@@ -14,7 +14,8 @@ const BillPaymentTable = ({ tenants, rentPayments, billPayments, tasks }) => {
                     <tr>
                         <th>Tenant</th>
                         <th>Amount</th>
-                        <th>Date Paid</th>
+                        <th>Due date</th>
+                        <th>Date paid</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -26,6 +27,7 @@ const BillPaymentTable = ({ tenants, rentPayments, billPayments, tasks }) => {
                                     : 'Unknown Tenant'}
                             </td>
                             <td>{billPayment.amount}</td>
+                            <td>{billPayment.dueDate}</td>
                             <td>{billPayment.datePaid}</td>
                         </tr>
                     ))}

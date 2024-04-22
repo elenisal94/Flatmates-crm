@@ -13,8 +13,20 @@ const tenantSchema = new mongoose.Schema({
         postcode: { type: String }
     },
     rentPaid: { type: Boolean, default: false },
+    totalRentPayments: { type: Number, default: 0 },
+    completedRentPayments: { type: Number, default: 0 },
+    pendingRentPayments: { type: Number, default: 0 },
+    lateRentPayments: { type: Number, default: 0 },
     billsPaid: { type: Boolean, default: false },
-    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }]
+    totalBillPayments: { type: Number, default: 0 },
+    completedBillPayments: { type: Number, default: 0 },
+    pendingBillPayments: { type: Number, default: 0 },
+    lateBillPayments: { type: Number, default: 0 },
+    totalTasks: { type: Number, default: 0 },
+    completedTasks: { type: Number, default: 0 },
+    pendingTasks: { type: Number, default: 0 },
+    overdueTasks: { type: Number, default: 0 },
+    tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
 });
 
 // Define schema for BuildingTask
@@ -30,7 +42,9 @@ const taskSchema = new mongoose.Schema({
 const rentPaymentSchema = new mongoose.Schema({
     tenant: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true },
     amount: { type: Number, required: true },
-    datePaid: { type: Date, default: Date.now }
+    dueDate: { type: Date, required: true },
+    datePaid: { type: Date },
+    paymentMade: { type: Boolean, default: false }
 });
 
 // Define schema for BillPayment
@@ -38,7 +52,9 @@ const billPaymentSchema = new mongoose.Schema({
     tenant: { type: mongoose.Schema.Types.ObjectId, ref: 'Tenant', required: true },
     billType: { type: String, required: true },
     amount: { type: Number, required: true },
-    datePaid: { type: Date, default: Date.now }
+    dueDate: { type: Date, required: true },
+    datePaid: { type: Date },
+    paymentMade: { type: Boolean, default: false }
 });
 
 // Define Tenant model

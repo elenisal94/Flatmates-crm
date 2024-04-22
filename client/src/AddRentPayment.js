@@ -4,6 +4,7 @@ import axios from 'axios';
 const AddRentPayment = ({ setRentPayments, tenants }) => {
     const [tenant, setTenant] = useState('');
     const [amount, setAmount] = useState('');
+    const [dueDate, setDueDate] = useState('');
     const [datePaid, setDatePaid] = useState('');
 
     const handleSubmit = async (e) => {
@@ -12,12 +13,14 @@ const AddRentPayment = ({ setRentPayments, tenants }) => {
             const newRentPayment = {
                 tenant,
                 amount,
+                dueDate,
                 datePaid,
             };
             const response = await axios.post('http://localhost:5001/api/rent-payments', newRentPayment);
             setRentPayments(prevRents => [...prevRents, response.data]);
             setTenant('');
             setAmount('');
+            setDueDate('');
             setDatePaid('');
         } catch (error) {
             console.error(error);
@@ -42,6 +45,10 @@ const AddRentPayment = ({ setRentPayments, tenants }) => {
                 <label>
                     Amount:
                     <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} required />
+                </label>
+                <label>
+                    Due Date:
+                    <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} required />
                 </label>
                 <label>
                     Date Paid:

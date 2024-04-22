@@ -2,6 +2,11 @@ import React from 'react';
 
 
 const TaskTable = ({ tenants, rentPayments, billPayments, tasks }) => {
+
+    const findTenantById = (taskTenantId) => {
+        return tenants.find(tenant => tenant._id === taskTenantId);
+    };
+
     return (
         <div>
             <h2>Tasks</h2>
@@ -20,7 +25,11 @@ const TaskTable = ({ tenants, rentPayments, billPayments, tasks }) => {
                         <tr key={task._id}>
                             <td>{task.title}</td>
                             <td>{task.description}</td>
-                            <td>{task.assignedTo}</td>
+                            <td>
+                                {findTenantById(task.assignedTo) ?
+                                    `${findTenantById(task.assignedTo).firstName} ${findTenantById(task.assignedTo).lastName}`
+                                    : 'Unknown Tenant'}
+                            </td>
                             <td>{task.dueDate}</td>
                             <td>{task.completed ? 'Yes' : 'No'}</td>
                         </tr>

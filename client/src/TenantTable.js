@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 const TenantTable = ({ tenants, rentPayments, billPayments, tasks }) => {
     return (
         <div>
@@ -12,11 +11,22 @@ const TenantTable = ({ tenants, rentPayments, billPayments, tasks }) => {
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Address</th>
-                        <th>Rent Paid</th>
-                        <th>Bills Paid</th>
-                        <th>Tasks</th>
-                        <th>Rent Payments</th>
-                        <th>Bill Payments</th>
+                        <th>Rent paid</th>
+                        <th>Total rent payments</th>
+                        <th>Completed rent payments</th>
+                        <th>Pending rent payments</th>
+                        <th>Late rent payments</th>
+                        <th>Bills paid</th>
+                        <th>Total bill payments</th>
+                        <th>Completed bill payments</th>
+                        <th>Pending bill payments</th>
+                        <th>Late bill payments</th>
+                        <th>Total tasks</th>
+                        <th>Completed tasks</th>
+                        <th>Pending tasks</th>
+                        <th>Overdue tasks</th>
+                        <th>Rent payments</th>
+                        <th>Bill payments</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,27 +37,26 @@ const TenantTable = ({ tenants, rentPayments, billPayments, tasks }) => {
                             <td>{tenant.phone}</td>
                             <td>{`${tenant.address?.flat ? `${tenant.address.flat}, ` : ''}${tenant.address?.street ? `${tenant.address.street}, ` : ''}${tenant.address?.city ? `${tenant.address.city}, ` : ''}${tenant.address?.state ? `${tenant.address.state}, ` : ''}${tenant.address?.postcode || ''}`}</td>
                             <td>{tenant.rentPaid ? 'Yes' : 'No'}</td>
+                            <td>{tenant.totalRentPayments}</td>
+                            <td>{tenant.completedRentPayments}</td>
+                            <td>{tenant.pendingRentPayments}</td>
+                            <td>{tenant.lateRentPayments}</td>
                             <td>{tenant.billsPaid ? 'Yes' : 'No'}</td>
+                            <td>{tenant.totalBillPayments}</td>
+                            <td>{tenant.completedBillPayments}</td>
+                            <td>{tenant.pendingBillPayments}</td>
+                            <td>{tenant.lateBillPayments}</td>
                             <td>
-                                <ul>
-                                    {tenant.tasks.map(task => (
-                                        <li key={task._id}>{task.title}</li>
-                                    ))}
-                                </ul>
+                                {tenant.totalTasks}
                             </td>
                             <td>
-                                <ul>
-                                    {rentPayments.filter(payment => payment.tenant._id === tenant._id).map(payment => (
-                                        <li key={payment._id}>Amount: {payment.amount}</li>
-                                    ))}
-                                </ul>
+                                {tenant.completedTasks}
                             </td>
                             <td>
-                                <ul>
-                                    {billPayments.filter(payment => payment.tenant._id === tenant._id).map(payment => (
-                                        <li key={payment._id}>Type: {payment.billType}, Amount: {payment.amount}</li>
-                                    ))}
-                                </ul>
+                                {tenant.pendingTasks}
+                            </td>
+                            <td>
+                                {tenant.overdueTasks}
                             </td>
                         </tr>
                     ))}

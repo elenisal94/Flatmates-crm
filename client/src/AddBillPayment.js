@@ -5,6 +5,7 @@ const AddBillPayment = ({ setBillPayments, tenants }) => {
     const [tenant, setTenant] = useState('');
     const [billType, setBillType] = useState('');
     const [amount, setAmount] = useState('');
+    const [dueDate, setDueDate] = useState('');
     const [datePaid, setDatePaid] = useState('');
 
     const handleSubmit = async (e) => {
@@ -14,6 +15,7 @@ const AddBillPayment = ({ setBillPayments, tenants }) => {
                 tenant,
                 billType,
                 amount,
+                dueDate,
                 datePaid,
             };
             const response = await axios.post('http://localhost:5001/api/bill-payments', newBillPayment);
@@ -21,6 +23,7 @@ const AddBillPayment = ({ setBillPayments, tenants }) => {
             setTenant('');
             setBillType('');
             setAmount('');
+            setDueDate('');
             setDatePaid('');
         } catch (error) {
             console.error(error);
@@ -57,8 +60,12 @@ const AddBillPayment = ({ setBillPayments, tenants }) => {
                     <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} required />
                 </label>
                 <label>
+                    Due Date:
+                    <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} required />
+                </label>
+                <label>
                     Date Paid:
-                    <input type="date" value={datePaid} onChange={(e) => setDatePaid(e.target.value)} required />
+                    <input type="date" value={datePaid} onChange={(e) => setDatePaid(e.target.value)} />
                 </label>
                 <button type="submit">Add Bill Payment</button>
             </form>
