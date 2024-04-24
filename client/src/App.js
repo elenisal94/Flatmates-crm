@@ -9,6 +9,7 @@ import TaskTable from './TasksTable';
 import BillPaymentTable from './BillPaymentsTable';
 import RentPaymentTable from './RentPaymentsTable';
 import Navbar from './Navbar';
+import PersistentDrawerRight from './Drawer';
 
 axios.defaults.baseURL = 'http://localhost:5001';
 axios.defaults.withCredentials = true;
@@ -18,6 +19,8 @@ const CRMSystem = () => {
   const [tasks, setTasks] = useState([]);
   const [rentPayments, setRentPayments] = useState([]);
   const [billPayments, setBillPayments] = useState([]);
+  const [selectedTenant, setSelectedTenant] = useState(null);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     // Fetch tenants
@@ -43,11 +46,24 @@ const CRMSystem = () => {
       .catch(error => console.error(error));
   }, []);
 
+  const handleProfileClick = (tenant) => {
+    console.log("handleProfileClick called with tenant:", tenant);
+    setSelectedTenant(tenant);
+    setOpen(true);
+    // handleDrawerOpen();
+  };
+
+  const handleCloseDrawer = () => {
+    setSelectedTenant(null);
+    setOpen(false);
+  };
+
   return (
     <div>
       <Navbar />
       <div className="main-content">
-        <TenantTable tenants={tenants} rentPayments={rentPayments} billPayments={billPayments} tasks={tasks} />
+        <TenantTable tenants={tenants} onProfileClick={handleProfileClick} setSelectedTenant={setSelectedTenant} />
+        <PersistentDrawerRight selectedTenant={selectedTenant} open={open} onClose={handleCloseDrawer} />
         <AddTenantForm setTenants={setTenants} />
         <TaskTable tasks={tasks} tenants={tenants} />
         <AddTaskForm setTasks={setTasks} tenants={tenants} />

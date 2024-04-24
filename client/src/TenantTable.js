@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TenantTable = ({ tenants, rentPayments, billPayments, tasks }) => {
+const TenantTable = ({ tenants, onProfileClick }) => {
     return (
         <div>
             <h2>Tenants and Details</h2>
@@ -25,14 +25,14 @@ const TenantTable = ({ tenants, rentPayments, billPayments, tasks }) => {
                         <th>Completed tasks</th>
                         <th>Pending tasks</th>
                         <th>Overdue tasks</th>
-                        <th>Rent payments</th>
-                        <th>Bill payments</th>
                     </tr>
                 </thead>
                 <tbody>
                     {tenants.map(tenant => (
                         <tr key={tenant._id}>
-                            <td>{`${tenant.firstName} ${tenant.lastName}`}</td>
+                            <td>{`${tenant.firstName} ${tenant.lastName}`}  <button onClick={() => {
+                                onProfileClick(tenant);
+                            }}>View</button></td>
                             <td>{tenant.email}</td>
                             <td>{tenant.phone}</td>
                             <td>{`${tenant.address?.flat ? `${tenant.address.flat}, ` : ''}${tenant.address?.street ? `${tenant.address.street}, ` : ''}${tenant.address?.city ? `${tenant.address.city}, ` : ''}${tenant.address?.state ? `${tenant.address.state}, ` : ''}${tenant.address?.postcode || ''}`}</td>
