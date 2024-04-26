@@ -10,6 +10,21 @@ exports.getAllTenants = async (req, res) => {
     }
 };
 
+exports.getSpecificTenant = async (req, res) => {
+    const tenantId = req.params.id;
+    try {
+        const tenant = await Tenant.findById(tenantId);
+        if (!tenant) {
+            return res.status(404).json({ message: 'Tenant not found' });
+        }
+        res.json(tenant);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+};
+
+
 exports.createTenant = async (req, res) => {
     try {
         const newTenant = new Tenant(req.body);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AddTaskForm = ({ setTasks, tenants }) => {
+const AddTaskForm = ({ setTasks, tenants, setRefreshInfo }) => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [assignedTo, setAssignedTo] = useState('');
@@ -25,6 +25,7 @@ const AddTaskForm = ({ setTasks, tenants }) => {
             setAssignedTo('');
             setDueDate('');
             setCompleted(false);
+            setRefreshInfo(true)
         } catch (error) {
             console.error(error);
         }

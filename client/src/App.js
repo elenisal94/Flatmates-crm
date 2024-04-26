@@ -21,6 +21,7 @@ const CRMSystem = () => {
   const [billPayments, setBillPayments] = useState([]);
   const [selectedTenant, setSelectedTenant] = useState(null);
   const [open, setOpen] = useState(false);
+  const [refreshInfo, setRefreshInfo] = useState(false)
 
   useEffect(() => {
     // Fetch tenants
@@ -44,14 +45,32 @@ const CRMSystem = () => {
     axios.get('/api/bill-payments')
       .then(response => setBillPayments(response.data))
       .catch(error => console.error(error));
-  }, []);
+
+    setRefreshInfo(false);
+
+  }, [refreshInfo]);
+
+  useEffect(() => {
+    if (selectedTenant) {
+      fetchSelectedTenant(selectedTenant._id);
+    }
+  }, [refreshInfo]);
 
   const handleProfileClick = (tenant) => {
     console.log("handleProfileClick called with tenant:", tenant);
     setSelectedTenant(tenant);
     setOpen(true);
-    // handleDrawerOpen();
   };
+
+  const fetchSelectedTenant = async (tenantId) => {
+    try {
+      const response = await axios.get(`/api/tenants/${tenantId}`);
+      setSelectedTenant(response.data);
+    } catch (error) {
+      console.error('Error fetching selected tenant data:', error);
+    }
+  };
+
 
   const handleCloseDrawer = () => {
     setSelectedTenant(null);
@@ -63,14 +82,14 @@ const CRMSystem = () => {
       <Navbar />
       <div className="main-content">
         <TenantTable tenants={tenants} onProfileClick={handleProfileClick} setSelectedTenant={setSelectedTenant} />
-        <PersistentDrawerRight selectedTenant={selectedTenant} open={open} onClose={handleCloseDrawer} />
-        <AddTenantForm setTenants={setTenants} />
+        <PersistentDrawerRight selectedTenant={selectedTenant} open={open} onClose={handleCloseDrawer} setRefreshInfo={setRefreshInfo} />
+        <AddTenantForm setTenants={setTenants} setRefreshInfo={setRefreshInfo} />
         <TaskTable tasks={tasks} tenants={tenants} />
-        <AddTaskForm setTasks={setTasks} tenants={tenants} />
+        <AddTaskForm setTasks={setTasks} tenants={tenants} setRefreshInfo={setRefreshInfo} />
         <RentPaymentTable rentPayments={rentPayments} tenants={tenants} />
-        <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} />
+        <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
         <BillPaymentTable billPayments={billPayments} tenants={tenants} />
-        <AddBillPayment setBillPayments={setBillPayments} tenants={tenants} />
+        <AddBillPayment setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
       </div>
     </div>
   );

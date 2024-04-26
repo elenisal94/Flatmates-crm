@@ -1,7 +1,76 @@
-import { Box, Drawer, CssBaseline, Card, CardContent, Typography, Divider, IconButton } from '@mui/material';
+import { useState, useEffect } from 'react';
+import { Box, Drawer, CssBaseline, Card, CardContent, Typography, Divider, CircularProgress, IconButton, Button, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import axios from 'axios';
 
-export default function PersistentDrawerRight({ selectedTenant, open, onClose }) {
+export default function PersistentDrawerRight({ selectedTenant, open, onClose, setRefreshInfo }) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [tenantData, setTenantData] = useState(selectedTenant || {});
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [flat, setFlat] = useState('');
+    const [street, setStreet] = useState('');
+    const [city, setCity] = useState('');
+    const [postcode, setPostcode] = useState('');
+
+    useEffect(() => {
+        setTenantData(selectedTenant || {});
+        if (selectedTenant?.address) {
+            const { flat, street, city, postcode } = selectedTenant.address;
+            setFlat(flat || '');
+            setStreet(street || '');
+            setCity(city || '');
+            setPostcode(postcode || '');
+        }
+    }, [selectedTenant]);
+
+    const handleEditButtonClick = () => {
+        setIsEditing(true);
+    };
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        if (name.startsWith('address.')) {
+            const fieldName = name.split('.')[1];
+            switch (fieldName) {
+                case 'flat':
+                    setFlat(value);
+                    break;
+                case 'street':
+                    setStreet(value);
+                    break;
+                case 'city':
+                    setCity(value);
+                    break;
+                case 'postcode':
+                    setPostcode(value);
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            setTenantData(prevData => ({ ...prevData, [name]: value }));
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsLoading(true);
+        try {
+            const updatedAddress = { flat, street, city, postcode };
+            const updatedData = { ...tenantData, address: updatedAddress };
+            await axios.put(`http://localhost:5001/api/tenants/${tenantData._id}`, updatedData);
+            setTenantData(updatedData);
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
+            setIsEditing(false);
+            setRefreshInfo(true)
+        }
+    };
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -26,21 +95,102 @@ export default function PersistentDrawerRight({ selectedTenant, open, onClose })
                 {selectedTenant && (
                     <Card>
                         <CardContent>
-                            <Typography variant="h5" gutterBottom>
-                                Profile Information
-                            </Typography>
-                            <Typography variant="body1">
-                                <strong>Name:</strong> {selectedTenant.firstName} {selectedTenant.lastName}
-                            </Typography>
-                            <Typography variant="body1">
-                                <strong>Email:</strong> {selectedTenant.email}
-                            </Typography>
-                            <Typography variant="body1">
-                                <strong>Phone:</strong> {selectedTenant.phone}
-                            </Typography>
-                            <Typography variant="body1">
-                                <strong>Address:</strong> {selectedTenant.address?.flat}, {selectedTenant.address?.street}, {selectedTenant.address?.city}, {selectedTenant.address?.postcode}
-                            </Typography>
+                            {!isEditing ? (
+                                <>
+                                    <Typography variant="h5" gutterBottom>
+                                        Profile Information
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        <strong>Name:</strong> {tenantData?.firstName} {tenantData?.lastName}
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        <strong>Email:</strong> {tenantData?.email}
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        <strong>Phone:</strong> {tenantData?.phone}
+                                    </Typography>
+                                    <Typography variant="body1">
+                                        <strong>Address:</strong> {tenantData.address?.flat}, {selectedTenant.address?.street}, {tenantData.address?.city}, {tenantData.address?.postcode}
+                                    </Typography>
+                                    <Button onClick={handleEditButtonClick}>Edit Details</Button>
+                                </>
+                            ) : (
+                                <>
+                                    <TextField
+                                        name="firstName"
+                                        label="First Name"
+                                        variant="outlined"
+                                        value={tenantData?.firstName || ""}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        sx={{ marginBottom: 1 }}
+                                    />
+                                    <TextField
+                                        name="lastName"
+                                        label="Last Name"
+                                        variant="outlined"
+                                        value={tenantData?.lastName}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        sx={{ marginBottom: 1 }}
+                                    />
+                                    <TextField
+                                        name="email"
+                                        label="Email"
+                                        variant="outlined"
+                                        value={tenantData?.email}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        sx={{ marginBottom: 1 }}
+                                    />
+                                    <TextField
+                                        name="phone"
+                                        label="Phone"
+                                        variant="outlined"
+                                        value={tenantData?.phone}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        sx={{ marginBottom: 1 }}
+                                    />
+                                    <TextField
+                                        name="address.flat"
+                                        label="Flat"
+                                        variant="outlined"
+                                        value={flat}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        sx={{ marginBottom: 1 }}
+                                    />
+                                    <TextField
+                                        name="address.street"
+                                        label="Street"
+                                        variant="outlined"
+                                        value={street}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        sx={{ marginBottom: 1 }}
+                                    />
+                                    <TextField
+                                        name="address.city"
+                                        label="City"
+                                        variant="outlined"
+                                        value={city}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        sx={{ marginBottom: 1 }}
+                                    />
+                                    <TextField
+                                        name="address.postcode"
+                                        label="Postcode"
+                                        variant="outlined"
+                                        value={postcode}
+                                        onChange={handleInputChange}
+                                        fullWidth
+                                        sx={{ marginBottom: 1 }}
+                                    />
+                                    <Button onClick={handleSubmit}> {isLoading ? <CircularProgress size={24} /> : "Save Changes"}</Button>
+                                </>
+                            )}
                             <Divider />
                             <Typography variant="body1">
                                 <strong>Rent Paid:</strong> {selectedTenant.rentPaid ? 'Yes' : 'No'}

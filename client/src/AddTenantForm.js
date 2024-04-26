@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AddTenantForm = ({ setTenants }) => {
+const AddTenantForm = ({ setTenants, setRefreshInfo }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
@@ -39,6 +39,7 @@ const AddTenantForm = ({ setTenants }) => {
             setStreet('');
             setCity('');
             setPostcode('');
+            setRefreshInfo(true)
         } catch (error) {
             console.error(error);
         }

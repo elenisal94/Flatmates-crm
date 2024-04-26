@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AddBillPayment = ({ setBillPayments, tenants }) => {
+const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
     const [tenant, setTenant] = useState('');
     const [billType, setBillType] = useState('');
     const [amount, setAmount] = useState('');
@@ -25,6 +25,7 @@ const AddBillPayment = ({ setBillPayments, tenants }) => {
             setAmount('');
             setDueDate('');
             setDatePaid('');
+            setRefreshInfo(true)
         } catch (error) {
             console.error(error);
         }
