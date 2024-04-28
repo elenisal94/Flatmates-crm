@@ -5,9 +5,9 @@ import axios from 'axios';
 
 export default function PersistentDrawerRight({ selectedTenant, open, onClose, setRefreshInfo }) {
     const [isEditing, setIsEditing] = useState(false);
-    const [tenantData, setTenantData] = useState(selectedTenant || {});
     const [isLoading, setIsLoading] = useState(false);
 
+    const [tenantData, setTenantData] = useState(selectedTenant || {});
     const [flat, setFlat] = useState('');
     const [street, setStreet] = useState('');
     const [city, setCity] = useState('');
@@ -22,6 +22,7 @@ export default function PersistentDrawerRight({ selectedTenant, open, onClose, s
             setCity(city || '');
             setPostcode(postcode || '');
         }
+        setIsEditing(false);
     }, [selectedTenant]);
 
     const handleEditButtonClick = () => {
@@ -53,6 +54,10 @@ export default function PersistentDrawerRight({ selectedTenant, open, onClose, s
         }
     };
 
+    const handleBackButtonClick = () => {
+        setIsEditing(false);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
@@ -67,7 +72,7 @@ export default function PersistentDrawerRight({ selectedTenant, open, onClose, s
         } finally {
             setIsLoading(false);
             setIsEditing(false);
-            setRefreshInfo(true)
+            setRefreshInfo(true);
         }
     };
 
@@ -112,7 +117,9 @@ export default function PersistentDrawerRight({ selectedTenant, open, onClose, s
                                     <Typography variant="body1">
                                         <strong>Address:</strong> {tenantData.address?.flat}, {selectedTenant.address?.street}, {tenantData.address?.city}, {tenantData.address?.postcode}
                                     </Typography>
-                                    <Button onClick={handleEditButtonClick}>Edit Details</Button>
+                                    <Box mt={2} mb={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                        <Button margin="dense" color="primary" variant="contained" size="small" onClick={handleEditButtonClick}>Edit Details</Button>
+                                    </Box>
                                 </>
                             ) : (
                                 <>
@@ -124,6 +131,7 @@ export default function PersistentDrawerRight({ selectedTenant, open, onClose, s
                                         onChange={handleInputChange}
                                         fullWidth
                                         sx={{ marginBottom: 1 }}
+                                        placeholder="First name"
                                     />
                                     <TextField
                                         name="lastName"
@@ -137,11 +145,12 @@ export default function PersistentDrawerRight({ selectedTenant, open, onClose, s
                                     <TextField
                                         name="email"
                                         label="Email"
-                                        variant="outlined"
                                         value={tenantData?.email}
                                         onChange={handleInputChange}
+                                        required
                                         fullWidth
                                         sx={{ marginBottom: 1 }}
+                                    // helperText={error ? "Required field." : ""}
                                     />
                                     <TextField
                                         name="phone"
@@ -188,7 +197,14 @@ export default function PersistentDrawerRight({ selectedTenant, open, onClose, s
                                         fullWidth
                                         sx={{ marginBottom: 1 }}
                                     />
-                                    <Button onClick={handleSubmit}> {isLoading ? <CircularProgress size={24} /> : "Save Changes"}</Button>
+                                    <Box mt={2} mb={2} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                        <Button color="primary" margin="dense" onClick={handleBackButtonClick}>
+                                            Back
+                                        </Button>
+                                        <Button color="primary" variant="contained" margin="dense" onClick={handleSubmit}>
+                                            {isLoading ? <CircularProgress size={24} /> : "Save Changes"}
+                                        </Button>
+                                    </Box>
                                 </>
                             )}
                             <Divider />

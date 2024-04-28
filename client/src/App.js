@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import AddTenantForm from './AddTenantForm';
-import AddTaskForm from './AddTaskForm';
-import AddRentPayment from './AddRentPayment';
-import AddBillPayment from './AddBillPayment';
-import TenantTable from './TenantTable';
-import TaskTable from './TasksTable';
-import BillPaymentTable from './BillPaymentsTable';
-import RentPaymentTable from './RentPaymentsTable';
-import Navbar from './Navbar';
+import AddTenantForm from './newEntries/AddTenantForm';
+import AddTaskForm from './newEntries/AddTaskForm';
+import AddRentPayment from './newEntries/AddRentPayment';
+import AddBillPayment from './newEntries/AddBillPayment';
+import TenantTable from './tables/TenantTable';
+import TaskTable from './tables/TasksTable';
+import BillPaymentTable from './tables/BillPaymentsTable';
+import RentPaymentTable from './tables/RentPaymentsTable';
+import Navbar from './layouts/Navbar';
 import PersistentDrawerRight from './Drawer';
 
 axios.defaults.baseURL = 'http://localhost:5001';
@@ -52,7 +52,8 @@ const CRMSystem = () => {
 
   useEffect(() => {
     if (selectedTenant) {
-      fetchSelectedTenant(selectedTenant._id);
+      const tenantId = selectedTenant._id;
+      fetchSelectedTenant(tenantId);
     }
   }, [refreshInfo]);
 

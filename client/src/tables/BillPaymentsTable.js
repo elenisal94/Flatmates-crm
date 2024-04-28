@@ -13,6 +13,7 @@ const BillPaymentTable = ({ tenants, rentPayments, billPayments, tasks }) => {
                 <thead>
                     <tr>
                         <th>Tenant</th>
+                        <th>Bill Type</th>
                         <th>Amount</th>
                         <th>Due date</th>
                         <th>Date paid</th>
@@ -26,6 +27,7 @@ const BillPaymentTable = ({ tenants, rentPayments, billPayments, tasks }) => {
                                     `${findTenantById(billPayment.tenant).firstName} ${findTenantById(billPayment.tenant).lastName}`
                                     : 'Unknown Tenant'}
                             </td>
+                            <td>{billPayment.billType}</td>
                             <td>{billPayment.amount}</td>
                             <td>{billPayment.dueDate}</td>
                             <td>{billPayment.datePaid}</td>

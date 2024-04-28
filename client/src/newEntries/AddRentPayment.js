@@ -2,26 +2,32 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const AddRentPayment = ({ setRentPayments, tenants, setRefreshInfo }) => {
-    const [tenant, setTenant] = useState('');
-    const [amount, setAmount] = useState('');
-    const [dueDate, setDueDate] = useState('');
-    const [datePaid, setDatePaid] = useState('');
+    const [formData, setFormData] = useState({
+        tenant: '',
+        amount: '',
+        dueDate: '',
+        datePaid: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            [name]: value
+        }));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const newRentPayment = {
-                tenant,
-                amount,
-                dueDate,
-                datePaid,
-            };
-            const response = await axios.post('http://localhost:5001/api/rent-payments', newRentPayment);
+            const response = await axios.post('http://localhost:5001/api/rent-payments', formData);
             setRentPayments(prevRents => [...prevRents, response.data]);
-            setTenant('');
-            setAmount('');
-            setDueDate('');
-            setDatePaid('');
+            setFormData({
+                tenant: '',
+                amount: '',
+                dueDate: '',
+                datePaid: ''
+            });
             setRefreshInfo(true);
         } catch (error) {
             console.error(error);
@@ -34,10 +40,10 @@ const AddRentPayment = ({ setRentPayments, tenants, setRefreshInfo }) => {
             <form onSubmit={handleSubmit}>
                 <label>
                     Tenant:
-                    <select value={tenant} onChange={(e) => setTenant(e.target.value)}>
+                    <select name="tenant" value={formData.tenant} onChange={handleChange}>
                         <option value="">Select Tenant</option>
                         {tenants.map(tenant => (
-                            <option key={tenant._id} value={tenant._id} required>
+                            <option key={tenant._id} value={tenant._id}>
                                 {tenant.firstName} {tenant.lastName}
                             </option>
                         ))}
@@ -45,15 +51,15 @@ const AddRentPayment = ({ setRentPayments, tenants, setRefreshInfo }) => {
                 </label>
                 <label>
                     Amount:
-                    <input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} required />
+                    <input type="number" name="amount" value={formData.amount} onChange={handleChange} required />
                 </label>
                 <label>
                     Due Date:
-                    <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} required />
+                    <input type="date" name="dueDate" value={formData.dueDate} onChange={handleChange} required />
                 </label>
                 <label>
                     Date Paid:
-                    <input type="date" value={datePaid} onChange={(e) => setDatePaid(e.target.value)} />
+                    <input type="date" name="datePaid" value={formData.datePaid} onChange={handleChange} />
                 </label>
                 <button type="submit">Add Rent Payment</button>
             </form>
