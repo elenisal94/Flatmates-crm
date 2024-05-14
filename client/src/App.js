@@ -10,11 +10,27 @@ import BillPaymentTable from './tables/BillPaymentsTable';
 import RentPaymentTable from './tables/RentPaymentsTable';
 import Navbar from './layouts/Navbar';
 import PersistentDrawerRight from './Drawer';
+import { useForm, Controller } from "react-hook-form"
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import 'dayjs/locale/en-gb';
+import dayjs from 'dayjs';
 
 axios.defaults.baseURL = 'http://localhost:5001';
 axios.defaults.withCredentials = true;
 
 const CRMSystem = () => {
+
+  const { register, handleSubmit, control, reset, formState, formState: { errors } } = useForm({
+    defaultValues: {
+      tenant: "",
+      billType: "",
+      amount: "",
+      paymentMade: "",
+      dueDate: null,
+      datePaid: null,
+    }
+  });
+
   const [tenants, setTenants] = useState([]);
   const [tasks, setTasks] = useState([]);
   const [rentPayments, setRentPayments] = useState([]);
@@ -72,7 +88,6 @@ const CRMSystem = () => {
     }
   };
 
-
   const handleCloseDrawer = () => {
     setSelectedTenant(null);
     setOpen(false);
@@ -90,7 +105,7 @@ const CRMSystem = () => {
         <RentPaymentTable rentPayments={rentPayments} tenants={tenants} />
         <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
         <BillPaymentTable billPayments={billPayments} tenants={tenants} />
-        <AddBillPayment setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
+        <AddBillPayment billPayments={billPayments} setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} control={control} errors={errors} register={register} handleSubmit={handleSubmit} reset={reset} formState={formState} />
       </div>
     </div>
   );

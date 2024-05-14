@@ -2,10 +2,20 @@ import { useState, useEffect } from 'react';
 import { Box, Drawer, CssBaseline, Card, CardContent, Typography, Divider, CircularProgress, IconButton, Button, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
+import { useForm } from 'react-hook-form';
 
 export default function PersistentDrawerRight({ selectedTenant, open, onClose, setRefreshInfo }) {
     const [isEditing, setIsEditing] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm()
+
+    const onSubmit = (data) => console.log(data)
 
     const [tenantData, setTenantData] = useState(selectedTenant || {});
     const [flat, setFlat] = useState('');
@@ -58,7 +68,7 @@ export default function PersistentDrawerRight({ selectedTenant, open, onClose, s
         setIsEditing(false);
     }
 
-    const handleSubmit = async (e) => {
+    const finalSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
         try {
@@ -123,88 +133,92 @@ export default function PersistentDrawerRight({ selectedTenant, open, onClose, s
                                 </>
                             ) : (
                                 <>
-                                    <TextField
-                                        name="firstName"
-                                        label="First Name"
-                                        variant="outlined"
-                                        value={tenantData?.firstName || ""}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        sx={{ marginBottom: 1 }}
-                                        placeholder="First name"
-                                    />
-                                    <TextField
-                                        name="lastName"
-                                        label="Last Name"
-                                        variant="outlined"
-                                        value={tenantData?.lastName}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        sx={{ marginBottom: 1 }}
-                                    />
-                                    <TextField
-                                        name="email"
-                                        label="Email"
-                                        value={tenantData?.email}
-                                        onChange={handleInputChange}
-                                        required
-                                        fullWidth
-                                        sx={{ marginBottom: 1 }}
-                                    // helperText={error ? "Required field." : ""}
-                                    />
-                                    <TextField
-                                        name="phone"
-                                        label="Phone"
-                                        variant="outlined"
-                                        value={tenantData?.phone}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        sx={{ marginBottom: 1 }}
-                                    />
-                                    <TextField
-                                        name="address.flat"
-                                        label="Flat"
-                                        variant="outlined"
-                                        value={flat}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        sx={{ marginBottom: 1 }}
-                                    />
-                                    <TextField
-                                        name="address.street"
-                                        label="Street"
-                                        variant="outlined"
-                                        value={street}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        sx={{ marginBottom: 1 }}
-                                    />
-                                    <TextField
-                                        name="address.city"
-                                        label="City"
-                                        variant="outlined"
-                                        value={city}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        sx={{ marginBottom: 1 }}
-                                    />
-                                    <TextField
-                                        name="address.postcode"
-                                        label="Postcode"
-                                        variant="outlined"
-                                        value={postcode}
-                                        onChange={handleInputChange}
-                                        fullWidth
-                                        sx={{ marginBottom: 1 }}
-                                    />
-                                    <Box mt={2} mb={2} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                        <Button color="primary" margin="dense" onClick={handleBackButtonClick}>
-                                            Back
-                                        </Button>
-                                        <Button color="primary" variant="contained" margin="dense" onClick={handleSubmit}>
-                                            {isLoading ? <CircularProgress size={24} /> : "Save Changes"}
-                                        </Button>
-                                    </Box>
+                                    <form onSubmit={handleSubmit(onSubmit)}>
+                                        <TextField
+                                            name="firstName"
+                                            {...register(`firstName-${selectedTenant?._id}`, { required: true })}
+                                            label="First Name"
+                                            variant="outlined"
+                                            value={tenantData?.firstName || ""}
+                                            onChange={handleInputChange}
+                                            fullWidth
+                                            sx={{ marginBottom: 1 }}
+                                            placeholder="First name"
+                                        />
+                                        {errors[`firstName-${selectedTenant?._id}`] && <span>This field is required</span>}
+                                        <TextField
+                                            name="lastName"
+                                            label="Last Name"
+                                            variant="outlined"
+                                            value={tenantData?.lastName}
+                                            onChange={handleInputChange}
+                                            fullWidth
+                                            sx={{ marginBottom: 1 }}
+                                        />
+                                        <TextField
+                                            name="email"
+                                            label="Email"
+                                            value={tenantData?.email}
+                                            onChange={handleInputChange}
+                                            required
+                                            fullWidth
+                                            sx={{ marginBottom: 1 }}
+                                        // helperText={error ? "Required field." : ""}
+                                        />
+                                        <TextField
+                                            name="phone"
+                                            label="Phone"
+                                            variant="outlined"
+                                            value={tenantData?.phone}
+                                            onChange={handleInputChange}
+                                            fullWidth
+                                            sx={{ marginBottom: 1 }}
+                                        />
+                                        <TextField
+                                            name="address.flat"
+                                            label="Flat"
+                                            variant="outlined"
+                                            value={flat}
+                                            onChange={handleInputChange}
+                                            fullWidth
+                                            sx={{ marginBottom: 1 }}
+                                        />
+                                        <TextField
+                                            name="address.street"
+                                            label="Street"
+                                            variant="outlined"
+                                            value={street}
+                                            onChange={handleInputChange}
+                                            fullWidth
+                                            sx={{ marginBottom: 1 }}
+                                        />
+                                        <TextField
+                                            name="address.city"
+                                            label="City"
+                                            variant="outlined"
+                                            value={city}
+                                            onChange={handleInputChange}
+                                            fullWidth
+                                            sx={{ marginBottom: 1 }}
+                                        />
+                                        <TextField
+                                            name="address.postcode"
+                                            label="Postcode"
+                                            variant="outlined"
+                                            value={postcode}
+                                            onChange={handleInputChange}
+                                            fullWidth
+                                            sx={{ marginBottom: 1 }}
+                                        />
+                                        <Box mt={2} mb={2} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Button color="primary" margin="dense" onClick={handleBackButtonClick}>
+                                                Back
+                                            </Button>
+                                            <Button color="primary" variant="contained" margin="dense" onClick={finalSubmit}>
+                                                {isLoading ? <CircularProgress size={24} /> : "Save Changes"}
+                                            </Button>
+                                        </Box>
+                                    </form>
                                 </>
                             )}
                             <Divider />

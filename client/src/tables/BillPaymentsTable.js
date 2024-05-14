@@ -29,8 +29,8 @@ const BillPaymentTable = ({ tenants, rentPayments, billPayments, tasks }) => {
                             </td>
                             <td>{billPayment.billType}</td>
                             <td>{billPayment.amount}</td>
-                            <td>{billPayment.dueDate}</td>
-                            <td>{billPayment.datePaid}</td>
+                            <td>{new Date(billPayment.dueDate).toLocaleString()}</td>
+                            <td>{new Date(billPayment.datePaid).toLocaleString()}</td>
                         </tr>
                     ))}
                 </tbody>
