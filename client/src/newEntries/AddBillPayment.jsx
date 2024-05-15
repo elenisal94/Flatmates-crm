@@ -1,15 +1,25 @@
 import axios from 'axios';
-import { Controller } from "react-hook-form";
-// import ReactDatePicker from "react-datepicker";
 import { FormControl, FormHelperText, InputLabel, TextField, MenuItem, Select, Grid, Button } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/en-gb';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import React from 'react';
+import { useForm, Controller } from "react-hook-form";
+import InputAdornment from '@mui/material/InputAdornment';
 
-const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo, handleSubmit, errors, control, reset, formState }) => {
+const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
 
+    const { handleSubmit, control, reset, formState: { errors } } = useForm({
+        defaultValues: {
+            tenant: "",
+            billType: "",
+            amount: "",
+            paymentMade: "",
+            dueDate: null,
+            datePaid: null,
+        }
+    });
 
     const onSubmit = async (data) => {
         try {
@@ -22,13 +32,6 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo, handleSubmit
         }
     };
 
-
-    const handleChange = (event) => {
-        const value = event.target.value;
-        const isPaymentMade = value === "true" ? true : false;
-        console.log("Payment made:", isPaymentMade);
-    };
-
     return (
         <div>
             <h2>Add Bill Payment</h2>
@@ -36,7 +39,7 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo, handleSubmit
                 <form onSubmit={handleSubmit((billPayments) => onSubmit(billPayments))}>
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
-                            <FormControl fullWidth error={errors.tenant}>
+                            <FormControl fullWidth error={!!errors.tenant}>
                                 <InputLabel htmlFor="tenant">Tenant</InputLabel>
                                 <Controller
                                     name="tenant"
@@ -58,11 +61,13 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo, handleSubmit
                                         </Select>
                                     )}
                                 />
-                                <FormHelperText sx={{ color: 'red' }}>{errors.tenant && errors.tenant.message}</FormHelperText>
+                                <FormHelperText sx={{ color: 'red' }}>
+                                    {errors.tenant && errors.tenant.message}
+                                </FormHelperText>
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth error={errors.billType}>
+                            <FormControl fullWidth error={!!errors.billType}>
                                 <InputLabel htmlFor="billType">Bill Type</InputLabel>
                                 <Controller
                                     name="billType"
@@ -71,8 +76,8 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo, handleSubmit
                                     defaultValue=""
                                     render={({ field }) => (
                                         <Select
-                                            id="billType"
                                             {...field}
+                                            id="billType"
                                             label="Bill Type"
                                         >
                                             <MenuItem value="">Select Bill Type</MenuItem>
@@ -83,50 +88,72 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo, handleSubmit
                                         </Select>
                                     )}
                                 />
-                                <FormHelperText sx={{ color: 'red' }}>{errors.billType && errors.billType.message}</FormHelperText>
+                                <FormHelperText sx={{ color: 'red' }}>
+                                    {errors.billType && errors.billType.message}
+                                </FormHelperText>
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth error={errors.amount}>
+                            <FormControl fullWidth error={!!errors.amount}>
                                 <Controller
                                     name="amount"
                                     control={control}
+                                    rules={{
+                                        required: "This field is required!", min: {
+                                            value: 1,
+                                            message: "Amount must be at least 1.",
+                                        },
+                                        max: {
+                                            value: 3000,
+                                            message: "Amount cannot exceed 3000.",
+                                        }
+                                    }}
                                     defaultValue=""
-                                    rules={{ required: "This field is required!" }}
-                                    render={({ field }) => (
+                                    render={({ field: { ref, ...field } }) => (
                                         <TextField
                                             {...field}
                                             variant="outlined"
                                             id="amount"
                                             label="Amount"
                                             type="number"
+                                            error={!!errors.amount}
+                                            InputProps={{
+                                                startAdornment: <InputAdornment position="start">£</InputAdornment>,
+                                            }}
                                         />
                                     )}
                                 />
-                                <FormHelperText sx={{ color: 'red' }}>{errors.amount && errors.amount.message}</FormHelperText>
+                                <FormHelperText sx={{ color: 'red' }}>
+                                    {errors.amount && errors.amount.message}
+                                </FormHelperText>
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth error={errors.dueDate}>
+                            <FormControl fullWidth error={!!errors.dueDate}>
                                 <Controller
                                     name="dueDate"
                                     control={control}
-                                    rules={{ required: true }}
-                                    defaultValue={null}
-                                    render={({ field }) => (
+                                    rules={{ required: "This field is required!" }}
+                                    render={({ field, fieldState: { error } }) => (
                                         <DatePicker
-                                            label="Due Date"
                                             {...field}
+                                            label="Due Date"
                                             selected={field.value ? new Date(field.value) : null}
                                             onChange={(date) => field.onChange(date)}
+                                            slotProps={{
+                                                textField: {
+                                                    variant: 'outlined',
+                                                    error: !!error,
+                                                    helperText: error?.message,
+                                                },
+                                            }}
                                         />
                                     )}
                                 />
-                                {errors.dueDate && <FormHelperText error>This field is required!</FormHelperText>}
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth error={errors.paymentMade}>
+                            <FormControl fullWidth error={!!errors.paymentMade}>
                                 <InputLabel htmlFor="paymentMade">Payment made?</InputLabel>
                                 <Controller
                                     name="paymentMade"
@@ -145,26 +172,33 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo, handleSubmit
                                         </Select>
                                     )}
                                 />
-                                <FormHelperText sx={{ color: 'red' }}>{errors.paymentMade && errors.paymentMade.message}</FormHelperText>
+                                <FormHelperText sx={{ color: 'red' }}>
+                                    {errors.paymentMade && errors.paymentMade.message}
+                                </FormHelperText>
                             </FormControl>
                         </Grid>
                         <Grid item xs={6}>
-                            <FormControl fullWidth error={errors.datePaid}>
+                            <FormControl fullWidth error={!!errors.datePaid}>
                                 <Controller
                                     name="datePaid"
                                     control={control}
-                                    rules={{ required: true }}
-                                    defaultValue={null}
-                                    render={({ field }) => (
+                                    rules={{ required: "This field is required!" }}
+                                    render={({ field, fieldState: { error } }) => (
                                         <DatePicker
-                                            label="Date Paid"
                                             {...field}
+                                            label="Date Paid"
                                             selected={field.value ? new Date(field.value) : null}
                                             onChange={(date) => field.onChange(date)}
+                                            slotProps={{
+                                                textField: {
+                                                    variant: 'outlined',
+                                                    error: !!error,
+                                                    helperText: error?.message,
+                                                },
+                                            }}
                                         />
                                     )}
                                 />
-                                {errors.datePaid && <FormHelperText error>This field is required!</FormHelperText>}
                             </FormControl>
                         </Grid>
                         <Grid item xs={12}>
