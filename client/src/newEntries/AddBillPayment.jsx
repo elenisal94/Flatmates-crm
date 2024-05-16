@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { FormControl, FormHelperText, InputLabel, TextField, MenuItem, Select, Grid, Button } from '@mui/material';
+import { useState } from 'react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import 'dayjs/locale/en-gb';
@@ -10,7 +11,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
 
-    const { handleSubmit, control, reset, formState: { errors } } = useForm({
+    const { handleSubmit, control, reset, watch, formState: { errors } } = useForm({
         defaultValues: {
             tenant: "",
             billType: "",
@@ -20,6 +21,9 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
             datePaid: null,
         }
     });
+
+    const watchAmount = watch('amount');
+    const watchPaymentMade = watch("paymentMade") === "true";
 
     const onSubmit = async (data) => {
         try {
@@ -38,7 +42,7 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
             <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
                 <form onSubmit={handleSubmit((billPayments) => onSubmit(billPayments))}>
                     <Grid container spacing={2}>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <FormControl fullWidth error={!!errors.tenant}>
                                 <InputLabel htmlFor="tenant">Tenant</InputLabel>
                                 <Controller
@@ -66,7 +70,7 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <FormControl fullWidth error={!!errors.billType}>
                                 <InputLabel htmlFor="billType">Bill Type</InputLabel>
                                 <Controller
@@ -93,7 +97,7 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <FormControl fullWidth error={!!errors.amount}>
                                 <Controller
                                     name="amount"
@@ -118,7 +122,7 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
                                             type="number"
                                             error={!!errors.amount}
                                             InputProps={{
-                                                startAdornment: <InputAdornment position="start">£</InputAdornment>,
+                                                startAdornment: watchAmount ? <InputAdornment position="start">£</InputAdornment> : null,
                                             }}
                                         />
                                     )}
@@ -128,7 +132,7 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <FormControl fullWidth error={!!errors.dueDate}>
                                 <Controller
                                     name="dueDate"
@@ -152,7 +156,7 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={12} sm={6}>
                             <FormControl fullWidth error={!!errors.paymentMade}>
                                 <InputLabel htmlFor="paymentMade">Payment made?</InputLabel>
                                 <Controller
@@ -177,31 +181,33 @@ const AddBillPayment = ({ setBillPayments, tenants, setRefreshInfo }) => {
                                 </FormHelperText>
                             </FormControl>
                         </Grid>
-                        <Grid item xs={6}>
-                            <FormControl fullWidth error={!!errors.datePaid}>
-                                <Controller
-                                    name="datePaid"
-                                    control={control}
-                                    rules={{ required: "This field is required!" }}
-                                    render={({ field, fieldState: { error } }) => (
-                                        <DatePicker
-                                            {...field}
-                                            label="Date Paid"
-                                            selected={field.value ? new Date(field.value) : null}
-                                            onChange={(date) => field.onChange(date)}
-                                            slotProps={{
-                                                textField: {
-                                                    variant: 'outlined',
-                                                    error: !!error,
-                                                    helperText: error?.message,
-                                                },
-                                            }}
-                                        />
-                                    )}
-                                />
-                            </FormControl>
-                        </Grid>
-                        <Grid item xs={12}>
+                        {watchPaymentMade && (
+                            <Grid item xs={12} sm={6}>
+                                <FormControl fullWidth error={!!errors.datePaid}>
+                                    <Controller
+                                        name="datePaid"
+                                        control={control}
+                                        rules={{ required: "This field is required!" }}
+                                        render={({ field, fieldState: { error } }) => (
+                                            <DatePicker
+                                                {...field}
+                                                label="Date Paid"
+                                                selected={field.value ? new Date(field.value) : null}
+                                                onChange={(date) => field.onChange(date)}
+                                                slotProps={{
+                                                    textField: {
+                                                        variant: 'outlined',
+                                                        error: !!error,
+                                                        helperText: error?.message,
+                                                    },
+                                                }}
+                                            />
+                                        )}
+                                    />
+                                </FormControl>
+                            </Grid>
+                        )}
+                        <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center' }}>
                             <Button variant="contained" type="submit">Add Bill Payment</Button>
                         </Grid>
                     </Grid>
