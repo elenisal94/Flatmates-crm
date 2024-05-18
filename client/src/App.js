@@ -10,7 +10,7 @@ import BillPaymentTable from './tables/BillPaymentsTable';
 import RentPaymentTable from './tables/RentPaymentsTable';
 import Navbar from './layouts/Navbar';
 import PersistentDrawerRight from './Drawer';
-import JoyOrderDashboardTemplate from './joyTemplates/order-dashboard/OrderDashboard';
+import TenantsTable from './tables/tenantsTable/TenantsTable';
 
 axios.defaults.baseURL = 'http://localhost:5001';
 axios.defaults.withCredentials = true;
@@ -92,7 +92,7 @@ const CRMSystem = () => {
         <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
         <BillPaymentTable billPayments={billPayments} tenants={tenants} />
         <AddBillPayment billPayments={billPayments} setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
-        <JoyOrderDashboardTemplate tenants={tenants} />
+        <TenantsTable tenants={tenants} />
       </div>
     </div>
   );
