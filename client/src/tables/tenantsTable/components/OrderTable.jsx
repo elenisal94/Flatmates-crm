@@ -81,6 +81,27 @@ export default function OrderTable({ tenants }) {
     const [order, setOrder] = useState('desc');
     const [selected, setSelected] = useState([]);
     const [open, setOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 20;
+
+    const totalItems = tenants.length;
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const paginatedTenants = stableSort(tenants, getComparator(order, 'id')).slice(startIndex, endIndex);
 
     const getPaymentStatus = (paid, latePayments) => {
         if (paid) {
@@ -261,12 +282,15 @@ export default function OrderTable({ tenants }) {
                 className="OrderTableContainer"
                 variant="outlined"
                 sx={{
-                    display: { xs: 'none', sm: 'initial' },
+                    display: 'block',
                     width: '100%',
                     borderRadius: 'sm',
                     flexShrink: 1,
-                    overflow: 'auto',
+                    overflowX: 'auto',
                     minHeight: 0,
+                    '@media (max-width: 600px)': {
+                        display: 'block',
+                    },
                 }}
             >
                 <Table
@@ -346,7 +370,7 @@ export default function OrderTable({ tenants }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {stableSort(tenants, getComparator(order, 'id')).map((tenant) => {
+                        {stableSort(paginatedTenants, getComparator(order, 'id')).map((tenant) => {
                             const isItemSelected = selected.indexOf(tenant._id) !== -1;
                             const rentStatus = getPaymentStatus(tenant.rentPaid, tenant.lateRentPayments);
                             const billStatus = getPaymentStatus(tenant.billsPaid, tenant.lateBillPayments);
@@ -447,7 +471,7 @@ export default function OrderTable({ tenants }) {
             <Box
                 className="Pagination-mobile"
                 sx={{
-                    display: { xs: 'flex', sm: 'none' },
+                    display: { xs: 'none', sm: 'none' },
                     alignItems: 'center',
                     gap: 1,
                     justifyContent: 'flex-end',
@@ -466,7 +490,7 @@ export default function OrderTable({ tenants }) {
                     borderTop: '1px solid',
                     borderColor: 'neutral.outlinedBorder',
                     bgcolor: 'background.level1',
-                    display: { xs: 'none', sm: 'flex' },
+                    display: { xs: 'flex', sm: 'flex' },
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     px: 2,
@@ -478,13 +502,13 @@ export default function OrderTable({ tenants }) {
                     level="body2"
                     sx={{ fontWeight: 'initial', color: 'text.secondary' }}
                 >
-                    1-5 of 30
+                    {`${startIndex + 1}-${endIndex} of ${totalItems}`}
                 </Typography>
                 <Box sx={{ display: 'flex', gap: 1 }}>
-                    <IconButton size="sm" variant="outlined" color="neutral">
+                    <IconButton size="sm" variant="outlined" color="neutral" onClick={handlePreviousPage} disabled={currentPage === 1}>
                         <KeyboardArrowLeftIcon />
                     </IconButton>
-                    <IconButton size="sm" variant="outlined" color="neutral">
+                    <IconButton size="sm" variant="outlined" color="neutral" onClick={handleNextPage} disabled={currentPage === totalPages}>
                         <KeyboardArrowRightIcon />
                     </IconButton>
                 </Box>
