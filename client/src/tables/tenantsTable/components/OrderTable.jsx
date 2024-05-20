@@ -29,6 +29,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import ClearIcon from '@mui/icons-material/Clear';
 import Pending from '@mui/icons-material/Pending';
 import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
@@ -78,16 +79,85 @@ function RowMenu({ tenants }) {
 }
 
 export default function OrderTable({ tenants }) {
+    const [searchQuery, setSearchQuery] = useState('');
     const [order, setOrder] = useState('desc');
     const [selected, setSelected] = useState([]);
     const [open, setOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [rentStatusFilter, setRentStatusFilter] = useState('');
+    const [billStatusFilter, setBillStatusFilter] = useState('');
+    const [taskStatusFilter, setTaskStatusFilter] = useState('');
     const itemsPerPage = 20;
 
-    const totalItems = tenants.length;
+    const handleClearSearch = () => {
+        setSearchQuery('');
+    };
+
+    const getPaymentStatus = (paid, latePayments) => {
+        if (paid) {
+            return 'Paid';
+        } else if (latePayments > 0) {
+            return 'Late';
+        } else {
+            return 'Pending';
+        }
+    };
+
+    const getTaskStatus = (tenant) => {
+        if (tenant.completedTasks > 0 && tenant.completedTasks === tenant.totalTasks) {
+            return 'Completed';
+        } else if (tenant.overdueTasks > 0) {
+            return 'Overdue';
+        } else if (tenant.pendingTasks > 0) {
+            return 'Pending';
+        } else {
+            return 'No Tasks';
+        }
+    };
+
+    const filteredTenants = tenants.filter((tenant) => {
+        const fullName = `${tenant.firstName ?? ''} ${tenant.lastName ?? ''}`.toLowerCase();
+        const query = searchQuery.toLowerCase();
+        const matchesQuery = (
+            fullName.includes(query) ||
+            tenant.email?.toLowerCase().includes(query) ||
+            tenant.phone?.toLowerCase().includes(query)
+        );
+
+        const rentStatus = getPaymentStatus(tenant.rentPaid, tenant.lateRentPayments);
+        const billStatus = getPaymentStatus(tenant.billsPaid, tenant.lateBillPayments);
+        const taskStatus = getTaskStatus(tenant);
+        const matchesRentStatus = !rentStatusFilter || rentStatus.toLowerCase() === rentStatusFilter.toLowerCase();
+        const matchesBillStatus = !billStatusFilter || billStatus.toLowerCase() === billStatusFilter.toLowerCase();
+        const matchesTaskStatus = !taskStatusFilter || taskStatus.toLowerCase() === taskStatusFilter.toLowerCase();
+        return matchesQuery && matchesRentStatus && matchesBillStatus && matchesTaskStatus;
+    });
+
+
+    const totalItems = filteredTenants.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+
+    const handleSearchChange = (event) => {
+        setSearchQuery(event.target.value);
+        setCurrentPage(1);
+    };
+
+    const handleRentStatusChange = (event, newValue) => {
+        setRentStatusFilter(newValue);
+        setCurrentPage(1);
+    };
+
+    const handleBillStatusChange = (event, newValue) => {
+        setBillStatusFilter(newValue);
+        setCurrentPage(1);
+    };
+
+    const handleTaskStatusChange = (event, newValue) => {
+        setTaskStatusFilter(newValue);
+        setCurrentPage(1);
+    };
 
     const handlePreviousPage = () => {
         if (currentPage > 1) {
@@ -101,17 +171,8 @@ export default function OrderTable({ tenants }) {
         }
     };
 
-    const paginatedTenants = stableSort(tenants, getComparator(order, 'id')).slice(startIndex, endIndex);
+    const paginatedTenants = stableSort(filteredTenants, getComparator(order, 'id')).slice(startIndex, endIndex);
 
-    const getPaymentStatus = (paid, latePayments) => {
-        if (paid) {
-            return 'Paid';
-        } else if (latePayments > 0) {
-            return 'Late';
-        } else {
-            return 'Pending';
-        }
-    };
 
     const getPaymentChipColor = (status) => {
         switch (status) {
@@ -136,18 +197,6 @@ export default function OrderTable({ tenants }) {
                 return <Pending />;
             default:
                 return null;
-        }
-    };
-
-    const getTaskStatus = (tenant) => {
-        if (tenant.completedTasks > 0 && tenant.completedTasks === tenant.totalTasks) {
-            return 'Completed';
-        } else if (tenant.overdueTasks > 0) {
-            return 'Overdue';
-        } else if (tenant.pendingTasks > 0) {
-            return 'Pending';
-        } else {
-            return 'No Tasks';
         }
     };
 
@@ -184,36 +233,47 @@ export default function OrderTable({ tenants }) {
     const renderFilters = () => (
         <>
             <FormControl size="sm">
-                <FormLabel>Status</FormLabel>
+                <FormLabel>Rent status</FormLabel>
                 <Select
                     size="sm"
                     placeholder="Filter by status"
                     slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
+                    value={rentStatusFilter}
+                    onChange={handleRentStatusChange}
                 >
+                    <Option value="">All</Option>
                     <Option value="paid">Paid</Option>
                     <Option value="pending">Pending</Option>
                     <Option value="late">Late</Option>
                 </Select>
             </FormControl>
             <FormControl size="sm">
-                <FormLabel>Category</FormLabel>
-                <Select size="sm" placeholder="All">
-                    <Option value="all">All</Option>
-                    <Option value="refund">Refund</Option>
-                    <Option value="purchase">Purchase</Option>
-                    <Option value="debit">Debit</Option>
+                <FormLabel>Bill status</FormLabel>
+                <Select
+                    size="sm"
+                    placeholder="Filter by status"
+                    value={billStatusFilter}
+                    onChange={handleBillStatusChange}
+                >
+                    <Option value="">All</Option>
+                    <Option value="paid">Paid</Option>
+                    <Option value="pending">Pending</Option>
+                    <Option value="late">Late</Option>
                 </Select>
             </FormControl>
             <FormControl size="sm">
-                <FormLabel>Tenant</FormLabel>
-                <Select size="sm" placeholder="All">
-                    <Option value="all">All</Option>
-                    <Option value="olivia">Olivia Rhye</Option>
-                    <Option value="steve">Steve Hampton</Option>
-                    <Option value="ciaran">Ciaran Murray</Option>
-                    <Option value="marina">Marina Macdonald</Option>
-                    <Option value="charles">Charles Fulton</Option>
-                    <Option value="jay">Jay Hoper</Option>
+                <FormLabel>Task status</FormLabel>
+                <Select
+                    size="sm"
+                    placeholder="Filter by status"
+                    value={taskStatusFilter}
+                    onChange={handleTaskStatusChange}
+                >
+                    <Option value="">All</Option>
+                    <Option value="completed">Completed</Option>
+                    <Option value="overdue">Overdue</Option>
+                    <Option value="pending">Pending</Option>
+                    <Option value="no tasks">No tasks</Option>
                 </Select>
             </FormControl>
         </>
@@ -234,7 +294,15 @@ export default function OrderTable({ tenants }) {
                     placeholder="Search"
                     startDecorator={<SearchIcon />}
                     sx={{ flexGrow: 1 }}
-                />
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    endDecorator={
+                        searchQuery && (
+                            <IconButton onClick={handleClearSearch}>
+                                <ClearIcon />
+                            </IconButton>
+                        )
+                    } />
                 <IconButton
                     size="sm"
                     variant="outlined"
@@ -274,7 +342,14 @@ export default function OrderTable({ tenants }) {
             >
                 <FormControl sx={{ flex: 1 }} size="sm">
                     <FormLabel>Search for tenant</FormLabel>
-                    <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} />
+                    <Input size="sm" placeholder="Search" startDecorator={<SearchIcon />} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                        endDecorator={
+                            searchQuery && (
+                                <IconButton onClick={handleClearSearch}>
+                                    <ClearIcon />
+                                </IconButton>
+                            )
+                        } />
                 </FormControl>
                 {renderFilters()}
             </Box>
