@@ -16,7 +16,7 @@ import OrderTable from './components/OrderTable';
 import OrderList from './components/OrderList';
 import Header from './components/Header';
 
-export default function TenantsTable({ tenants }) {
+export default function TenantsTable({ tenants, onProfileClick }) {
     return (
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
@@ -93,7 +93,7 @@ export default function TenantsTable({ tenants }) {
                             Download PDF
                         </Button>
                     </Box>
-                    <OrderTable tenants={tenants} />
+                    <OrderTable tenants={tenants} onProfileClick={onProfileClick} />
                     {/* <OrderList tenants={tenants} /> */}
                 </Box>
             </Box>

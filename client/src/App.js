@@ -92,7 +92,7 @@ const CRMSystem = () => {
         <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
         <BillPaymentTable billPayments={billPayments} tenants={tenants} />
         <AddBillPayment billPayments={billPayments} setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
-        <TenantsTable tenants={tenants} />
+        <TenantsTable tenants={tenants} onProfileClick={handleProfileClick} />
       </div>
     </div>
   );

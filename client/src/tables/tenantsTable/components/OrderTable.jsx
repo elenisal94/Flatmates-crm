@@ -24,7 +24,6 @@ import Menu from '@mui/joy/Menu';
 import MenuButton from '@mui/joy/MenuButton';
 import MenuItem from '@mui/joy/MenuItem';
 import Dropdown from '@mui/joy/Dropdown';
-
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -78,7 +77,7 @@ function RowMenu({ tenants }) {
     );
 }
 
-export default function OrderTable({ tenants }) {
+export default function OrderTable({ tenants, onProfileClick }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [order, setOrder] = useState('desc');
     const [selected, setSelected] = useState([]);
@@ -479,7 +478,15 @@ export default function OrderTable({ tenants }) {
                                                     level="body3"
                                                     textColor="text.primary"
                                                 >
-                                                    {tenant.firstName} {tenant.lastName}
+                                                    <Link
+                                                        href="#"
+                                                        onClick={(event) => {
+                                                            event.preventDefault();
+                                                            onProfileClick(tenant);
+                                                        }}
+                                                    >
+                                                        {`${tenant.firstName} ${tenant.lastName}`}
+                                                    </Link>
                                                 </Typography>
                                             </div>
                                         </Box>
