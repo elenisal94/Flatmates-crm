@@ -16,6 +16,7 @@ import Stack from '@mui/joy/Stack';
 import Sheet from '@mui/joy/Sheet';
 import Typography from '@mui/joy/Typography';
 import CircularProgress from '@mui/joy/CircularProgress';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 export default function DrawerFilters({ selectedTenant, open, onClose, setRefreshInfo }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -98,14 +99,19 @@ export default function DrawerFilters({ selectedTenant, open, onClose, setRefres
             setRefreshInfo(true);
         }
     };
+
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+
     return (
         <React.Fragment>
             <Drawer
-                size="md"
+                size={isSmallScreen ? 'lg' : 'md'}
                 variant="plain"
-                anchor="right"
+                anchor={isSmallScreen ? 'bottom' : 'right'}
                 open={open}
                 onClose={onClose}
+                hideBackdrop={false}
                 slotProps={{
                     content: {
                         sx: {
@@ -115,8 +121,14 @@ export default function DrawerFilters({ selectedTenant, open, onClose, setRefres
                         },
                     },
                 }}
+                ModalProps={{
+                    style: {
+                        pointerEvents: 'none',
+                    },
+                }}
             >
                 <Sheet
+                    variant="outlined"
                     sx={{
                         borderRadius: 'md',
                         p: 2,

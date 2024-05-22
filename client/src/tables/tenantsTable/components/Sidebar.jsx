@@ -45,7 +45,7 @@ function Toggler({ defaultExpanded = false, renderToggle, children }) {
                     transition: '0.2s ease',
                     '& > *': {
                         overflow: 'hidden',
-                    },
+                    }
                 }}
             >
                 {children}

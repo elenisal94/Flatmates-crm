@@ -120,8 +120,12 @@ export default function OrderTable({ tenants, onProfileClick }) {
         const matchesQuery = (
             fullName.includes(query) ||
             tenant.email?.toLowerCase().includes(query) ||
-            tenant.phone?.toLowerCase().includes(query)
-        );
+            tenant.phone?.toLowerCase().includes(query) ||
+            (tenant.address &&
+                (tenant.address.flat + ' ' + tenant.address.street + ' ' + tenant.address.city + ' ' + tenant.address.postcode)
+                    .toLowerCase()
+                    .includes(query)
+            ));
 
         const rentStatus = getPaymentStatus(tenant.rentPaid, tenant.lateRentPayments);
         const billStatus = getPaymentStatus(tenant.billsPaid, tenant.lateBillPayments);
