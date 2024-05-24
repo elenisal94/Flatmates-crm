@@ -33,7 +33,9 @@ import Pending from '@mui/icons-material/Pending';
 import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import ResizableTableCell from '../../tableUtils/ResizableTableCell';
+import '../../tableUtils/TableStyles.css';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -57,19 +59,17 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-function RowMenu({ tenants }) {
+function RowMenu({ tenant, handleEditClick }) {
     return (
         <Dropdown>
             <MenuButton
                 slots={{ root: IconButton }}
                 slotProps={{ root: { variant: 'plain', color: 'neutral', size: 'sm' } }}
             >
-                <MoreHorizRoundedIcon />
+                <MoreHorizIcon />
             </MenuButton>
             <Menu size="sm" sx={{ minWidth: 140 }}>
-                <MenuItem>Edit</MenuItem>
-                <MenuItem>Rename</MenuItem>
-                <MenuItem>Move</MenuItem>
+                <MenuItem onClick={() => handleEditClick(tenant)}>Edit</MenuItem>
                 <Divider />
                 <MenuItem color="danger">Delete</MenuItem>
             </Menu>
@@ -77,7 +77,7 @@ function RowMenu({ tenants }) {
     );
 }
 
-export default function OrderTable({ tenants, onProfileClick }) {
+export default function OrderTable({ tenants, onProfileClick, handleEditClick }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [order, setOrder] = useState('desc');
     const [selected, setSelected] = useState([]);
@@ -193,11 +193,11 @@ export default function OrderTable({ tenants, onProfileClick }) {
     const getPaymentStartDecorator = (status) => {
         switch (status) {
             case 'Paid':
-                return <CheckRoundedIcon />;
+                return <CheckRoundedIcon sx={{ zIndex: -1 }} />;
             case 'Late':
-                return <ErrorOutline />;
+                return <ErrorOutline sx={{ zIndex: -1 }} />;
             case 'Pending':
-                return <Pending />;
+                return <Pending sx={{ zIndex: -1 }} />;
             default:
                 return null;
         }
@@ -221,7 +221,7 @@ export default function OrderTable({ tenants, onProfileClick }) {
     const getTaskStartDecorator = (status) => {
         switch (status) {
             case 'Completed':
-                return <CheckRoundedIcon />;
+                return <CheckRoundedIcon style={{ zIndex: 10 }} />;
             case 'Overdue':
                 return <ErrorOutline />;
             case 'Pending':
@@ -360,6 +360,8 @@ export default function OrderTable({ tenants, onProfileClick }) {
                 className="OrderTableContainer"
                 variant="outlined"
                 sx={{
+                    '--TableRow-stripeBackground': 'rgba(0 0 0 / 0.04)',
+                    '--TableRow-hoverBackground': 'rgba(0 0 0 / 0.08)',
                     display: 'block',
                     width: '100%',
                     borderRadius: 'sm',
@@ -375,17 +377,23 @@ export default function OrderTable({ tenants, onProfileClick }) {
                     aria-labelledby="tableTitle"
                     stickyHeader
                     hoverRow
+                    noWrap={false}
                     sx={{
                         '--TableCell-headBackground': 'var(--joy-palette-background-level1)',
                         '--Table-headerUnderlineThickness': '1px',
                         '--TableRow-hoverBackground': 'var(--joy-palette-background-level1)',
                         '--TableCell-paddingY': '4px',
                         '--TableCell-paddingX': '8px',
+                        '& tr > *:last-child': {
+                            position: 'sticky',
+                            right: 0,
+                            bgcolor: 'var(--TableCell-headBackground)',
+                        }
                     }}
                 >
                     <thead>
                         <tr>
-                            <th style={{ width: 48, textAlign: 'center', padding: '12px 6px' }}>
+                            <th style={{ width: 48, textAlign: 'center', padding: '12px 6px', borderRight: '1px solid rgba(0, 0, 0, 0.1)' }}>
                                 <Checkbox
                                     size="sm"
                                     indeterminate={
@@ -405,7 +413,7 @@ export default function OrderTable({ tenants, onProfileClick }) {
                                     sx={{ verticalAlign: 'text-bottom' }}
                                 />
                             </th>
-                            <th style={{ width: 120, padding: '12px 6px' }}>
+                            <ResizableTableCell>
                                 <Link
                                     underline="none"
                                     color="primary"
@@ -423,28 +431,26 @@ export default function OrderTable({ tenants, onProfileClick }) {
                                 >
                                     Tenant
                                 </Link>
-                            </th>
-                            <th style={{ width: 160, padding: '12px 6px' }}>Phone</th>
-                            <th style={{ width: 160, padding: '12px 6px' }}>Email</th>
-                            <th style={{ width: 160, padding: '12px 6px' }}>Address</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Rent status</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Total rent payments</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Completed rent payments</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Pending rent payments</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Late rent payments</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Bills status</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Total bill payments</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Completed bill payments</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Pending bill payments</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Late bill payments</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Tasks status</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Total tasks</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Completed tasks</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Pending tasks</th>
-                            <th style={{ width: 140, padding: '12px 6px' }}>Overdue tasks</th>
-                            <th style={{ width: 48, textAlign: 'center', padding: '12px 6px' }}>
-                                <RowMenu />
-                            </th>
+                            </ResizableTableCell>
+                            <ResizableTableCell>Phone</ResizableTableCell>
+                            <ResizableTableCell>Email</ResizableTableCell>
+                            <ResizableTableCell>Address</ResizableTableCell>
+                            <ResizableTableCell>Rent status</ResizableTableCell>
+                            <ResizableTableCell>Total rent payments</ResizableTableCell>
+                            <ResizableTableCell>Completed rent payments</ResizableTableCell>
+                            <ResizableTableCell>Pending rent payments</ResizableTableCell>
+                            <ResizableTableCell>Late rent payments</ResizableTableCell>
+                            <ResizableTableCell>Bills status</ResizableTableCell>
+                            <ResizableTableCell>Total bill payments</ResizableTableCell>
+                            <ResizableTableCell>Completed bill payments</ResizableTableCell>
+                            <ResizableTableCell>Pending bill payments</ResizableTableCell>
+                            <ResizableTableCell>Late bill payments</ResizableTableCell>
+                            <ResizableTableCell>Tasks status</ResizableTableCell>
+                            <ResizableTableCell>Total tasks</ResizableTableCell>
+                            <ResizableTableCell>Completed tasks</ResizableTableCell>
+                            <ResizableTableCell>Pending tasks</ResizableTableCell>
+                            <ResizableTableCell>Overdue tasks</ResizableTableCell>
+                            <th aria-label="last" style={{ width: 48, textAlign: 'center', padding: '12px 6px', borderLeft: '1px solid rgba(0, 0, 0, 0.1)' }} />
                         </tr>
                     </thead>
                     <tbody>
@@ -456,7 +462,7 @@ export default function OrderTable({ tenants, onProfileClick }) {
 
                             return (
                                 <tr key={tenant._id}>
-                                    <td style={{ textAlign: 'center' }}>
+                                    <td className="table-cell" style={{ textAlign: 'center' }}>
                                         <Checkbox
                                             size="sm"
                                             checked={isItemSelected}
@@ -473,9 +479,8 @@ export default function OrderTable({ tenants, onProfileClick }) {
                                             sx={{ verticalAlign: 'text-bottom' }}
                                         />
                                     </td>
-                                    <td>
+                                    <td className="table-cell">
                                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                            {/* <Avatar size="sm">{tenant.customer.initial}</Avatar> */}
                                             <div>
                                                 <Typography
                                                     fontWeight="lg"
@@ -495,9 +500,10 @@ export default function OrderTable({ tenants, onProfileClick }) {
                                             </div>
                                         </Box>
                                     </td>
-                                    <td>{tenant.phone}</td>
-                                    <td>{tenant.email}</td>
-                                    <td>{`${tenant.address?.flat ? `${tenant.address.flat}, ` : ''}${tenant.address?.street ? `${tenant.address.street}, ` : ''}${tenant.address?.city ? `${tenant.address.city}, ` : ''}${tenant.address?.state ? `${tenant.address.state}, ` : ''}${tenant.address?.postcode || ''}`}</td>                                    <td>
+                                    <td className="table-cell">{tenant.phone}</td>
+                                    <td className="table-cell">{tenant.email}</td>
+                                    <td className="table-cell">{`${tenant.address?.flat ? `${tenant.address.flat}, ` : ''}${tenant.address?.street ? `${tenant.address.street}, ` : ''}${tenant.address?.city ? `${tenant.address.city}, ` : ''}${tenant.address?.state ? `${tenant.address.state}, ` : ''}${tenant.address?.postcode || ''}`}</td>
+                                    <td className="table-cell">
                                         <Chip
                                             variant="soft"
                                             size="sm"
@@ -507,11 +513,11 @@ export default function OrderTable({ tenants, onProfileClick }) {
                                             {rentStatus}
                                         </Chip>
                                     </td>
-                                    <td>{tenant.totalRentPayments}</td>
-                                    <td>{tenant.completedRentPayments}</td>
-                                    <td>{tenant.pendingRentPayments}</td>
-                                    <td>{tenant.lateRentPayments}</td>
-                                    <td>
+                                    <td className="table-cell">{tenant.totalRentPayments}</td>
+                                    <td className="table-cell">{tenant.completedRentPayments}</td>
+                                    <td className="table-cell">{tenant.pendingRentPayments}</td>
+                                    <td className="table-cell">{tenant.lateRentPayments}</td>
+                                    <td className="table-cell">
                                         <Chip
                                             variant="soft"
                                             size="sm"
@@ -521,11 +527,11 @@ export default function OrderTable({ tenants, onProfileClick }) {
                                             {billStatus}
                                         </Chip>
                                     </td>
-                                    <td>{tenant.totalBillPayments}</td>
-                                    <td>{tenant.completedBillPayments}</td>
-                                    <td>{tenant.pendingBillPayments}</td>
-                                    <td>{tenant.lateBillPayments}</td>
-                                    <td><Chip
+                                    <td className="table-cell">{tenant.totalBillPayments}</td>
+                                    <td className="table-cell">{tenant.completedBillPayments}</td>
+                                    <td className="table-cell">{tenant.pendingBillPayments}</td>
+                                    <td className="table-cell">{tenant.lateBillPayments}</td>
+                                    <td className="table-cell"><Chip
                                         variant="soft"
                                         size="sm"
                                         startDecorator={getTaskStartDecorator}
@@ -533,20 +539,20 @@ export default function OrderTable({ tenants, onProfileClick }) {
                                     >
                                         {taskStatus}
                                     </Chip></td>
-                                    <td>
+                                    <td className="table-cell">
                                         {tenant.totalTasks}
                                     </td>
-                                    <td>
+                                    <td className="table-cell">
                                         {tenant.completedTasks}
                                     </td>
-                                    <td>
+                                    <td className="table-cell">
                                         {tenant.pendingTasks}
                                     </td>
-                                    <td>
+                                    <td className="table-cell">
                                         {tenant.overdueTasks}
                                     </td>
-                                    <td style={{ textAlign: 'center' }}>
-                                        <RowMenu />
+                                    <td style={{ textAlign: 'center', borderLeft: '1px solid rgba(0, 0, 0, 0.1)' }}>
+                                        <RowMenu tenant={tenant} handleEditClick={handleEditClick} />
                                     </td>
                                 </tr>
                             );

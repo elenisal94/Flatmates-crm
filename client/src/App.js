@@ -9,7 +9,7 @@ import TaskTable from './tables/TasksTable';
 import BillPaymentTable from './tables/BillPaymentsTable';
 import RentPaymentTable from './tables/RentPaymentsTable';
 import Navbar from './layouts/Navbar';
-import PersistentDrawerRight from './Drawer';
+import Drawer from './Drawer';
 import TenantsTable from './tables/tenantsTable/TenantsTable';
 
 axios.defaults.baseURL = 'http://localhost:5001';
@@ -24,6 +24,8 @@ const CRMSystem = () => {
   const [selectedTenant, setSelectedTenant] = useState(null);
   const [open, setOpen] = useState(false);
   const [refreshInfo, setRefreshInfo] = useState(false)
+  const [isEditing, setIsEditing] = useState(false);
+
 
   useEffect(() => {
     // Fetch tenants
@@ -60,8 +62,13 @@ const CRMSystem = () => {
   }, [refreshInfo]);
 
   const handleProfileClick = (tenant) => {
-    console.log("handleProfileClick called with tenant:", tenant);
     setSelectedTenant(tenant);
+    setOpen(true);
+  };
+
+  const handleEditClick = (tenant) => {
+    setSelectedTenant(tenant);
+    setIsEditing(true);
     setOpen(true);
   };
 
@@ -84,7 +91,7 @@ const CRMSystem = () => {
       <Navbar />
       <div className="main-content">
         <TenantTable tenants={tenants} onProfileClick={handleProfileClick} setSelectedTenant={setSelectedTenant} />
-        <PersistentDrawerRight selectedTenant={selectedTenant} open={open} onClose={handleCloseDrawer} setRefreshInfo={setRefreshInfo} />
+        <Drawer selectedTenant={selectedTenant} open={open} onClose={handleCloseDrawer} setRefreshInfo={setRefreshInfo} isEditing={isEditing} setIsEditing={setIsEditing} />
         <AddTenantForm setTenants={setTenants} setRefreshInfo={setRefreshInfo} />
         <TaskTable tasks={tasks} tenants={tenants} />
         <AddTaskForm setTasks={setTasks} tenants={tenants} setRefreshInfo={setRefreshInfo} />
@@ -92,7 +99,7 @@ const CRMSystem = () => {
         <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
         <BillPaymentTable billPayments={billPayments} tenants={tenants} />
         <AddBillPayment billPayments={billPayments} setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
-        <TenantsTable tenants={tenants} onProfileClick={handleProfileClick} />
+        <TenantsTable tenants={tenants} onProfileClick={handleProfileClick} handleEditClick={handleEditClick} />
       </div>
     </div>
   );

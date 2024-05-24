@@ -1,0 +1,7 @@
+.table-cell {
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow: hidden;
+}

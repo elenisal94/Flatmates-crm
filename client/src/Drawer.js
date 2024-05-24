@@ -18,8 +18,7 @@ import Typography from '@mui/joy/Typography';
 import CircularProgress from '@mui/joy/CircularProgress';
 import { useMediaQuery, useTheme } from '@mui/material';
 
-export default function DrawerFilters({ selectedTenant, open, onClose, setRefreshInfo }) {
-    const [isEditing, setIsEditing] = useState(false);
+export default function DrawerFilters({ isEditing, setIsEditing, selectedTenant, open, onClose, setRefreshInfo }) {
     const [isLoading, setIsLoading] = useState(false);
 
     const {
@@ -46,7 +45,6 @@ export default function DrawerFilters({ selectedTenant, open, onClose, setRefres
             setCity(city || '');
             setPostcode(postcode || '');
         }
-        setIsEditing(false);
     }, [selectedTenant]);
 
     const handleEditButtonClick = () => {
@@ -118,6 +116,7 @@ export default function DrawerFilters({ selectedTenant, open, onClose, setRefres
                             bgcolor: 'transparent',
                             p: { md: 3, sm: 0 },
                             boxShadow: 'none',
+                            height: isSmallScreen ? '85vh' : 'auto',
                         },
                     },
                 }}
@@ -435,7 +434,7 @@ export default function DrawerFilters({ selectedTenant, open, onClose, setRefres
                                 onClick={handleBackButtonClick}>
                                 Back
                             </Button>}
-                        {!isEditing ? <Button sx={{ marginLeft: 'auto' }} onClick={handleEditButtonClick}>Edit tenant info</Button> : <Button onClick={finalSubmit}>
+                        {!isEditing ? <Button color="warning" variant="soft" sx={{ marginLeft: 'auto' }} onClick={handleEditButtonClick}>Edit tenant info</Button> : <Button onClick={finalSubmit}>
                             {isLoading ? <CircularProgress /> : "Save Changes"}
                         </Button>}
                     </Stack>
