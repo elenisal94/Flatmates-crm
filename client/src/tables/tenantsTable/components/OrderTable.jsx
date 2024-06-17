@@ -35,6 +35,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ResizableTableCell from '../../tableUtils/ResizableTableCell';
+import { ListItemText } from '@mui/material';
 import '../../tableUtils/TableStyles.css';
 
 function descendingComparator(a, b, orderBy) {
@@ -87,6 +88,47 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
     const [billStatusFilter, setBillStatusFilter] = useState('');
     const [taskStatusFilter, setTaskStatusFilter] = useState('');
     const itemsPerPage = 20;
+    const [columnVisibility, setColumnVisibility] = useState({
+        phone: true,
+        email: true,
+        address: true,
+        rentStatus: true,
+        totalRentPayments: true,
+        completedRentPayments: true,
+        pendingRentPayments: true,
+        lateRentPayments: true,
+        billsStatus: true,
+        totalBillPayments: true,
+        completedBillPayments: true,
+        pendingBillPayments: true,
+        lateBillPayments: true,
+        tasksStatus: true,
+        totalTasks: true,
+        completedTasks: true,
+        pendingTasks: true,
+        overdueTasks: true
+    });
+
+    const columns = [
+        { id: 'phone', label: 'Phone' },
+        { id: 'email', label: 'Email' },
+        { id: 'address', label: 'Address' },
+        { id: 'rentStatus', label: 'Rent Status' },
+        { id: 'totalRentPayments', label: 'Total Rent Payments' },
+        { id: 'completedRentPayments', label: 'Completed Rent Payments' },
+        { id: 'pendingRentPayments', label: 'Pending Rent Payments' },
+        { id: 'lateRentPayments', label: 'Late Rent Payments' },
+        { id: 'billsStatus', label: 'Bills Status' },
+        { id: 'totalBillPayments', label: 'Total Bill Payments' },
+        { id: 'completedBillPayments', label: 'Completed Bill Payments' },
+        { id: 'pendingBillPayments', label: 'Pending Bill Payments' },
+        { id: 'lateBillPayments', label: 'Late Bill Payments' },
+        { id: 'tasksStatus', label: 'Tasks Status' },
+        { id: 'totalTasks', label: 'Total Tasks' },
+        { id: 'completedTasks', label: 'Completed Tasks' },
+        { id: 'pendingTasks', label: 'Pending Tasks' },
+        { id: 'overdueTasks', label: 'Overdue Tasks' }
+    ];
 
     const handleClearSearch = () => {
         setSearchQuery('');
@@ -142,10 +184,6 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
 
-    const handleSearchChange = (event) => {
-        setSearchQuery(event.target.value);
-        setCurrentPage(1);
-    };
 
     const handleRentStatusChange = (event, newValue) => {
         setRentStatusFilter(newValue);
@@ -221,7 +259,7 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
     const getTaskStartDecorator = (status) => {
         switch (status) {
             case 'Completed':
-                return <CheckRoundedIcon style={{ zIndex: 10 }} />;
+                return <CheckRoundedIcon />;
             case 'Overdue':
                 return <ErrorOutline />;
             case 'Pending':
@@ -231,6 +269,13 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
             default:
                 return null;
         }
+    };
+
+    const handleColumnToggle = (columnId) => {
+        setColumnVisibility((prevState) => ({
+            ...prevState,
+            [columnId]: !prevState[columnId]
+        }));
     };
 
     const renderFilters = () => (
@@ -277,6 +322,25 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                     <Option value="overdue">Overdue</Option>
                     <Option value="pending">Pending</Option>
                     <Option value="no tasks">No tasks</Option>
+                </Select>
+            </FormControl>
+            <FormControl size="sm">
+                <FormLabel>Visible columns list</FormLabel>
+                <Select
+                    multiple
+                    value={Object.keys(columnVisibility).filter((columnId) => columnVisibility[columnId])}
+                    input={<Input />}
+                    renderValue={(selected) => selected.join(', ')}
+                >
+                    {columns.map((column) => (
+                        <MenuItem key={column.id} value={column.id}>
+                            <Checkbox
+                                checked={columnVisibility[column.id]}
+                                onChange={() => handleColumnToggle(column.id)} // Modify this line
+                            />
+                            <ListItemText primary={column.label} />
+                        </MenuItem>
+                    ))}
                 </Select>
             </FormControl>
         </>
@@ -432,24 +496,24 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                                     Tenant
                                 </Link>
                             </ResizableTableCell>
-                            <ResizableTableCell>Phone</ResizableTableCell>
-                            <ResizableTableCell>Email</ResizableTableCell>
-                            <ResizableTableCell>Address</ResizableTableCell>
-                            <ResizableTableCell>Rent status</ResizableTableCell>
-                            <ResizableTableCell>Total rent payments</ResizableTableCell>
-                            <ResizableTableCell>Completed rent payments</ResizableTableCell>
-                            <ResizableTableCell>Pending rent payments</ResizableTableCell>
-                            <ResizableTableCell>Late rent payments</ResizableTableCell>
-                            <ResizableTableCell>Bills status</ResizableTableCell>
-                            <ResizableTableCell>Total bill payments</ResizableTableCell>
-                            <ResizableTableCell>Completed bill payments</ResizableTableCell>
-                            <ResizableTableCell>Pending bill payments</ResizableTableCell>
-                            <ResizableTableCell>Late bill payments</ResizableTableCell>
-                            <ResizableTableCell>Tasks status</ResizableTableCell>
-                            <ResizableTableCell>Total tasks</ResizableTableCell>
-                            <ResizableTableCell>Completed tasks</ResizableTableCell>
-                            <ResizableTableCell>Pending tasks</ResizableTableCell>
-                            <ResizableTableCell>Overdue tasks</ResizableTableCell>
+                            {columnVisibility['phone'] && <ResizableTableCell>Phone</ResizableTableCell>}
+                            {columnVisibility['email'] && <ResizableTableCell>Email</ResizableTableCell>}
+                            {columnVisibility['address'] && <ResizableTableCell>Address</ResizableTableCell>}
+                            {columnVisibility['rentStatus'] && <ResizableTableCell>Rent status</ResizableTableCell>}
+                            {columnVisibility['totalRentPayments'] && <ResizableTableCell>Total rent payments</ResizableTableCell>}
+                            {columnVisibility['completedRentPayments'] && <ResizableTableCell>Completed rent payments</ResizableTableCell>}
+                            {columnVisibility['pendingRentPayments'] && <ResizableTableCell>Pending rent payments</ResizableTableCell>}
+                            {columnVisibility['lateRentPayments'] && <ResizableTableCell>Late rent payments</ResizableTableCell>}
+                            {columnVisibility['billsStatus'] && <ResizableTableCell>Bills status</ResizableTableCell>}
+                            {columnVisibility['totalBillPayments'] && <ResizableTableCell>Total bill payments</ResizableTableCell>}
+                            {columnVisibility['completedBillPayments'] && <ResizableTableCell>Completed bill payments</ResizableTableCell>}
+                            {columnVisibility['pendingBillPayments'] && <ResizableTableCell>Pending bill payments</ResizableTableCell>}
+                            {columnVisibility['lateBillPayments'] && <ResizableTableCell>Late bill payments</ResizableTableCell>}
+                            {columnVisibility['tasksStatus'] && <ResizableTableCell>Tasks status</ResizableTableCell>}
+                            {columnVisibility['totalTasks'] && <ResizableTableCell>Total tasks</ResizableTableCell>}
+                            {columnVisibility['completedTasks'] && <ResizableTableCell>Completed tasks</ResizableTableCell>}
+                            {columnVisibility['pendingTasks'] && <ResizableTableCell>Pending tasks</ResizableTableCell>}
+                            {columnVisibility['overdueTasks'] && <ResizableTableCell>Overdue tasks</ResizableTableCell>}
                             <th aria-label="last" style={{ width: 48, textAlign: 'center', padding: '12px 6px', borderLeft: '1px solid rgba(0, 0, 0, 0.1)' }} />
                         </tr>
                     </thead>
@@ -551,7 +615,7 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                                     <td className="table-cell">
                                         {tenant.overdueTasks}
                                     </td>
-                                    <td style={{ textAlign: 'center', borderLeft: '1px solid rgba(0, 0, 0, 0.1)' }}>
+                                    <td style={{ textAlign: 'center', borderLeft: '1px solid rgba(0, 0, 0, 0.1)', zIndex: '2' }}>
                                         <RowMenu tenant={tenant} handleEditClick={handleEditClick} />
                                     </td>
                                 </tr>

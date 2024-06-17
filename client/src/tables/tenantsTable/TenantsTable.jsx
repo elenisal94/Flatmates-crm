@@ -13,7 +13,6 @@ import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
 import Sidebar from './components/Sidebar';
 import OrderTable from './components/OrderTable';
-import OrderList from './components/OrderList';
 import Header from './components/Header';
 
 export default function TenantsTable({ tenants, onProfileClick, handleEditClick }) {
@@ -94,7 +93,6 @@ export default function TenantsTable({ tenants, onProfileClick, handleEditClick 
                         </Button>
                     </Box>
                     <OrderTable tenants={tenants} onProfileClick={onProfileClick} handleEditClick={handleEditClick} />
-                    {/* <OrderList tenants={tenants} /> */}
                 </Box>
             </Box>
         </CssVarsProvider>

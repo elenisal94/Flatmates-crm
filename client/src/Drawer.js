@@ -116,7 +116,7 @@ export default function DrawerFilters({ isEditing, setIsEditing, selectedTenant,
                             bgcolor: 'transparent',
                             p: { md: 3, sm: 0 },
                             boxShadow: 'none',
-                            height: isSmallScreen ? '85vh' : 'auto',
+                            height: isSmallScreen ? '85vh' : '100%',
                         },
                     },
                 }}
@@ -138,9 +138,9 @@ export default function DrawerFilters({ isEditing, setIsEditing, selectedTenant,
                         overflow: 'auto',
                     }}
                 >
+                    <ModalClose />
                     <DialogTitle>Tenant profile</DialogTitle>
                     <DialogContent>
-                        <ModalClose />
                         {selectedTenant && (
                             !isEditing ? (
                                 <FormControl orientation="horizontal">
