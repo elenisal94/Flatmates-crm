@@ -5,6 +5,7 @@ import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
 import Chip from '@mui/joy/Chip';
+import ChipDelete from '@mui/joy/ChipDelete';
 import Divider from '@mui/joy/Divider';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
@@ -84,9 +85,9 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
     const [selected, setSelected] = useState([]);
     const [open, setOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
-    const [rentStatusFilter, setRentStatusFilter] = useState('');
-    const [billStatusFilter, setBillStatusFilter] = useState('');
-    const [taskStatusFilter, setTaskStatusFilter] = useState('');
+    const [rentStatusFilter, setRentStatusFilter] = useState([]);
+    const [billStatusFilter, setBillStatusFilter] = useState([]);
+    const [taskStatusFilter, setTaskStatusFilter] = useState([]);
     const itemsPerPage = 20;
     const [columnVisibility, setColumnVisibility] = useState({
         phone: true,
@@ -172,9 +173,9 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
         const rentStatus = getPaymentStatus(tenant.rentPaid, tenant.lateRentPayments);
         const billStatus = getPaymentStatus(tenant.billsPaid, tenant.lateBillPayments);
         const taskStatus = getTaskStatus(tenant);
-        const matchesRentStatus = !rentStatusFilter || rentStatus.toLowerCase() === rentStatusFilter.toLowerCase();
-        const matchesBillStatus = !billStatusFilter || billStatus.toLowerCase() === billStatusFilter.toLowerCase();
-        const matchesTaskStatus = !taskStatusFilter || taskStatus.toLowerCase() === taskStatusFilter.toLowerCase();
+        const matchesRentStatus = !rentStatusFilter.length || rentStatusFilter.includes(rentStatus.toLowerCase());
+        const matchesBillStatus = !billStatusFilter || billStatusFilter.length === 0 || billStatusFilter.includes(billStatus.toLowerCase());
+        const matchesTaskStatus = !taskStatusFilter.length || taskStatusFilter.includes(taskStatus.toLowerCase());
         return matchesQuery && matchesRentStatus && matchesBillStatus && matchesTaskStatus;
     });
 
@@ -186,17 +187,21 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
 
 
     const handleRentStatusChange = (event, newValue) => {
-        setRentStatusFilter(newValue);
+        const updatedValue = Array.isArray(newValue) ? newValue : [newValue];
+        setRentStatusFilter(updatedValue);
         setCurrentPage(1);
     };
 
+
     const handleBillStatusChange = (event, newValue) => {
-        setBillStatusFilter(newValue);
+        const updatedValue = Array.isArray(newValue) ? newValue : [newValue];
+        setBillStatusFilter(updatedValue);
         setCurrentPage(1);
     };
 
     const handleTaskStatusChange = (event, newValue) => {
-        setTaskStatusFilter(newValue);
+        const updatedValue = Array.isArray(newValue) ? newValue : [newValue];
+        setTaskStatusFilter(updatedValue);
         setCurrentPage(1);
     };
 
@@ -278,18 +283,40 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
         }));
     };
 
+    const handleChipDelete = (valueToDelete) => {
+        const specificValue = valueToDelete.value;
+        console.log('value to delete', specificValue)
+        const updatedFilter = setBillStatusFilter((prev) => prev.filter((value) => value !== specificValue));
+        setBillStatusFilter(updatedFilter);
+    };
+
     const renderFilters = () => (
         <>
             <FormControl size="sm">
                 <FormLabel>Rent status</FormLabel>
                 <Select
+                    multiple
                     size="sm"
                     placeholder="Filter by status"
                     slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
-                    value={rentStatusFilter}
+                    // value={rentStatusFilter}
                     onChange={handleRentStatusChange}
+                    renderValue={(rentStatusFilter) => (
+                        <Box sx={{ display: 'flex', gap: '0.25rem' }}>
+                            {rentStatusFilter.map((selectedOption) => (
+                                <Chip
+                                    variant="soft"
+                                    color="primary">
+                                    {selectedOption.label}
+                                </Chip>
+                            ))}
+                        </Box>
+                    )}
+                    sx={{
+                        minWidth: '15rem',
+                    }}
                 >
-                    <Option value="">All</Option>
+                    {/* <Option value="">All</Option> */}
                     <Option value="paid">Paid</Option>
                     <Option value="pending">Pending</Option>
                     <Option value="late">Late</Option>
@@ -298,12 +325,30 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
             <FormControl size="sm">
                 <FormLabel>Bill status</FormLabel>
                 <Select
+                    multiple
                     size="sm"
                     placeholder="Filter by status"
-                    value={billStatusFilter}
+                    slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
+                    // value={billStatusFilter}
                     onChange={handleBillStatusChange}
+                    renderValue={(billStatusFilter) => (
+                        <Box sx={{ display: 'flex', gap: '0.25rem' }}>
+                            {billStatusFilter.map((selectedOption) => (
+                                <Chip variant="soft"
+                                    color="primary"
+                                // endDecorator={
+                                //     <ChipDelete onDelete={() => handleChipDelete(selectedOption)} />}
+                                >
+                                    {selectedOption.label}
+                                </Chip>
+                            ))}
+                        </Box>
+                    )}
+                    sx={{
+                        minWidth: '15rem',
+                    }}
                 >
-                    <Option value="">All</Option>
+                    {/* <Option value="">All</Option> */}
                     <Option value="paid">Paid</Option>
                     <Option value="pending">Pending</Option>
                     <Option value="late">Late</Option>
@@ -312,12 +357,26 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
             <FormControl size="sm">
                 <FormLabel>Task status</FormLabel>
                 <Select
+                    multiple
                     size="sm"
                     placeholder="Filter by status"
-                    value={taskStatusFilter}
+                    slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
+                    // value={taskStatusFilter}
                     onChange={handleTaskStatusChange}
+                    renderValue={(taskStatusFilter) => (
+                        <Box sx={{ display: 'flex', gap: '0.25rem' }}>
+                            {taskStatusFilter.map((selectedOption) => (
+                                <Chip variant="soft" color="primary">
+                                    {selectedOption.label}
+                                </Chip>
+                            ))}
+                        </Box>
+                    )}
+                    sx={{
+                        minWidth: '15rem',
+                    }}
                 >
-                    <Option value="">All</Option>
+                    {/* <Option value="">All</Option> */}
                     <Option value="completed">Completed</Option>
                     <Option value="overdue">Overdue</Option>
                     <Option value="pending">Pending</Option>
@@ -336,7 +395,7 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                         <MenuItem key={column.id} value={column.id}>
                             <Checkbox
                                 checked={columnVisibility[column.id]}
-                                onChange={() => handleColumnToggle(column.id)} // Modify this line
+                                onChange={() => handleColumnToggle(column.id)}
                             />
                             <ListItemText primary={column.label} />
                         </MenuItem>
@@ -564,57 +623,87 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                                             </div>
                                         </Box>
                                     </td>
-                                    <td className="table-cell">{tenant.phone}</td>
-                                    <td className="table-cell">{tenant.email}</td>
-                                    <td className="table-cell">{`${tenant.address?.flat ? `${tenant.address.flat}, ` : ''}${tenant.address?.street ? `${tenant.address.street}, ` : ''}${tenant.address?.city ? `${tenant.address.city}, ` : ''}${tenant.address?.state ? `${tenant.address.state}, ` : ''}${tenant.address?.postcode || ''}`}</td>
-                                    <td className="table-cell">
-                                        <Chip
-                                            variant="soft"
-                                            size="sm"
-                                            startDecorator={getPaymentStartDecorator(rentStatus)}
-                                            color={getPaymentChipColor(rentStatus)}
-                                        >
-                                            {rentStatus}
-                                        </Chip>
-                                    </td>
-                                    <td className="table-cell">{tenant.totalRentPayments}</td>
-                                    <td className="table-cell">{tenant.completedRentPayments}</td>
-                                    <td className="table-cell">{tenant.pendingRentPayments}</td>
-                                    <td className="table-cell">{tenant.lateRentPayments}</td>
-                                    <td className="table-cell">
-                                        <Chip
-                                            variant="soft"
-                                            size="sm"
-                                            startDecorator={getPaymentStartDecorator(billStatus)}
-                                            color={getPaymentChipColor(billStatus)}
-                                        >
-                                            {billStatus}
-                                        </Chip>
-                                    </td>
-                                    <td className="table-cell">{tenant.totalBillPayments}</td>
-                                    <td className="table-cell">{tenant.completedBillPayments}</td>
-                                    <td className="table-cell">{tenant.pendingBillPayments}</td>
-                                    <td className="table-cell">{tenant.lateBillPayments}</td>
-                                    <td className="table-cell"><Chip
-                                        variant="soft"
-                                        size="sm"
-                                        startDecorator={getTaskStartDecorator}
-                                        color={getTaskChipColor(taskStatus)}
-                                    >
-                                        {taskStatus}
-                                    </Chip></td>
-                                    <td className="table-cell">
-                                        {tenant.totalTasks}
-                                    </td>
-                                    <td className="table-cell">
-                                        {tenant.completedTasks}
-                                    </td>
-                                    <td className="table-cell">
-                                        {tenant.pendingTasks}
-                                    </td>
-                                    <td className="table-cell">
-                                        {tenant.overdueTasks}
-                                    </td>
+                                    {columnVisibility.phone && (
+                                        <td className="table-cell">{tenant.phone}</td>
+                                    )}
+                                    {columnVisibility.email && (
+                                        <td className="table-cell">{tenant.email}</td>
+                                    )}
+                                    {columnVisibility.address && (
+                                        <td className="table-cell">{`${tenant.address?.flat ? `${tenant.address.flat}, ` : ''}${tenant.address?.street ? `${tenant.address.street}, ` : ''}${tenant.address?.city ? `${tenant.address.city}, ` : ''}${tenant.address?.state ? `${tenant.address.state}, ` : ''}${tenant.address?.postcode || ''}`}</td>
+                                    )}
+                                    {columnVisibility.rentStatus && (
+                                        <td className="table-cell">
+                                            <Chip
+                                                variant="soft"
+                                                size="sm"
+                                                startDecorator={getPaymentStartDecorator(rentStatus)}
+                                                color={getPaymentChipColor(rentStatus)}
+                                            >
+                                                {rentStatus}
+                                            </Chip>
+                                        </td>
+                                    )}
+                                    {columnVisibility.totalRentPayments && (
+                                        <td className="table-cell">{tenant.totalRentPayments}</td>
+                                    )}
+                                    {columnVisibility.completedRentPayments && (
+                                        <td className="table-cell">{tenant.completedRentPayments}</td>
+                                    )}
+                                    {columnVisibility.pendingRentPayments && (
+                                        <td className="table-cell">{tenant.pendingRentPayments}</td>
+                                    )}
+                                    {columnVisibility.lateRentPayments && (
+                                        <td className="table-cell">{tenant.lateRentPayments}</td>
+                                    )}
+                                    {columnVisibility.billsStatus && (
+                                        <td className="table-cell">
+                                            <Chip
+                                                variant="soft"
+                                                size="sm"
+                                                startDecorator={getPaymentStartDecorator(billStatus)}
+                                                color={getPaymentChipColor(billStatus)}
+                                            >
+                                                {billStatus}
+                                            </Chip>
+                                        </td>
+                                    )}
+                                    {columnVisibility.totalBillPayments && (
+                                        <td className="table-cell">{tenant.totalBillPayments}</td>
+                                    )}
+                                    {columnVisibility.completedBillPayments && (
+                                        <td className="table-cell">{tenant.completedBillPayments}</td>
+                                    )}
+                                    {columnVisibility.pendingBillPayments && (
+                                        <td className="table-cell">{tenant.pendingBillPayments}</td>
+                                    )}
+                                    {columnVisibility.lateBillPayments && (
+                                        <td className="table-cell">{tenant.lateBillPayments}</td>
+                                    )}
+                                    {columnVisibility.tasksStatus && (
+                                        <td className="table-cell">
+                                            <Chip
+                                                variant="soft"
+                                                size="sm"
+                                                startDecorator={getTaskStartDecorator}
+                                                color={getTaskChipColor(taskStatus)}
+                                            >
+                                                {taskStatus}
+                                            </Chip>
+                                        </td>
+                                    )}
+                                    {columnVisibility.totalTasks && (
+                                        <td className="table-cell">{tenant.totalTasks}</td>
+                                    )}
+                                    {columnVisibility.completedTasks && (
+                                        <td className="table-cell">{tenant.completedTasks}</td>
+                                    )}
+                                    {columnVisibility.pendingTasks && (
+                                        <td className="table-cell">{tenant.pendingTasks}</td>
+                                    )}
+                                    {columnVisibility.overdueTasks && (
+                                        <td className="table-cell">{tenant.overdueTasks}</td>
+                                    )}
                                     <td style={{ textAlign: 'center', borderLeft: '1px solid rgba(0, 0, 0, 0.1)', zIndex: '2' }}>
                                         <RowMenu tenant={tenant} handleEditClick={handleEditClick} />
                                     </td>
