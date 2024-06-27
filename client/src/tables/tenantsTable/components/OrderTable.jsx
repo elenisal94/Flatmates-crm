@@ -37,7 +37,9 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import ResizableTableCell from '../../tableUtils/ResizableTableCell';
 import { ListItemText } from '@mui/material';
+import CloseRounded from '@mui/icons-material/CloseRounded';
 import '../../tableUtils/TableStyles.css';
+import StatusFilter from '../../tableUtils/StatusFilter'
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) return -1;
@@ -131,8 +133,32 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
         { id: 'overdueTasks', label: 'Overdue Tasks' }
     ];
 
+    // const rentOptions = [
+    //     { value: 'paid', label: 'Paid' },
+    //     { value: 'pending', label: 'Pending' },
+    //     { value: 'late', label: 'Late' },
+    // ];
+
+    // const billOptions = [
+    //     { value: 'paid', label: 'Paid' },
+    //     { value: 'pending', label: 'Pending' },
+    //     { value: 'late', label: 'Late' },
+    // ];
+
+    // const taskOptions = [
+    //     { value: 'completed', label: 'Completed' },
+    //     { value: 'overdue', label: 'Overdue' },
+    //     { value: 'pending', label: 'Pending' },
+    //     { value: 'no tasks', label: 'No tasks' },
+    // ];
+
     const handleClearSearch = () => {
         setSearchQuery('');
+    };
+
+    const clearStatusFilter = (setStatusFilter) => {
+        setStatusFilter([]);
+        setCurrentPage(1);
     };
 
     const getPaymentStatus = (paid, latePayments) => {
@@ -185,25 +211,24 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
 
-
-    const handleRentStatusChange = (event, newValue) => {
+    const handleStatusChange = (type) => (event, newValue) => {
         const updatedValue = Array.isArray(newValue) ? newValue : [newValue];
-        setRentStatusFilter(updatedValue);
+        switch (type) {
+            case 'rent':
+                setRentStatusFilter(updatedValue);
+                break;
+            case 'bill':
+                setBillStatusFilter(updatedValue);
+                break;
+            case 'task':
+                setTaskStatusFilter(updatedValue);
+                break;
+            default:
+                break;
+        }
         setCurrentPage(1);
     };
 
-
-    const handleBillStatusChange = (event, newValue) => {
-        const updatedValue = Array.isArray(newValue) ? newValue : [newValue];
-        setBillStatusFilter(updatedValue);
-        setCurrentPage(1);
-    };
-
-    const handleTaskStatusChange = (event, newValue) => {
-        const updatedValue = Array.isArray(newValue) ? newValue : [newValue];
-        setTaskStatusFilter(updatedValue);
-        setCurrentPage(1);
-    };
 
     const handlePreviousPage = () => {
         if (currentPage > 1) {
@@ -283,24 +308,51 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
         }));
     };
 
-    const handleChipDelete = (valueToDelete) => {
-        const specificValue = valueToDelete.value;
-        console.log('value to delete', specificValue)
-        const updatedFilter = setBillStatusFilter((prev) => prev.filter((value) => value !== specificValue));
-        setBillStatusFilter(updatedFilter);
-    };
 
     const renderFilters = () => (
         <>
+            {/* Refactoring approach */}
+            {/* <StatusFilter
+                label="Rent status"
+                options={rentOptions}
+                value={rentStatusFilter}
+                onChange={handleStatusChange('rent')}
+                clearFilter={() => clearStatusFilter(setRentStatusFilter)}
+            />
+            <StatusFilter
+                label="Bill status"
+                options={billOptions}
+                value={billStatusFilter}
+                onChange={handleStatusChange('bill')}
+                clearFilter={() => clearStatusFilter(setBillStatusFilter)}
+            />
+            <StatusFilter
+                label="Task status"
+                options={taskOptions}
+                value={taskStatusFilter}
+                onChange={handleStatusChange('task')}
+                clearFilter={() => clearStatusFilter(setTaskStatusFilter)}
+            /> */}
             <FormControl size="sm">
                 <FormLabel>Rent status</FormLabel>
                 <Select
                     multiple
                     size="sm"
-                    placeholder="Filter by status"
+                    placeholder="Filter rents"
                     slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
-                    // value={rentStatusFilter}
-                    onChange={handleRentStatusChange}
+                    value={rentStatusFilter}
+                    onChange={handleStatusChange('rent')}
+                    {...(rentStatusFilter.length > 0 && {
+                        endDecorator: (
+                            <IconButton
+                                size="sm"
+                                onClick={() => clearStatusFilter(setRentStatusFilter)}
+                            >
+                                <CloseRounded />
+                            </IconButton>
+                        ),
+                        indicator: null,
+                    })}
                     renderValue={(rentStatusFilter) => (
                         <Box sx={{ display: 'flex', gap: '0.25rem' }}>
                             {rentStatusFilter.map((selectedOption) => (
@@ -316,7 +368,6 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                         minWidth: '15rem',
                     }}
                 >
-                    {/* <Option value="">All</Option> */}
                     <Option value="paid">Paid</Option>
                     <Option value="pending">Pending</Option>
                     <Option value="late">Late</Option>
@@ -327,17 +378,26 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                 <Select
                     multiple
                     size="sm"
-                    placeholder="Filter by status"
+                    placeholder="Filter bills"
                     slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
-                    // value={billStatusFilter}
-                    onChange={handleBillStatusChange}
+                    value={billStatusFilter}
+                    onChange={handleStatusChange('bill')}
+                    {...(billStatusFilter.length > 0 && {
+                        endDecorator: (
+                            <IconButton
+                                size="sm"
+                                onClick={() => clearStatusFilter(setBillStatusFilter)}
+                            >
+                                <CloseRounded />
+                            </IconButton>
+                        ),
+                        indicator: null,
+                    })}
                     renderValue={(billStatusFilter) => (
                         <Box sx={{ display: 'flex', gap: '0.25rem' }}>
                             {billStatusFilter.map((selectedOption) => (
                                 <Chip variant="soft"
                                     color="primary"
-                                // endDecorator={
-                                //     <ChipDelete onDelete={() => handleChipDelete(selectedOption)} />}
                                 >
                                     {selectedOption.label}
                                 </Chip>
@@ -348,7 +408,6 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                         minWidth: '15rem',
                     }}
                 >
-                    {/* <Option value="">All</Option> */}
                     <Option value="paid">Paid</Option>
                     <Option value="pending">Pending</Option>
                     <Option value="late">Late</Option>
@@ -359,10 +418,21 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                 <Select
                     multiple
                     size="sm"
-                    placeholder="Filter by status"
+                    placeholder="Filter tasks"
                     slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
-                    // value={taskStatusFilter}
-                    onChange={handleTaskStatusChange}
+                    value={taskStatusFilter}
+                    onChange={handleStatusChange('task')}
+                    {...(taskStatusFilter.length > 0 && {
+                        endDecorator: (
+                            <IconButton
+                                size="sm"
+                                onClick={() => clearStatusFilter(setTaskStatusFilter)}
+                            >
+                                <CloseRounded />
+                            </IconButton>
+                        ),
+                        indicator: null,
+                    })}
                     renderValue={(taskStatusFilter) => (
                         <Box sx={{ display: 'flex', gap: '0.25rem' }}>
                             {taskStatusFilter.map((selectedOption) => (
@@ -376,7 +446,6 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                         minWidth: '15rem',
                     }}
                 >
-                    {/* <Option value="">All</Option> */}
                     <Option value="completed">Completed</Option>
                     <Option value="overdue">Overdue</Option>
                     <Option value="pending">Pending</Option>
@@ -387,6 +456,7 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                 <FormLabel>Visible columns list</FormLabel>
                 <Select
                     multiple
+                    placeholder="Selected Columns"
                     value={Object.keys(columnVisibility).filter((columnId) => columnVisibility[columnId])}
                     input={<Input />}
                     renderValue={(selected) => selected.join(', ')}
@@ -394,6 +464,7 @@ export default function OrderTable({ tenants, onProfileClick, handleEditClick })
                     {columns.map((column) => (
                         <MenuItem key={column.id} value={column.id}>
                             <Checkbox
+                                overlay
                                 checked={columnVisibility[column.id]}
                                 onChange={() => handleColumnToggle(column.id)}
                             />

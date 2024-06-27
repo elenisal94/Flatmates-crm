@@ -21,6 +21,7 @@
     "react-hook-form": "^7.51.3",
     "react-scripts": "5.0.1",
     "react-table-column-resizer": "^1.2.3",
+    "theme-ui": "^0.16.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
