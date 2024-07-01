@@ -1,5 +1,6 @@
 import React from 'react';
-import { Select, Box } from '@mui/material';
+import Select from '@mui/joy/Select';
+import Box from '@mui/joy/Box';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
@@ -7,17 +8,21 @@ import Chip from '@mui/joy/Chip';
 import IconButton from '@mui/joy/IconButton';
 import Option from '@mui/joy/Option';
 
-const StatusFilter = ({ label, options, value, onChange, clearFilter }) => (
-    <FormControl size="sm">
+const StatusFilter = ({
+    label, options = [], filter = [], onChange, clearFilter
+}) => (
+    <FormControl
+        size="sm"
+    >
         <FormLabel>{label}</FormLabel>
         <Select
             multiple
             size="sm"
             placeholder={`Filter ${label.toLowerCase()}`}
             slotProps={{ button: { sx: { whiteSpace: 'nowrap' } } }}
-            value={value}
+            value={filter}
             onChange={onChange}
-            {...(value.length > 0 && {
+            {...(filter.length > 0 && {
                 endDecorator: (
                     <IconButton
                         size="sm"
@@ -28,13 +33,16 @@ const StatusFilter = ({ label, options, value, onChange, clearFilter }) => (
                 ),
                 indicator: null,
             })}
-            renderValue={(value) => (
-                <Box sx={{ display: 'flex', gap: '0.25rem' }}>
-                    {value.map((selectedOption) => (
+            renderValue={(filter) => (
+                <Box
+                    sx={{ display: 'flex', gap: '0.25rem' }}
+                >
+                    {filter.map((selectedOption) => (
                         <Chip
-                            key={selectedOption.value}
+                            key={selectedOption}
                             variant="soft"
-                            color="primary">
+                            color="primary"
+                        >
                             {selectedOption.label}
                         </Chip>
                     ))}
@@ -42,7 +50,6 @@ const StatusFilter = ({ label, options, value, onChange, clearFilter }) => (
             )}
             sx={{
                 minWidth: '15rem',
-                borderRadius: '4px',
             }}
         >
             {options.map((option) => (
