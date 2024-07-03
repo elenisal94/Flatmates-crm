@@ -30,4 +30,4 @@ function Navbar() {
     );
 }
 
-export default Navbar; // Keep this export statement
+export default Navbar;

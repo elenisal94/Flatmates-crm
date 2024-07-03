@@ -6,16 +6,16 @@ import Button from '@mui/joy/Button';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 import Link from '@mui/joy/Link';
 import Typography from '@mui/joy/Typography';
-
+import AddIcon from '@mui/icons-material/Add';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
-import Sidebar from './components/Sidebar';
-import OrderTable from './components/OrderTable';
-import Header from './components/Header';
+import Sidebar from '../../layouts/MenuSidebar';
+import EnhancedTenantTable from './components/EnhancedTenantTable';
+import Header from '../tableUtils/Header';
 
-export default function TenantsTable({ tenants, onProfileClick, handleEditClick }) {
+export default function TenantsPage({ tenants, onProfileClick, handleEditClick }) {
     return (
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
@@ -86,13 +86,13 @@ export default function TenantsTable({ tenants, onProfileClick, handleEditClick 
                         </Typography>
                         <Button
                             color="primary"
-                            startDecorator={<DownloadRoundedIcon />}
+                            startDecorator={<AddIcon />}
                             size="sm"
                         >
-                            Download PDF
+                            Add tenant
                         </Button>
                     </Box>
-                    <OrderTable tenants={tenants} onProfileClick={onProfileClick} handleEditClick={handleEditClick} />
+                    <EnhancedTenantTable tenants={tenants} onProfileClick={onProfileClick} handleEditClick={handleEditClick} />
                 </Box>
             </Box>
         </CssVarsProvider>

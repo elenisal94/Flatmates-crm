@@ -4,13 +4,13 @@ import AddTenantForm from './newEntries/AddTenantForm';
 import AddTaskForm from './newEntries/AddTaskForm';
 import AddRentPayment from './newEntries/AddRentPayment';
 import AddBillPayment from './newEntries/AddBillPayment';
-import TenantTable from './tables/TenantTable';
-import TaskTable from './tables/TasksTable';
-import BillPaymentTable from './tables/BillPaymentsTable';
-import RentPaymentTable from './tables/RentPaymentsTable';
+import TenantTable from './tablePages/TenantTable';
+import TaskTable from './tablePages/TasksTable';
+import BillPaymentTable from './tablePages/BillPaymentsTable';
+import RentPaymentTable from './tablePages/RentPaymentsTable';
 import Navbar from './layouts/Navbar';
 import Drawer from './Drawer';
-import TenantsTable from './tables/tenantsTable/TenantsTable';
+import TenantsPage from './tablePages/tenantsPage/TenantsPage';
 
 axios.defaults.baseURL = 'http://localhost:5001';
 axios.defaults.withCredentials = true;
@@ -99,7 +99,7 @@ const CRMSystem = () => {
         <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
         <BillPaymentTable billPayments={billPayments} tenants={tenants} />
         <AddBillPayment billPayments={billPayments} setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
-        <TenantsTable tenants={tenants} onProfileClick={handleProfileClick} handleEditClick={handleEditClick} />
+        <TenantsPage tenants={tenants} onProfileClick={handleProfileClick} handleEditClick={handleEditClick} />
       </div>
     </div>
   );
