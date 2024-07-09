@@ -293,10 +293,10 @@ export default function EnhancedTenantTable({ tenants, onProfileClick, handleEdi
                 clearFilter={() => clearStatusFilter(setTaskStatusFilter)}
             />
             <FormControl size="sm">
-                <FormLabel>Visible columns list</FormLabel>
+                <FormLabel>Visible columns</FormLabel>
                 <Select
                     multiple
-                    placeholder="Selected Columns"
+                    placeholder="See Columns"
                     value={Object.keys(columnVisibility).filter((columnId) => columnVisibility[columnId])}
                     input={<Input />}
                     renderValue={(selected) => selected.join(', ')}
