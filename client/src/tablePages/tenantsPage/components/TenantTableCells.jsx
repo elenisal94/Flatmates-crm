@@ -169,7 +169,7 @@ const TenantTableCells = ({
                             <td className="table-cell">{tenant.totalRentPayments}</td>
                         )}
                         {columnVisibility.completedRentPayments && (
-                            <td className="table-cell">{tenant.rentPaid}</td>
+                            <td className="table-cell">{tenant.completedRentPayments}</td>
                         )}
                         {columnVisibility.pendingRentPayments && (
                             <td className="table-cell">{tenant.pendingRentPayments}</td>
@@ -193,7 +193,7 @@ const TenantTableCells = ({
                             <td className="table-cell">{tenant.totalBillPayments}</td>
                         )}
                         {columnVisibility.completedBillPayments && (
-                            <td className="table-cell">{tenant.billsPaid}</td>
+                            <td className="table-cell">{tenant.completedBillPayments}</td>
                         )}
                         {columnVisibility.pendingBillPayments && (
                             <td className="table-cell">{tenant.pendingBillPayments}</td>
