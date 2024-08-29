@@ -44,7 +44,7 @@ function stableSort(array, comparator) {
 }
 
 
-export default function EnhancedTenantTable({ tenants, onProfileClick, handleEditClick }) {
+export default function EnhancedTenantTable({ tenants, onProfileClick, handleEditClick, handleDelete }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [order, setOrder] = useState('desc');
     const [selected, setSelected] = useState([]);
@@ -384,6 +384,7 @@ export default function EnhancedTenantTable({ tenants, onProfileClick, handleEdi
                     columnVisibility={columnVisibility}
                     onProfileClick={onProfileClick}
                     handleEditClick={handleEditClick}
+                    handleDelete= {handleDelete}
                     stableSort={stableSort}
                     order={order}
                     setOrder={setOrder}

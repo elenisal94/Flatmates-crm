@@ -7,7 +7,7 @@ import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
 import Divider from '@mui/joy/Divider';
 
-function RowMenu({ onEdit }) {
+function RowMenu({ onEdit, onDelete }) {
     return (
         <Dropdown>
             <MenuButton
@@ -19,7 +19,7 @@ function RowMenu({ onEdit }) {
             <Menu size="sm" sx={{ minWidth: 140 }}>
                 <MenuItem onClick={onEdit}>Edit</MenuItem>
                 <Divider />
-                <MenuItem color="danger">Delete</MenuItem>
+                <MenuItem onClick={onDelete} color="danger">Delete</MenuItem>
             </Menu>
         </Dropdown>
     );

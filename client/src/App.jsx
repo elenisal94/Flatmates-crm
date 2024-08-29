@@ -26,7 +26,6 @@ const CRMSystem = () => {
   const [refreshInfo, setRefreshInfo] = useState(false)
   const [isEditing, setIsEditing] = useState(false);
 
-
   useEffect(() => {
     // Fetch tenants
     axios.get('/api/tenants')
@@ -54,13 +53,6 @@ const CRMSystem = () => {
 
   }, [refreshInfo]);
 
-  useEffect(() => {
-    if (selectedTenant) {
-      const tenantId = selectedTenant._id;
-      fetchSelectedTenant(tenantId);
-    }
-  }, [refreshInfo]);
-
   const handleProfileClick = (tenant) => {
     setSelectedTenant(tenant);
     setOpen(true);
@@ -72,6 +64,32 @@ const CRMSystem = () => {
     setOpen(true);
   };
 
+  // const handleDelete = async (selectedTenant) => {
+  //   const tenantId = selectedTenant._id;
+  //   try {
+  //     await axios.delete(`/api/tenants/${tenantId}`);
+  //     setRefreshInfo(prev => !prev);
+  //   } catch (error) {
+  //     console.error('Error deleting tenant:', error);
+  //   }
+  // };
+
+  const handleDelete = async (selectedTenant) => {
+    const tenantId = selectedTenant._id;
+    try {
+      const response = await axios.delete(`/api/tenants/${tenantId}`);
+  
+      if (response.status === 200) {
+        setRefreshInfo(prev => !prev);
+      } else {
+        console.warn(`Unexpected response status: ${response.status}`);
+      }
+    } catch (error) {
+      console.error('Failed to delete tenant:', error.message || error);
+    }
+  };
+  
+
   const fetchSelectedTenant = async (tenantId) => {
     try {
       const response = await axios.get(`/api/tenants/${tenantId}`);
@@ -80,6 +98,14 @@ const CRMSystem = () => {
       console.error('Error fetching selected tenant data:', error);
     }
   };
+
+  useEffect(() => {
+    if (selectedTenant) {
+      const tenantId = selectedTenant._id;
+      fetchSelectedTenant(tenantId);
+    }
+  }, [refreshInfo]);
+
 
   const handleCloseDrawer = () => {
     setSelectedTenant(null);
@@ -99,7 +125,7 @@ const CRMSystem = () => {
         <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
         <BillPaymentTable billPayments={billPayments} tenants={tenants} />
         <AddBillPayment billPayments={billPayments} setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
-        <TenantsPage tenants={tenants} onProfileClick={handleProfileClick} handleEditClick={handleEditClick} />
+        <TenantsPage tenants={tenants} onProfileClick={handleProfileClick} handleEditClick={handleEditClick} handleDelete={handleDelete} />
       </div>
     </div>
   );

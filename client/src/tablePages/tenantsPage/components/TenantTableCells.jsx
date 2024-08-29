@@ -11,7 +11,7 @@ import RowMenu from '../../tableUtils/RowMenu';
 
 const TenantTableCells = ({
     tenants, selected, setSelected, order, setOrder,
-    columnVisibility, onProfileClick, handleEditClick,
+    columnVisibility, onProfileClick, handleEditClick, handleDelete,
     stableSort, paginatedTenants,
     getPaymentStatus, getPaymentStartDecorator,
     getPaymentChipColor, getTaskStatus, getComparator,
@@ -103,7 +103,6 @@ const TenantTableCells = ({
                 const rentStatus = getPaymentStatus(tenant.rentPaid, tenant.lateRentPayments);
                 const billStatus = getPaymentStatus(tenant.billsPaid, tenant.lateBillPayments);
                 const taskStatus = getTaskStatus(tenant);
-                console.log('Paginated Tenants', paginatedTenants)
                 return (
                     <tr key={tenant._id}>
                         <td className="table-cell" style={{ textAlign: 'center' }}>
@@ -228,6 +227,7 @@ const TenantTableCells = ({
                         <td style={{ textAlign: 'center', borderLeft: '1px solid rgba(0, 0, 0, 0.1)', zIndex: '2' }}>
                             <RowMenu
                                 onEdit={() => handleEditClick(tenant)}
+                                onDelete={() => handleDelete(tenant)}
                                 onProfile={() => onProfileClick(tenant)}
                             />
                         </td>

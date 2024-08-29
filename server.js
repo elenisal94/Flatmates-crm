@@ -13,10 +13,34 @@ const PORT = process.env.PORT || 5001;
 // CORS configuration
 const corsOptions = {
     origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true,
-    optionSuccessStatus: 200
+    optionsSuccessStatus: 200
 };
+
+// app.use((req, res, next) => {
+//     console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+//     next();
+// });
+
+
 app.use(cors(corsOptions));
+
+// Enable pre-flight requests for all routes
+app.options('*', (req, res, next) => {
+    console.log('Received CORS preflight request');
+    next();
+}, cors(corsOptions));
+
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Methods', 'GET, HEAD, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    next();
+  });
+
 app.use(express.json());
 
 // Connect to MongoDB

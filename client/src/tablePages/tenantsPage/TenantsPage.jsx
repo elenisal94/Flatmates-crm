@@ -9,13 +9,12 @@ import Typography from '@mui/joy/Typography';
 import AddIcon from '@mui/icons-material/Add';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-import DownloadRoundedIcon from '@mui/icons-material/DownloadRounded';
 
 import Sidebar from '../../layouts/MenuSidebar';
 import EnhancedTenantTable from './components/EnhancedTenantTable';
 import Header from '../tableUtils/Header';
 
-export default function TenantsPage({ tenants, onProfileClick, handleEditClick }) {
+export default function TenantsPage({ tenants, onProfileClick, handleEditClick, handleDelete }) {
     return (
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
@@ -92,7 +91,7 @@ export default function TenantsPage({ tenants, onProfileClick, handleEditClick }
                             Add tenant
                         </Button>
                     </Box>
-                    <EnhancedTenantTable tenants={tenants} onProfileClick={onProfileClick} handleEditClick={handleEditClick} />
+                    <EnhancedTenantTable tenants={tenants} onProfileClick={onProfileClick} handleEditClick={handleEditClick} handleDelete={handleDelete}/>
                 </Box>
             </Box>
         </CssVarsProvider>
