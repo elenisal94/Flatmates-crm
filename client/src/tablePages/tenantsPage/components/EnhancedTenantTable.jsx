@@ -146,7 +146,7 @@ export default function EnhancedTenantTable({ tenants, onProfileClick, handleEdi
         }
     };
 
-    const filteredTenants = tenants.filter((tenant) => {
+    const filteredTenants = (tenants || []).filter((tenant) => {
         const fullName = `${tenant.firstName ?? ''} ${tenant.lastName ?? ''}`.toLowerCase();
         const query = searchQuery.toLowerCase();
         const matchesQuery = (

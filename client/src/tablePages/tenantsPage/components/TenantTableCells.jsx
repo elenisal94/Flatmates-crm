@@ -43,14 +43,14 @@ const TenantTableCells = ({
                         indeterminate={
                             selected.length > 0 && selected.length !== tenants.length
                         }
-                        checked={selected.length === tenants.length}
+                        checked={(selected?.length || 0) === (tenants?.length || 0)}
                         onChange={(event) => {
                             setSelected(
-                                event.target.checked ? tenants.map((tenant) => tenant._id) : [],
+                                event.target.checked ? tenants.map((tenant) => tenant._id) : []
                             );
                         }}
                         color={
-                            selected.length > 0 || selected.length === tenants.length
+                            (selected?.length || 0) > 0 || (selected?.length || 0) === (tenants?.length || 0)
                                 ? 'primary'
                                 : undefined
                         }

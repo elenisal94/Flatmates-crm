@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
@@ -9,12 +9,15 @@ import Typography from '@mui/joy/Typography';
 import AddIcon from '@mui/icons-material/Add';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-
 import Sidebar from '../../layouts/MenuSidebar';
 import EnhancedTenantTable from './components/EnhancedTenantTable';
 import Header from '../tableUtils/Header';
+import TenantForm from '../../forms/TenantForm';
+import withEntityManagement from '../../hoc/withEntityManagement';
 
-export default function TenantsPage({ tenants, onProfileClick, handleEditClick, handleDelete }) {
+function TenantsPage({ entities, handleView, handleEdit, handleAddNew, handleDelete }) {
+   
+    // const { entities, handleView, handleEdit, handleAddNew, handleDelete } = useEntity('tenants');
     return (
         <CssVarsProvider disableTransitionOnChange>
             <CssBaseline />
@@ -87,13 +90,21 @@ export default function TenantsPage({ tenants, onProfileClick, handleEditClick, 
                             color="primary"
                             startDecorator={<AddIcon />}
                             size="sm"
+                            onClick={handleAddNew}
                         >
                             Add tenant
                         </Button>
                     </Box>
-                    <EnhancedTenantTable tenants={tenants} onProfileClick={onProfileClick} handleEditClick={handleEditClick} handleDelete={handleDelete}/>
+                    <EnhancedTenantTable
+                        tenants={entities}
+                        onProfileClick={handleView}
+                        handleEditClick={handleEdit}
+                        handleDelete={handleDelete}
+                    />
                 </Box>
             </Box>
         </CssVarsProvider>
     );
 }
+
+export default withEntityManagement(TenantsPage, TenantForm, 'tenants');

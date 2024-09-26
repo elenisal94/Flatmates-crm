@@ -11,123 +11,39 @@ import RentPaymentTable from './tablePages/toDeleteHoldingPages/RentPaymentsTabl
 import Navbar from './layouts/Navbar';
 import Drawer from './Drawer';
 import TenantsPage from './tablePages/tenantsPage/TenantsPage';
-
-axios.defaults.baseURL = 'http://localhost:5001';
-axios.defaults.withCredentials = true;
+import {
+  extendTheme as materialExtendTheme,
+  CssVarsProvider as MaterialCssVarsProvider,
+  THEME_ID as MATERIAL_THEME_ID,
+} from '@mui/material/styles';
+import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
 const CRMSystem = () => {
 
-  const [tenants, setTenants] = useState([]);
-  const [tasks, setTasks] = useState([]);
-  const [rentPayments, setRentPayments] = useState([]);
-  const [billPayments, setBillPayments] = useState([]);
-  const [selectedTenant, setSelectedTenant] = useState(null);
-  const [open, setOpen] = useState(false);
-  const [refreshInfo, setRefreshInfo] = useState(false)
-  const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    // Fetch tenants
-    axios.get('/api/tenants')
-      .then(response => setTenants(response.data))
-      .catch(error => {
-        console.error('Error fetching tenants:', error);
-      });
-
-    // Fetch tasks
-    axios.get('/api/tasks')
-      .then(response => setTasks(response.data))
-      .catch(error => console.error(error));
-
-    // Fetch rent payments
-    axios.get('/api/rent-payments')
-      .then(response => setRentPayments(response.data))
-      .catch(error => console.error(error));
-
-    // Fetch bill payments
-    axios.get('/api/bill-payments')
-      .then(response => setBillPayments(response.data))
-      .catch(error => console.error(error));
-
-    setRefreshInfo(false);
-
-  }, [refreshInfo]);
-
-  const handleProfileClick = (tenant) => {
-    setSelectedTenant(tenant);
-    setOpen(true);
-  };
-
-  const handleEditClick = (tenant) => {
-    setSelectedTenant(tenant);
-    setIsEditing(true);
-    setOpen(true);
-  };
-
-  // const handleDelete = async (selectedTenant) => {
-  //   const tenantId = selectedTenant._id;
-  //   try {
-  //     await axios.delete(`/api/tenants/${tenantId}`);
-  //     setRefreshInfo(prev => !prev);
-  //   } catch (error) {
-  //     console.error('Error deleting tenant:', error);
-  //   }
-  // };
-
-  const handleDelete = async (selectedTenant) => {
-    const tenantId = selectedTenant._id;
-    try {
-      const response = await axios.delete(`/api/tenants/${tenantId}`);
-  
-      if (response.status === 200) {
-        setRefreshInfo(prev => !prev);
-      } else {
-        console.warn(`Unexpected response status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error('Failed to delete tenant:', error.message || error);
-    }
-  };
-  
-
-  const fetchSelectedTenant = async (tenantId) => {
-    try {
-      const response = await axios.get(`/api/tenants/${tenantId}`);
-      setSelectedTenant(response.data);
-    } catch (error) {
-      console.error('Error fetching selected tenant data:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (selectedTenant) {
-      const tenantId = selectedTenant._id;
-      fetchSelectedTenant(tenantId);
-    }
-  }, [refreshInfo]);
-
-
-  const handleCloseDrawer = () => {
-    setSelectedTenant(null);
-    setOpen(false);
-  };
+  const materialTheme = materialExtendTheme();
 
   return (
-    <div>
-      <Navbar />
-      <div className="main-content">
-        <TenantTable tenants={tenants} onProfileClick={handleProfileClick} setSelectedTenant={setSelectedTenant} />
-        <Drawer selectedTenant={selectedTenant} open={open} onClose={handleCloseDrawer} setRefreshInfo={setRefreshInfo} isEditing={isEditing} setIsEditing={setIsEditing} />
-        <AddTenantForm setTenants={setTenants} setRefreshInfo={setRefreshInfo} />
-        <TaskTable tasks={tasks} tenants={tenants} />
-        <AddTaskForm setTasks={setTasks} tenants={tenants} setRefreshInfo={setRefreshInfo} />
-        <RentPaymentTable rentPayments={rentPayments} tenants={tenants} />
-        <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
-        <BillPaymentTable billPayments={billPayments} tenants={tenants} />
-        <AddBillPayment billPayments={billPayments} setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
-        <TenantsPage tenants={tenants} onProfileClick={handleProfileClick} handleEditClick={handleEditClick} handleDelete={handleDelete} />
-      </div>
-    </div>
+    <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+      <JoyCssVarsProvider>
+        <CssBaseline enableColorScheme />
+        <div>
+          {/* <Navbar /> */}
+          <div className="main-content">
+            {/* <TenantTable tenants={tenants} onProfileClick={handleProfileClick} setSelectedTenant={setSelectedTenant} />
+            <Drawer selectedTenant={selectedTenant} open={open} onClose={handleCloseDrawer} setRefreshInfo={setRefreshInfo} isEditing={isEditing} setIsEditing={setIsEditing} />
+            <AddTenantForm setTenants={setTenants} setRefreshInfo={setRefreshInfo} />
+            <TaskTable tasks={tasks} tenants={tenants} />
+            <AddTaskForm setTasks={setTasks} tenants={tenants} setRefreshInfo={setRefreshInfo} />
+            <RentPaymentTable rentPayments={rentPayments} tenants={tenants} />
+            <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
+            <BillPaymentTable billPayments={billPayments} tenants={tenants} />
+            <AddBillPayment billPayments={billPayments} setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />  */}
+            <TenantsPage/>
+          </div>
+        </div>
+      </JoyCssVarsProvider>
+    </MaterialCssVarsProvider>
   );
 };
 

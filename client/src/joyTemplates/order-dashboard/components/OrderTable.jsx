@@ -328,8 +328,8 @@ export default function OrderTable() {
                 >
                     <FilterAltIcon />
                 </IconButton>
-                <Modal open={open} onClose={() => setOpen(false)}>
-                    <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
+                <Modal open={open} onClose={() => setOpen(false)} >
+                    <ModalDialog aria-labelledby="filter-modal" layout="fullscreen" >
                         <ModalClose />
                         <Typography id="filter-modal" level="h2">
                             Filters

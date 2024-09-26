@@ -19,7 +19,7 @@ const FiltersModal = ({ open, setOpen, renderFilters }) => (
         >
             <FilterAltIcon />
         </IconButton>
-        <Modal open={open} onClose={() => setOpen(false)}>
+        <Modal open={open} onClose={() => setOpen(false)} >
             <ModalDialog aria-labelledby="filter-modal" layout="fullscreen">
                 <ModalClose />
                 <Typography id="filter-modal" level="h2">
