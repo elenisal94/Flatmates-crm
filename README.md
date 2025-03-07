@@ -1,6 +1,6 @@
 # Flatmates CRM
 
-This in-progress project is a CRM system for landlords to manage their tenants across multiple properties. It includes reviewing rent and bill payments as well as checking if there are any pending tasks for a specific tenant. This is being built using Javascript and React.
+This in-progress project is a CRM system for landlords to manage their tenants across multiple properties. It includes reviewing rent and bill payments as well as checking if there are any pending tasks for a specific tenant. This is being built using Javascript and React. <a href="https://elenisalamouri.co.uk/flatmates-crm/">See more project details</a>.
 
 <i>Tenants table page </i>
 <img width="1423" alt="Screenshot 2024-07-04 at 00 10 16" src="https://github.com/elenisal94/flatmates-crm/assets/57360206/4249c3ea-418d-4e67-a480-6a6b842686ef">
