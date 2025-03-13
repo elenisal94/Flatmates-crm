@@ -1,3 +1,4 @@
+// TenantStore.js
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
 
@@ -14,7 +15,6 @@ class TenantStore {
     this.fetchTenants(); // Fetch data on store initialization
   }
 
-  // 🔹 Fetch all tenants
   async fetchTenants() {
     try {
       const response = await axios.get("/api/tenants");
@@ -24,7 +24,6 @@ class TenantStore {
     }
   }
 
-  // 🔹 View a single tenant
   async viewTenant(tenant) {
     try {
       const response = await axios.get(`/api/tenants/${tenant._id}`);
@@ -35,7 +34,6 @@ class TenantStore {
     }
   }
 
-  // 🔹 Edit a tenant
   async editTenant(tenant) {
     try {
       const response = await axios.get(`/api/tenants/${tenant._id}`);
@@ -46,7 +44,6 @@ class TenantStore {
     }
   }
 
-  // 🔹 Delete a tenant
   async deleteTenant(tenant) {
     try {
       const response = await axios.delete(`/api/tenants/${tenant._id}`);
@@ -63,21 +60,17 @@ class TenantStore {
     }
   }
 
-  // 🔹 Add a new tenant
   setupNewTenant() {
     this.selectedTenant = null;
     this.open = true;
   }
 
-  // 🔹 Close modal/drawer
   handleClose() {
     this.open = false;
     this.selectedTenant = null;
   }
 
-  // 🔹 Save (Add/Edit) a tenant
   async saveTenant(tenantData) {
-    console.log("saveTenant ran");
     try {
       if (this.selectedTenant) {
         // Edit the tenant if selectedTenant exists
@@ -91,7 +84,6 @@ class TenantStore {
       } else {
         // Add a new tenant if no selectedTenant
         const response = await axios.post("/api/tenants", tenantData);
-        console.log("Tenant Added:", response.data);
         this.tenants = [...this.tenants, response.data];
       }
 

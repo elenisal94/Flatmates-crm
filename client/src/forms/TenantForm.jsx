@@ -139,7 +139,7 @@ const TenantForm = ({
         <AddTenant
           entityData={entityData}
           mode={mode}
-          onSave={handleSubmit(onSubmit)} // Handle form submission
+          onSave={handleSubmit(onSubmit)}
           onClose={onClose}
           entityName={entityName}
           control={control}

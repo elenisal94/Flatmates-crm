@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { observer } from "mobx-react-lite";
 import { CssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
@@ -13,16 +14,20 @@ import Sidebar from "../../layouts/MenuSidebar";
 import EnhancedTenantTable from "./components/EnhancedTenantTable";
 import Header from "../tableUtils/Header";
 import TenantForm from "../../forms/TenantForm";
-import withEntityManagement from "../../stores/withEntityManagement";
+import TenantStore from "../../stores/TenantStore"; // Import TenantStore
+import DrawerComponent from "../../layouts/GenericDrawer";
 
-function TenantsPage({
-  entities,
-  handleView,
-  handleEdit,
-  handleAddNew,
-  handleDelete,
-}) {
-  // const { entities, handleView, handleEdit, handleAddNew, handleDelete } = useEntity('tenants');
+const TenantsPage = observer(() => {
+  // Use MobX store directly for tenant data and actions
+  const { tenants, selectedTenant, open, refreshInfo } = TenantStore;
+
+  // Ensure data is fetched on page load
+  useEffect(() => {
+    if (refreshInfo) {
+      TenantStore.fetchTenants();
+    }
+  }, [refreshInfo]);
+
   return (
     <CssVarsProvider disableTransitionOnChange>
       <CssBaseline />
@@ -95,21 +100,34 @@ function TenantsPage({
               color="primary"
               startDecorator={<AddIcon />}
               size="sm"
-              onClick={handleAddNew}
+              onClick={() => TenantStore.setupNewTenant()}
             >
               Add tenant
             </Button>
           </Box>
           <EnhancedTenantTable
-            tenants={entities}
-            onProfileClick={handleView}
-            handleEditClick={handleEdit}
-            handleDelete={handleDelete}
+            tenants={tenants}
+            onProfileClick={(tenant) => TenantStore.viewTenant(tenant)}
+            handleEditClick={(tenant) => TenantStore.editTenant(tenant)}
+            handleDelete={(tenant) => TenantStore.deleteTenant(tenant)}
           />
         </Box>
       </Box>
+
+      {/* TenantForm */}
+      {open && (
+        <DrawerComponent open={open} onClose={TenantStore.handleClose}>
+          <TenantForm
+            mode={selectedTenant ? "edit" : "add"}
+            onClose={TenantStore.handleClose}
+            onSave={TenantStore.saveTenant}
+            entityData={selectedTenant}
+            entityName="tenant"
+          />
+        </DrawerComponent>
+      )}
     </CssVarsProvider>
   );
-}
+});
 
-export default withEntityManagement(TenantsPage, TenantForm, "tenants");
+export default TenantsPage;
