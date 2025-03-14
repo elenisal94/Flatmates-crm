@@ -1,13 +1,43 @@
 import React from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
+import { inject, observer } from "mobx-react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import TextField from "./formComponents/TextField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 
-const EditTenant = ({ entityData, onSave, onClose, formFields }) => {
-  // Initialize the form methods
+const schema = yup.object().shape({
+  firstName: yup.string().required("First name is required"),
+  lastName: yup.string().required("Last name is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  phone: yup
+    .string()
+    .matches(/^\d{10}$/, "Phone number must be 10 digits")
+    .required("Phone number is required"),
+  address: yup.object({
+    flat: yup.string().required("Flat number is required"),
+    street: yup.string().required("Street name and number is required"),
+    city: yup.string().required("City is required"),
+    postcode: yup.string().required("Postcode is required"),
+  }),
+});
+
+const EditTenant = ({ tenantStore, tenantFields }) => {
   const methods = useForm({
-    defaultValues: entityData, // Set default values from entityData
+    resolver: yupResolver(schema),
+    defaultValues: tenantStore.selectedTenant || {
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+      address: {
+        flat: "",
+        street: "",
+        city: "",
+        postcode: "",
+      },
+    },
   });
 
   const {
@@ -17,42 +47,41 @@ const EditTenant = ({ entityData, onSave, onClose, formFields }) => {
     setValue,
   } = methods;
 
-  const onSubmit = (data) => {
-    onSave(data); // Handle save when form is submitted
+  const onSubmit = async (data) => {
+    await tenantStore.saveTenant(data);
+    tenantStore.handleClose();
   };
 
   return (
     <FormProvider {...methods}>
-      {" "}
-      {/* Provide methods to all child components */}
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout title="Edit Record">
-          {formFields
-            .filter((field) => !field.viewOnly) // Only render fields that are not view-only
+          {tenantFields
+            .filter((field) => !field.viewOnly)
             .map(({ name, label, required, type, disabled }) => (
               <div key={name}>
                 <Controller
                   name={name}
-                  control={control} // Pass control to each input field
+                  control={control}
                   render={({ field }) => (
                     <TextField
-                      {...field} // Spread field to TextField to handle input value and onChange
+                      {...field}
                       label={label}
                       required={required}
                       type={type}
                       disabled={disabled}
-                      error={!!errors[name]} // Display error if it exists
-                      helperText={errors[name]?.message} // Display error message
+                      error={!!errors[name]}
+                      helperText={errors[name]?.message}
                     />
                   )}
                 />
               </div>
             ))}
         </FormLayout>
-        <FormActions onClose={onClose} onSubmitLabel="Save Changes" />
+        <FormActions onSubmitLabel="Save Changes" />
       </form>
     </FormProvider>
   );
 };
 
-export default EditTenant;
+export default inject("tenantStore")(observer(EditTenant));

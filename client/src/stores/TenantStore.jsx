@@ -12,7 +12,7 @@ class TenantStore {
     makeAutoObservable(this);
     axios.defaults.baseURL = "http://localhost:5001";
     axios.defaults.withCredentials = true;
-    this.fetchTenants(); // Fetch data on store initialization
+    this.fetchTenants();
   }
 
   async fetchTenants() {
@@ -65,6 +65,10 @@ class TenantStore {
     this.open = true;
   }
 
+  setOpen() {
+    this.open = true;
+  }
+
   handleClose() {
     this.open = false;
     this.selectedTenant = null;
@@ -73,7 +77,6 @@ class TenantStore {
   async saveTenant(tenantData) {
     try {
       if (this.selectedTenant) {
-        // Edit the tenant if selectedTenant exists
         const response = await axios.put(
           `/api/tenants/${this.selectedTenant._id}`,
           tenantData
@@ -82,7 +85,6 @@ class TenantStore {
           tenant._id === this.selectedTenant._id ? response.data : tenant
         );
       } else {
-        // Add a new tenant if no selectedTenant
         const response = await axios.post("/api/tenants", tenantData);
         this.tenants = [...this.tenants, response.data];
       }

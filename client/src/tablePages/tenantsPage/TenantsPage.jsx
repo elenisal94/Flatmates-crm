@@ -14,14 +14,12 @@ import Sidebar from "../../layouts/MenuSidebar";
 import EnhancedTenantTable from "./components/EnhancedTenantTable";
 import Header from "../tableUtils/Header";
 import TenantForm from "../../forms/TenantForm";
-import TenantStore from "../../stores/TenantStore"; // Import TenantStore
+import TenantStore from "../../stores/TenantStore";
 import DrawerComponent from "../../layouts/GenericDrawer";
 
 const TenantsPage = observer(() => {
-  // Use MobX store directly for tenant data and actions
   const { tenants, selectedTenant, open, refreshInfo } = TenantStore;
 
-  // Ensure data is fetched on page load
   useEffect(() => {
     if (refreshInfo) {
       TenantStore.fetchTenants();
@@ -116,10 +114,12 @@ const TenantsPage = observer(() => {
 
       {/* TenantForm */}
       {open && (
-        <DrawerComponent open={open} onClose={TenantStore.handleClose}>
+        <DrawerComponent
+          open={TenantStore.setOpen}
+          onClose={() => TenantStore.handleClose()}
+        >
           <TenantForm
             mode={selectedTenant ? "edit" : "add"}
-            onClose={TenantStore.handleClose}
             onSave={TenantStore.saveTenant}
             entityData={selectedTenant}
             entityName="tenant"

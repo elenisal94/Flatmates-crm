@@ -3,12 +3,11 @@ import { inject, observer } from "mobx-react";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import get from "lodash/get";
 import TextField from "./formComponents/TextField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 
-const AddTenant = ({ tenantStore, onClose }) => {
+const AddTenant = ({ tenantStore }) => {
   const schema = yup.object().shape({
     firstName: yup.string().required("First name is required"),
     lastName: yup.string().required("Last name is required"),
@@ -25,7 +24,6 @@ const AddTenant = ({ tenantStore, onClose }) => {
     }),
   });
 
-  // Initialize form with validation
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -49,17 +47,15 @@ const AddTenant = ({ tenantStore, onClose }) => {
     formState: { errors },
   } = methods;
 
-  // Save the tenant using the store's addTenant method
   const onSubmit = async (data) => {
-    await tenantStore.saveTenant(data); // Call addTenant from tenantStore
-    onClose();
+    await tenantStore.saveTenant(data);
+    tenantStore.handleClose();
   };
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout title="Add Tenant">
-          {/* First Name Field */}
           <div>
             <TextField
               {...register("firstName")}
@@ -69,8 +65,6 @@ const AddTenant = ({ tenantStore, onClose }) => {
               helperText={errors.firstName?.message}
             />
           </div>
-
-          {/* Last Name Field */}
           <div>
             <TextField
               {...register("lastName")}
@@ -80,8 +74,6 @@ const AddTenant = ({ tenantStore, onClose }) => {
               helperText={errors.lastName?.message}
             />
           </div>
-
-          {/* Email Field */}
           <div>
             <TextField
               {...register("email")}
@@ -92,8 +84,6 @@ const AddTenant = ({ tenantStore, onClose }) => {
               helperText={errors.email?.message}
             />
           </div>
-
-          {/* Phone Field */}
           <div>
             <TextField
               {...register("phone")}
@@ -103,8 +93,6 @@ const AddTenant = ({ tenantStore, onClose }) => {
               helperText={errors.phone?.message}
             />
           </div>
-
-          {/* Address Fields */}
           <div>
             <TextField
               {...register("address.flat")}
@@ -142,7 +130,7 @@ const AddTenant = ({ tenantStore, onClose }) => {
             />
           </div>
         </FormLayout>
-        <FormActions onClose={onClose} onSubmitLabel="Add" />
+        <FormActions onSubmitLabel="Add" />
       </form>
     </FormProvider>
   );

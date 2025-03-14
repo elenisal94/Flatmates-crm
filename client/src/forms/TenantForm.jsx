@@ -1,29 +1,9 @@
 import React from "react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import AddTenant from "./AddTenant"; // AddTenant Component
-import EditTenant from "./EditTenant"; // EditTenant Component
-import ViewTenant from "./ViewTenant"; // ViewTenant Component
+import { inject, observer } from "mobx-react";
+import AddTenant from "./AddTenant";
+import EditTenant from "./EditTenant";
+import ViewTenant from "./ViewTenant";
 
-// Define validation schema using Yup with nested validation for address
-const schema = yup.object().shape({
-  firstName: yup.string().required("First name is required"),
-  lastName: yup.string().required("Last name is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
-  phone: yup
-    .string()
-    .matches(/^\d{10}$/, "Phone number must be 10 digits")
-    .required("Phone number is required"),
-  address: yup.object().shape({
-    flat: yup.string().notRequired(),
-    street: yup.string().notRequired(),
-    city: yup.string().required("City is required"),
-    postcode: yup.string().required("Postcode is required"),
-  }),
-});
-
-// Define form fields (including nested fields like address)
 const tenantFields = [
   { name: "firstName", label: "First Name", required: true, type: "text" },
   { name: "lastName", label: "Last Name", required: true, type: "text" },
@@ -110,63 +90,31 @@ const tenantFields = [
   },
 ];
 
-const TenantForm = ({
-  entityData,
-  mode,
-  onSave,
-  onClose,
-  entityName,
-  handleEdit,
-}) => {
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    setValue,
-  } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues: entityData,
-  });
-
-  const onSubmit = (data) => {
-    onSave(data); // Pass data to onSave for saving
-  };
-
-  // Conditionally render the right component based on `mode`
+const TenantForm = ({ tenantStore, mode, entityName }) => {
   switch (mode) {
     case "add":
       return (
         <AddTenant
-          entityData={entityData}
+          tenantStore={tenantStore}
           mode={mode}
-          onSave={handleSubmit(onSubmit)}
-          onClose={onClose}
           entityName={entityName}
-          control={control}
-          errors={errors}
-          setValue={setValue}
           tenantFields={tenantFields}
         />
       );
     case "edit":
       return (
         <EditTenant
-          entityData={entityData}
+          tenantStore={tenantStore}
           mode={mode}
-          onSave={handleSubmit(onSubmit)}
-          onClose={onClose}
           entityName={entityName}
-          control={control}
-          errors={errors}
-          setValue={setValue}
+          tenantFields={tenantFields}
         />
       );
     case "view":
       return (
         <ViewTenant
-          entityData={entityData}
+          tenantStore={tenantStore}
           mode={mode}
-          onClose={onClose}
           entityName={entityName}
         />
       );
@@ -175,4 +123,4 @@ const TenantForm = ({
   }
 };
 
-export default TenantForm;
+export default inject("tenantStore")(observer(TenantForm));
