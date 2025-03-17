@@ -78,7 +78,10 @@ const EditTenant = ({ tenantStore, tenantFields }) => {
               </div>
             ))}
         </FormLayout>
-        <FormActions onSubmitLabel="Save Changes" />
+        <FormActions
+          onClose={() => tenantStore.handleClose()}
+          onSubmitLabel="Save Changes"
+        />
       </form>
     </FormProvider>
   );

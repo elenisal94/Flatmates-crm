@@ -116,6 +116,7 @@ const TenantForm = ({ tenantStore, mode, entityName }) => {
           tenantStore={tenantStore}
           mode={mode}
           entityName={entityName}
+          tenantFields={tenantFields}
         />
       );
     default:

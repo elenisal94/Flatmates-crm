@@ -112,14 +112,13 @@ const TenantsPage = observer(() => {
         </Box>
       </Box>
 
-      {/* TenantForm */}
       {open && (
         <DrawerComponent
           open={TenantStore.setOpen}
           onClose={() => TenantStore.handleClose()}
         >
           <TenantForm
-            mode={selectedTenant ? "edit" : "add"}
+            mode={TenantStore.mode}
             onSave={TenantStore.saveTenant}
             entityData={selectedTenant}
             entityName="tenant"

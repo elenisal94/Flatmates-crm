@@ -130,7 +130,10 @@ const AddTenant = ({ tenantStore }) => {
             />
           </div>
         </FormLayout>
-        <FormActions onSubmitLabel="Add" />
+        <FormActions
+          onClose={() => tenantStore.handleClose()}
+          onSubmitLabel="Add"
+        />
       </form>
     </FormProvider>
   );

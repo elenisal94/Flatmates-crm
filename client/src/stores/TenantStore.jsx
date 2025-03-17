@@ -7,6 +7,7 @@ class TenantStore {
   selectedTenant = null;
   open = false;
   refreshInfo = false;
+  mode = "add";
 
   constructor() {
     makeAutoObservable(this);
@@ -62,6 +63,19 @@ class TenantStore {
 
   setupNewTenant() {
     this.selectedTenant = null;
+    this.mode = "add";
+    this.open = true;
+  }
+
+  editTenant(tenant) {
+    this.selectedTenant = tenant;
+    this.mode = "edit";
+    this.open = true;
+  }
+
+  viewTenant(tenant) {
+    this.selectedTenant = tenant;
+    this.mode = "view";
     this.open = true;
   }
 
@@ -72,6 +86,7 @@ class TenantStore {
   handleClose() {
     this.open = false;
     this.selectedTenant = null;
+    this.mode = "add";
   }
 
   async saveTenant(tenantData) {
