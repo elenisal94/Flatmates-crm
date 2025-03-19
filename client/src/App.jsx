@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import AppRoutes from "./appRoutes/AppRoutes";
 import axios from "axios";
 import AddTenantForm from "./newEntries/AddTenantForm";
 import AddTaskForm from "./newEntries/AddTaskForm";
@@ -9,7 +10,8 @@ import TaskTable from "./tablePages/toDeleteHoldingPages/TasksTable";
 import BillPaymentTable from "./tablePages/toDeleteHoldingPages/BillPaymentsTable";
 import RentPaymentTable from "./tablePages/toDeleteHoldingPages/RentPaymentsTable";
 import Navbar from "./layouts/Navbar";
-import TenantsPage from "./tablePages/tenantsPage/TenantsPage";
+import TenantPage from "./tablePages/tenantPage/TenantPage";
+import Sidebar from "./layouts/MenuSidebar";
 import {
   extendTheme as materialExtendTheme,
   CssVarsProvider as MaterialCssVarsProvider,
@@ -36,7 +38,8 @@ const CRMSystem = () => {
             <AddRentPayment setRentPayments={setRentPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />
             <BillPaymentTable billPayments={billPayments} tenants={tenants} />
             <AddBillPayment billPayments={billPayments} setBillPayments={setBillPayments} tenants={tenants} setRefreshInfo={setRefreshInfo} />  */}
-            <TenantsPage />
+            {/* <TenantPage /> */}
+            <AppRoutes />;
           </div>
         </div>
       </JoyCssVarsProvider>

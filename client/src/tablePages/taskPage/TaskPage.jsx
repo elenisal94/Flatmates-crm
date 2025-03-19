@@ -10,19 +10,18 @@ import Typography from "@mui/joy/Typography";
 import AddIcon from "@mui/icons-material/Add";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import ChevronRightRoundedIcon from "@mui/icons-material/ChevronRightRounded";
-import Sidebar from "../../layouts/MenuSidebar";
-import EnhancedTenantTable from "./components/EnhancedTenantTable";
+import TaskTable from "./TaskTable";
 import Header from "../tableUtils/Header";
-import TenantForm from "../../forms/TenantForm";
-import TenantStore from "../../stores/TenantStore";
+import TaskForm from "../../forms/TaskForm";
+import TaskStore from "../../stores/TaskStore";
 import DrawerComponent from "../../layouts/GenericDrawer";
 
-const TenantsPage = observer(() => {
-  const { tenants, selectedTenant, open, refreshInfo } = TenantStore;
+const TaskPage = observer(() => {
+  const { tasks, selectedTask, open, refreshInfo } = TaskStore;
 
   useEffect(() => {
     if (refreshInfo) {
-      TenantStore.fetchTenants();
+      TaskStore.fetchTasks();
     }
   }, [refreshInfo]);
 
@@ -31,7 +30,6 @@ const TenantsPage = observer(() => {
       <CssBaseline />
       <Box sx={{ display: "flex", minHeight: "100dvh" }}>
         <Header />
-        <Sidebar />
         <Box
           component="main"
           className="MainContent"
@@ -76,7 +74,7 @@ const TenantsPage = observer(() => {
                 Dashboard
               </Link>
               <Typography color="primary" fontWeight={500} fontSize={12}>
-                Tenants
+                Tasks
               </Typography>
             </Breadcrumbs>
           </Box>
@@ -92,36 +90,36 @@ const TenantsPage = observer(() => {
             }}
           >
             <Typography level="h2" component="h1">
-              Tenants
+              Tasks
             </Typography>
             <Button
               color="primary"
               startDecorator={<AddIcon />}
               size="sm"
-              onClick={() => TenantStore.setupNewTenant()}
+              onClick={() => TaskStore.setupNewTask()}
             >
-              Add tenant
+              Add Task
             </Button>
           </Box>
-          <EnhancedTenantTable
-            tenants={tenants}
-            onProfileClick={(tenant) => TenantStore.viewTenant(tenant)}
-            handleEditClick={(tenant) => TenantStore.editTenant(tenant)}
-            handleDelete={(tenant) => TenantStore.deleteTenant(tenant)}
+          <TaskTable
+            tasks={tasks}
+            onProfileClick={(task) => TaskStore.viewTask(task)}
+            handleEditClick={(task) => TaskStore.editTask(task)}
+            handleDelete={(task) => TaskStore.deleteTask(task)}
           />
         </Box>
       </Box>
 
       {open && (
         <DrawerComponent
-          open={TenantStore.setOpen}
-          onClose={() => TenantStore.handleClose()}
+          open={TaskStore.setOpen}
+          onClose={() => TaskStore.handleClose()}
         >
-          <TenantForm
-            mode={TenantStore.mode}
-            onSave={TenantStore.saveTenant}
-            entityData={selectedTenant}
-            entityName="tenant"
+          <TaskForm
+            mode={TaskStore.mode}
+            onSave={TaskStore.saveTask}
+            entityData={selectedTask}
+            entityName="task"
           />
         </DrawerComponent>
       )}
@@ -129,4 +127,4 @@ const TenantsPage = observer(() => {
   );
 });
 
-export default TenantsPage;
+export default TaskPage;

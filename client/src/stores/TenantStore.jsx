@@ -1,4 +1,3 @@
-// TenantStore.js
 import { makeAutoObservable } from "mobx";
 import axios from "axios";
 

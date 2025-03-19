@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import axios from "axios";
 import { Provider } from "mobx-react";
 import tenantStore from "./stores/TenantStore.jsx";
+import taskStore from "./stores/TaskStore.jsx";
 // import { ThemeProvider } from '@mui/material/styles';
 // import theme from './theme'; // Import the theme file you created
 
@@ -16,7 +17,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     {/* <ThemeProvider theme={theme}> */}
-    <Provider tenantStore={tenantStore}>
+    <Provider tenantStore={tenantStore} taskStore={taskStore}>
       <CRMSystem />
       {/* </ThemeProvider> */}
     </Provider>
