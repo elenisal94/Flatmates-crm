@@ -3,7 +3,13 @@ import { useFormContext, Controller } from "react-hook-form";
 import { FormControl, FormLabel, FormHelperText } from "@mui/joy";
 import Select from "react-select";
 
-const SelectField = ({ name, label, required, options }) => {
+const SelectField = ({
+  name,
+  label,
+  required,
+  options,
+  isSearchable = true,
+}) => {
   const {
     control,
     formState: { errors },
@@ -24,9 +30,12 @@ const SelectField = ({ name, label, required, options }) => {
             options={options}
             getOptionLabel={(e) => e.label}
             getOptionValue={(e) => e.value}
-            onChange={(selectedOption) => field.onChange(selectedOption.value)} // Update form value
-            isSearchable
-            placeholder="Search and select..."
+            value={
+              options.find((option) => option.value === field.value) || null
+            }
+            onChange={(selectedOption) => field.onChange(selectedOption.value)}
+            isSearchable={isSearchable}
+            placeholder="Select an option..."
           />
         )}
       />

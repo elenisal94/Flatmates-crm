@@ -1,15 +1,14 @@
 import React from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import { FormControl, FormLabel, FormHelperText } from "@mui/joy";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs from "dayjs";
 
 const DateField = ({ name, label, required }) => {
   const {
-    register,
-    formState: { errors },
     control,
+    formState: { errors },
   } = useFormContext();
 
   return (
@@ -21,20 +20,29 @@ const DateField = ({ name, label, required }) => {
       <Controller
         name={name}
         control={control}
+        rules={{ required: "This field is required" }}
         render={({ field }) => (
-          <LocalizationProvider dateAdapter={AdapterDayjs} disablePast>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
+              isRequired="true"
               {...field}
+              value={field.value ? dayjs(field.value) : null}
+              onChange={(newValue) =>
+                field.onChange(newValue ? newValue.toISOString() : null)
+              }
               slotProps={{
                 textField: {
-                  error: !!errors[name], // Add error prop to the internal TextField
+                  variant: "outlined",
+                  size: "small",
+                  fullWidth: true,
+                  error: !!errors[name],
+                  helperText: errors[name]?.message || "",
                 },
               }}
             />
           </LocalizationProvider>
         )}
       />
-      {errors[name] && <FormHelperText>{errors[name]?.message}</FormHelperText>}
     </FormControl>
   );
 };

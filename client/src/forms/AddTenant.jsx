@@ -3,7 +3,7 @@ import { inject, observer } from "mobx-react";
 import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import TextField from "./formComponents/TextField";
+import CustomTextField from "./formComponents/CustomTextField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 
@@ -57,7 +57,7 @@ const AddTenant = ({ tenantStore }) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout title="Add Tenant">
           <div>
-            <TextField
+            <CustomTextField
               {...register("firstName")}
               label="First Name"
               required
@@ -66,7 +66,7 @@ const AddTenant = ({ tenantStore }) => {
             />
           </div>
           <div>
-            <TextField
+            <CustomTextField
               {...register("lastName")}
               label="Last Name"
               required
@@ -75,7 +75,7 @@ const AddTenant = ({ tenantStore }) => {
             />
           </div>
           <div>
-            <TextField
+            <CustomTextField
               {...register("email")}
               label="Email"
               required
@@ -85,7 +85,7 @@ const AddTenant = ({ tenantStore }) => {
             />
           </div>
           <div>
-            <TextField
+            <CustomTextField
               {...register("phone")}
               label="Phone"
               required
@@ -94,7 +94,7 @@ const AddTenant = ({ tenantStore }) => {
             />
           </div>
           <div>
-            <TextField
+            <CustomTextField
               {...register("address.flat")}
               label="Flat Number"
               required
@@ -103,7 +103,7 @@ const AddTenant = ({ tenantStore }) => {
             />
           </div>
           <div>
-            <TextField
+            <CustomTextField
               {...register("address.street")}
               label="Street"
               required
@@ -112,7 +112,7 @@ const AddTenant = ({ tenantStore }) => {
             />
           </div>
           <div>
-            <TextField
+            <CustomTextField
               {...register("address.city")}
               label="City"
               required
@@ -121,7 +121,7 @@ const AddTenant = ({ tenantStore }) => {
             />
           </div>
           <div>
-            <TextField
+            <CustomTextField
               {...register("address.postcode")}
               label="Postcode"
               required

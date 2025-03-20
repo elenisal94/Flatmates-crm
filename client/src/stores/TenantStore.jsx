@@ -19,8 +19,12 @@ class TenantStore {
     try {
       const response = await axios.get("/api/tenants");
       this.tenants = response.data;
+      return Array.isArray(response.data)
+        ? response.data
+        : Object.values(response.data);
     } catch (error) {
       console.error("Error fetching tenants:", error);
+      return [];
     }
   }
 

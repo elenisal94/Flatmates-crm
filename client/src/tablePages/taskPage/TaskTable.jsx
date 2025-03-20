@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/joy/Box";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
@@ -20,6 +20,7 @@ import SearchInput from "../tableUtils/SearchInput";
 import FiltersModal from "../tableUtils/FiltersModal";
 import TaskCells from "./TaskCells";
 import Pagination from "../tableUtils/Pagination";
+import TenantStore from "../../stores/TenantStore";
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) return -1;
@@ -74,23 +75,7 @@ export default function TaskTable({
     { id: "dueDate", label: "Due Date" },
     { id: "completed", label: "Completed?" },
     { id: "tasksStatus", label: "Status" },
-    // { id: "totalTasks", label: "Total Tasks" },
-    // { id: "completedTasks", label: "Completed Tasks" },
-    // { id: "pendingTasks", label: "Pending Tasks" },
-    // { id: "overdueTasks", label: "Overdue Tasks" },
   ];
-
-  //   const rentOptions = [
-  //     { value: "paid", label: "Paid" },
-  //     { value: "pending", label: "Pending" },
-  //     { value: "late", label: "Late" },
-  //   ];
-
-  //   const billOptions = [
-  //     { value: "paid", label: "Paid" },
-  //     { value: "pending", label: "Pending" },
-  //     { value: "late", label: "Late" },
-  //   ];
 
   const taskOptions = [
     { value: "completed", label: "Completed" },
@@ -107,16 +92,6 @@ export default function TaskTable({
     setCurrentPage(1);
   };
 
-  //   const getPaymentStatus = (paid, latePayments) => {
-  //     if (paid) {
-  //       return "Paid";
-  //     } else if (latePayments > 0) {
-  //       return "Late";
-  //     } else {
-  //       return "Pending";
-  //     }
-  //   };
-
   const getTaskStatus = (task) => {
     if (task.completed) {
       return "Completed";
@@ -129,20 +104,32 @@ export default function TaskTable({
     }
   };
 
+  useEffect(() => {
+    TenantStore.fetchTenants();
+  }, []);
+
+  const getFullName = (tenantId) => {
+    const tenants = TenantStore.tenants;
+    const tenant = tenants.find(
+      (t) => t._id.toString() === tenantId.toString()
+    );
+    return tenant ? `${tenant.firstName} ${tenant.lastName}` : "Unassigned"; // ✅ Fallback
+  };
+
   const filteredTasks = (tasks || []).filter((task) => {
     const title = `${task.title ?? ""}`.toLowerCase();
+    const description = `${task.description ?? ""}`.toLowerCase();
+    const assignedToName = getFullName(task.assignedTo);
     const query = searchQuery.toLowerCase();
-    const matchesQuery = title.includes(query);
+    const matchesQuery =
+      title.includes(query) ||
+      description.includes(query) ||
+      assignedToName.toLowerCase().includes(query);
     const taskStatus = getTaskStatus(task);
     const matchesTaskStatus =
       !taskStatusFilter.length ||
       taskStatusFilter.includes(taskStatus.toLowerCase());
-    return (
-      matchesQuery &&
-      //   matchesRentStatus &&
-      //   matchesBillStatus &&
-      matchesTaskStatus
-    );
+    return matchesQuery && matchesTaskStatus;
   });
 
   const totalItems = filteredTasks.length;
@@ -153,12 +140,6 @@ export default function TaskTable({
   const handleStatusChange = (type) => (event, newValue) => {
     const updatedValue = Array.isArray(newValue) ? newValue : [newValue];
     switch (type) {
-      //   case "rent":
-      //     setRentStatusFilter(updatedValue);
-      //     break;
-      //   case "bill":
-      //     setBillStatusFilter(updatedValue);
-      //     break;
       case "task":
         setTaskStatusFilter(updatedValue);
         break;
@@ -184,32 +165,6 @@ export default function TaskTable({
     filteredTasks,
     getComparator(order, "id")
   ).slice(startIndex, endIndex);
-
-  //   const getPaymentChipColor = (status) => {
-  //     switch (status) {
-  //       case "Paid":
-  //         return "success";
-  //       case "Late":
-  //         return "danger";
-  //       case "Pending":
-  //         return "warning";
-  //       default:
-  //         return "neutral";
-  //     }
-  //   };
-
-  //   const getPaymentStartDecorator = (status) => {
-  //     switch (status) {
-  //       case "Paid":
-  //         return <CheckRoundedIcon sx={{ zIndex: -1 }} />;
-  //       case "Late":
-  //         return <ErrorOutline sx={{ zIndex: -1 }} />;
-  //       case "Pending":
-  //         return <Pending sx={{ zIndex: -1 }} />;
-  //       default:
-  //         return null;
-  //     }
-  //   };
 
   const getTaskChipColor = (status) => {
     switch (status) {
@@ -250,20 +205,6 @@ export default function TaskTable({
 
   const renderFilters = () => (
     <>
-      {/* <StatusFilter
-        label="Rent status"
-        options={rentOptions}
-        filter={rentStatusFilter}
-        onChange={handleStatusChange("rent")}
-        clearFilter={() => clearStatusFilter(setRentStatusFilter)}
-      />
-      <StatusFilter
-        label="Bill status"
-        options={billOptions}
-        filter={billStatusFilter}
-        onChange={handleStatusChange("bill")}
-        clearFilter={() => clearStatusFilter(setBillStatusFilter)}
-      /> */}
       <StatusFilter
         label="Task status"
         options={taskOptions}
@@ -332,7 +273,7 @@ export default function TaskTable({
         }}
       >
         <FormControl sx={{ flex: 1 }} size="sm">
-          <FormLabel>Search for task</FormLabel>
+          <FormLabel>Search tasks</FormLabel>
           <Input
             size="sm"
             placeholder="Search"
@@ -369,6 +310,7 @@ export default function TaskTable({
       >
         <TaskCells
           tasks={tasks}
+          getFullName={getFullName}
           selected={selected}
           setSelected={setSelected}
           columnVisibility={columnVisibility}
@@ -379,9 +321,6 @@ export default function TaskTable({
           order={order}
           setOrder={setOrder}
           paginatedTasks={paginatedTasks}
-          //   getPaymentStatus={getPaymentStatus}
-          //   getPaymentStartDecorator={getPaymentStartDecorator}
-          //   getPaymentChipColor={getPaymentChipColor}
           getTaskStatus={getTaskStatus}
           getTaskStartDecorator={getTaskStartDecorator}
           getTaskChipColor={getTaskChipColor}

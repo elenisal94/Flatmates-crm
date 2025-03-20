@@ -3,7 +3,7 @@ import { useForm, FormProvider, Controller } from "react-hook-form";
 import { inject, observer } from "mobx-react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import TextField from "./formComponents/TextField";
+import CustomTextField from "./formComponents/CustomTextField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 
@@ -64,7 +64,7 @@ const EditTenant = ({ tenantStore, tenantFields }) => {
                   name={name}
                   control={control}
                   render={({ field }) => (
-                    <TextField
+                    <CustomTextField
                       {...field}
                       label={label}
                       required={required}

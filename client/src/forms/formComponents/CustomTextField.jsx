@@ -1,12 +1,12 @@
 import React from "react";
 import { useFormContext } from "react-hook-form";
-import Input from "@mui/joy/Input";
+import TextField from "@mui/material/TextField";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
 import FormHelperText from "@mui/joy/FormHelperText";
 import Box from "@mui/joy/Box";
 
-const TextField = ({ name, label, required, placeholder }) => {
+const CustomTextField = ({ name, label, required, placeholder }) => {
   const {
     register,
     formState: { errors },
@@ -20,7 +20,8 @@ const TextField = ({ name, label, required, placeholder }) => {
           {label}
           {required && "*"}
         </FormLabel>
-        <Input
+        <TextField
+          size="small"
           sx={{ typography: "body-sm" }}
           {...register(name, { required })}
           placeholder={placeholder}
@@ -33,4 +34,4 @@ const TextField = ({ name, label, required, placeholder }) => {
   );
 };
 
-export default TextField;
+export default CustomTextField;

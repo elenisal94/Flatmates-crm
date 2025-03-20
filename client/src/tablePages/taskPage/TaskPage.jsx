@@ -18,7 +18,6 @@ import DrawerComponent from "../../layouts/GenericDrawer";
 
 const TaskPage = observer(() => {
   const { tasks, selectedTask, open, refreshInfo } = TaskStore;
-
   useEffect(() => {
     if (refreshInfo) {
       TaskStore.fetchTasks();

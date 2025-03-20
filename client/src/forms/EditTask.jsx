@@ -1,11 +1,14 @@
-import React from "react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
+import React, { useEffect, useState } from "react";
 import { inject, observer } from "mobx-react";
+import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import TextField from "./formComponents/TextField";
+import CustomTextField from "./formComponents/CustomTextField";
+import SelectField from "./formComponents/SelectField";
+import DateField from "./formComponents/DateField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
+import TenantStore from "../stores/TenantStore";
 
 const schema = yup.object().shape({
   title: yup.string().required("Title is required"),
@@ -15,7 +18,9 @@ const schema = yup.object().shape({
   completed: yup.boolean().required("Completed status is required"),
 });
 
-const EditTask = ({ taskStore, taskFields }) => {
+const EditTask = ({ taskStore }) => {
+  const [tenantOptions, setTenantOptions] = useState([]);
+
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: taskStore.selectedTask || {
@@ -28,11 +33,22 @@ const EditTask = ({ taskStore, taskFields }) => {
   });
 
   const {
+    register,
     handleSubmit,
-    control,
     formState: { errors },
-    setValue,
   } = methods;
+
+  useEffect(() => {
+    const fetchTenants = async () => {
+      const tenants = await TenantStore.fetchTenants();
+      const options = tenants.map((tenant) => ({
+        value: tenant._id,
+        label: `${tenant.firstName} ${tenant.lastName}`,
+      }));
+      setTenantOptions(options);
+    };
+    fetchTenants();
+  }, []);
 
   const onSubmit = async (data) => {
     await taskStore.saveTask(data);
@@ -42,28 +58,58 @@ const EditTask = ({ taskStore, taskFields }) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormLayout title="Edit Record">
-          {taskFields
-            .filter((field) => !field.viewOnly)
-            .map(({ name, label, required, type, disabled }) => (
-              <div key={name}>
-                <Controller
-                  name={name}
-                  control={control}
-                  render={({ field }) => (
-                    <TextField
-                      {...field}
-                      label={label}
-                      required={required}
-                      type={type}
-                      disabled={disabled}
-                      error={!!errors[name]}
-                      helperText={errors[name]?.message}
-                    />
-                  )}
-                />
-              </div>
-            ))}
+        <FormLayout title="Edit Task">
+          <div>
+            <CustomTextField
+              {...register("title")}
+              label="Title"
+              required
+              error={!!errors.title}
+              helperText={errors.title?.message}
+            />
+          </div>
+          <div>
+            <CustomTextField
+              {...register("description")}
+              label="Description"
+              required
+              error={!!errors.description}
+              helperText={errors.description?.message}
+            />
+          </div>
+          <div>
+            <SelectField
+              name="assignedTo"
+              label="Assigned to"
+              required
+              options={tenantOptions}
+              helperText={errors.assignedTo?.message}
+            />
+          </div>
+          <div>
+            <DateField
+              {...register("dueDate")}
+              name="dueDate"
+              label="Due Date"
+              required
+              error={!!errors.dueDate}
+              helperText={errors.dueDate?.message}
+            />
+          </div>
+          <div>
+            <SelectField
+              {...register("completed")}
+              name="completed"
+              label="Completed?"
+              required
+              helperText={errors.completed?.message}
+              options={[
+                { value: true, label: "Yes" },
+                { value: false, label: "No" },
+              ]}
+              isSearchable={false}
+            />
+          </div>
         </FormLayout>
         <FormActions
           onClose={() => taskStore.handleClose()}
