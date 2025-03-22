@@ -43,7 +43,11 @@ const ViewTask = ({ taskStore }) => {
         <p>No task data available.</p>
       )}
 
-      <FormActions onClose={() => taskStore.handleClose()} submit={false} />
+      <FormActions
+        className="form-actions"
+        onClose={() => taskStore.handleClose()}
+        submit={false}
+      />
     </FormLayout>
   );
 };

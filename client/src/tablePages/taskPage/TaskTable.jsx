@@ -55,8 +55,6 @@ export default function TaskTable({
   const [selected, setSelected] = useState([]);
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [rentStatusFilter, setRentStatusFilter] = useState([]);
-  const [billStatusFilter, setBillStatusFilter] = useState([]);
   const [taskStatusFilter, setTaskStatusFilter] = useState([]);
   const itemsPerPage = 20;
   const [columnVisibility, setColumnVisibility] = useState({

@@ -8,6 +8,9 @@ import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ResizableTableCell from "../tableUtils/ResizableTableCell";
 import RowMenu from "../tableUtils/RowMenu";
 import dayjs from "dayjs";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import Pending from "@mui/icons-material/Pending";
+import ErrorOutline from "@mui/icons-material/ErrorOutline";
 
 const TaskCells = ({
   tasks,
@@ -25,6 +28,36 @@ const TaskCells = ({
   getTaskStatus,
   getComparator,
 }) => {
+  const getTaskChipColor = (status) => {
+    switch (status) {
+      case "Completed":
+        return "success";
+      case "Overdue":
+        return "danger";
+      case "Pending":
+        return "warning";
+      case "No Tasks":
+        return "neutral";
+      default:
+        return "neutral";
+    }
+  };
+
+  const getTaskStartDecorator = (status) => {
+    switch (status) {
+      case "Completed":
+        return <CheckRoundedIcon />;
+      case "Overdue":
+        return <ErrorOutline />;
+      case "Pending":
+        return <Pending />;
+      case "No Tasks":
+        return null;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Table
       aria-labelledby="tableTitle"
@@ -105,6 +138,9 @@ const TaskCells = ({
           {columnVisibility.completed && (
             <ResizableTableCell>Completed?</ResizableTableCell>
           )}
+          {columnVisibility.tasksStatus && (
+            <ResizableTableCell>Task status</ResizableTableCell>
+          )}
           <th
             aria-label="last"
             style={{
@@ -177,7 +213,7 @@ const TaskCells = ({
               {columnVisibility.completed && (
                 <td className="table-cell">{task.completed ? "Yes" : "No"}</td>
               )}
-              {/* {columnVisibility.tasksStatus && (
+              {columnVisibility.tasksStatus && (
                 <td className="table-cell">
                   <Chip
                     variant="soft"
@@ -188,7 +224,7 @@ const TaskCells = ({
                     {taskStatus}
                   </Chip>
                 </td>
-              )} */}
+              )}
               <td
                 style={{
                   textAlign: "center",

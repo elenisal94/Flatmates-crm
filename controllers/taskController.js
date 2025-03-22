@@ -1,4 +1,5 @@
 const { Task, Tenant } = require("../schema.js");
+const { updateTenantStats } = require("../helpers/tenantStatsHelper");
 
 exports.getAllTasks = async (req, res) => {
   try {
@@ -28,19 +29,9 @@ exports.createTask = async (req, res) => {
   try {
     const newTask = new Task(req.body);
     await newTask.save();
-    const findAllTasks = await Task.find({ assignedTo: newTask.assignedTo });
-    const totalTasks = findAllTasks.length;
-    const completedTasks = findAllTasks.filter((task) => task.completed).length;
-    const pendingTasks = findAllTasks.filter((task) => !task.completed).length;
-    const overdueTasks = findAllTasks.filter(
-      (task) => !task.completed && task.dueDate < new Date()
-    ).length;
-    await Tenant.findByIdAndUpdate(newTask.assignedTo, {
-      totalTasks,
-      completedTasks,
-      pendingTasks,
-      overdueTasks,
-    });
+
+    await updateTenantStats(newTask.assignedTo);
+
     res.status(201).json(newTask);
   } catch (error) {
     console.error(error);
@@ -54,6 +45,9 @@ exports.updateTask = async (req, res) => {
     const updatedTask = await Task.findByIdAndUpdate(taskId, req.body, {
       new: true,
     });
+
+    await updateTenantStats(updatedTask.assignedTo);
+
     res.json(updatedTask);
   } catch (error) {
     console.error(error);
@@ -68,6 +62,9 @@ exports.deleteTask = async (req, res) => {
     if (!deletedTask) {
       return res.status(404).json({ message: "Task not found" });
     }
+
+    await updateTenantStats(deletedTask.assignedTo);
+
     res.json({ message: "Task deleted successfully" });
   } catch (error) {
     console.error(error);

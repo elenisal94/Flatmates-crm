@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Sidebar from "../layouts/MenuSidebar";
 import TenantPage from "../tablePages/tenantPage/TenantPage";
 import TaskPage from "../tablePages/taskPage/TaskPage";
@@ -10,6 +15,7 @@ const AppRoutes = () => {
         <Sidebar />
         <div style={{ flex: 1, overflowX: "auto", minWidth: 0 }}>
           <Routes>
+            <Route path="/" element={<Navigate to="/tenants" />} />
             <Route path="/tenants" element={<TenantPage />} />
             <Route path="/tasks" element={<TaskPage />} />
           </Routes>

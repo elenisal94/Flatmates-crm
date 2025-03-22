@@ -91,6 +91,7 @@ const EditTask = ({ taskStore }) => {
               {...register("dueDate")}
               name="dueDate"
               label="Due Date"
+              defaultValue={taskStore.selectedTask?.dueDate}
               required
               error={!!errors.dueDate}
               helperText={errors.dueDate?.message}

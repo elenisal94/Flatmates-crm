@@ -9,7 +9,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "mongoose": "^8.3.1"
+    "mongoose": "^8.3.1",
+    "node-cron": "^3.0.3"
   },
   "devDependencies": {
     "supertest": "^7.0.0"

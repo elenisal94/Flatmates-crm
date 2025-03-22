@@ -16,7 +16,7 @@ const AddTenant = ({ tenantStore }) => {
       .string()
       .matches(/^\d{10}$/, "Phone number must be 10 digits")
       .required("Phone number is required"),
-    address: yup.object({
+    address: yup.object().shape({
       flat: yup.string().required("Flat number is required"),
       street: yup.string().required("Street name and number is required"),
       city: yup.string().required("City is required"),

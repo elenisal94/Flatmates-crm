@@ -6,6 +6,7 @@ const tenantRoutes = require("./routes/tenantRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const rentPaymentRoutes = require("./routes/rentPaymentRoutes");
 const billPaymentRoutes = require("./routes/billPaymentRoutes");
+require("./helpers/cronJob.js");
 
 const app = express();
 const PORT = process.env.PORT || 5001;
