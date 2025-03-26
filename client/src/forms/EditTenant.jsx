@@ -44,7 +44,6 @@ const EditTenant = ({ tenantStore, tenantFields }) => {
     handleSubmit,
     control,
     formState: { errors },
-    setValue,
   } = methods;
 
   const onSubmit = async (data) => {

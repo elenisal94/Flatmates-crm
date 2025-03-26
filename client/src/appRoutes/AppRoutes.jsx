@@ -7,6 +7,7 @@ import {
 import Sidebar from "../layouts/MenuSidebar";
 import TenantPage from "../tablePages/tenantPage/TenantPage";
 import TaskPage from "../tablePages/taskPage/TaskPage";
+import BillsPage from "../tablePages/billsPage/BillsPage";
 
 const AppRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const AppRoutes = () => {
             <Route path="/" element={<Navigate to="/tenants" />} />
             <Route path="/tenants" element={<TenantPage />} />
             <Route path="/tasks" element={<TaskPage />} />
+            <Route path="/bills" element={<BillsPage />} />
           </Routes>
         </div>
       </div>

@@ -172,6 +172,14 @@ export default function Sidebar() {
             </ListItemButton>
           </ListItem>
           <ListItem>
+            <ListItemButton component={Link} to="/bills">
+              <AssignmentRoundedIcon />
+              <ListItemContent>
+                <Typography level="title-sm">Bills</Typography>
+              </ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
             <ListItemButton
               role="menuitem"
               component="a"

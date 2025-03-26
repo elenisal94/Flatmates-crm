@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import AppRoutes from "./appRoutes/AppRoutes";
 import {
   extendTheme as materialExtendTheme,

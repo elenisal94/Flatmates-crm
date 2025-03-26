@@ -29,6 +29,7 @@ class TaskStore {
       const response = await axios.get(`/api/tasks/${task._id}`);
       this.selectedTask = response.data;
       this.open = true;
+      this.mode = "view";
     } catch (error) {
       console.error("Failed to fetch task details:", error);
     }
@@ -39,6 +40,7 @@ class TaskStore {
       const response = await axios.get(`/api/tasks/${task._id}`);
       this.selectedTask = response.data;
       this.open = true;
+      this.mode = "edit";
     } catch (error) {
       console.error("Failed to fetch task details for editing:", error);
     }
@@ -61,18 +63,6 @@ class TaskStore {
   setupNewTask() {
     this.selectedTask = null;
     this.mode = "add";
-    this.open = true;
-  }
-
-  editTask(task) {
-    this.selectedTask = task;
-    this.mode = "edit";
-    this.open = true;
-  }
-
-  viewTask(task) {
-    this.selectedTask = task;
-    this.mode = "view";
     this.open = true;
   }
 
@@ -110,4 +100,5 @@ class TaskStore {
   }
 }
 
-export default new TaskStore();
+const taskStore = new TaskStore();
+export default taskStore;

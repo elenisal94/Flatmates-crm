@@ -5,7 +5,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 
-const DateField = ({ name, label, required, defaultValue }) => {
+const DateField = ({ name, label, required, dueDate }) => {
   const {
     control,
     setValue,
@@ -14,12 +14,13 @@ const DateField = ({ name, label, required, defaultValue }) => {
   } = useFormContext();
 
   useEffect(() => {
-    if (!defaultValue) {
-      setValue(name, dayjs().toISOString(), { shouldValidate: true });
-    } else {
-      setValue(name, defaultValue, { shouldValidate: true });
+    if (required) {
+      const defaultDate = dueDate
+        ? dayjs(dueDate).toISOString()
+        : dayjs().toISOString();
+      setValue(name, defaultDate, { shouldValidate: true });
     }
-  }, [defaultValue, name, setValue]);
+  }, [name, required, setValue, dueDate]);
 
   return (
     <FormControl error={!!errors[name]} fullWidth>
@@ -43,8 +44,8 @@ const DateField = ({ name, label, required, defaultValue }) => {
               format="DD/MM/YYYY"
               value={field.value ? dayjs(field.value) : null}
               onChange={(newValue) => {
-                const formattedValue = newValue ? newValue.toISOString() : null;
-                setValue(name, formattedValue, { shouldValidate: true });
+                const value = newValue ? newValue.toISOString() : null;
+                setValue(name, value, { shouldValidate: true });
                 trigger(name);
               }}
               slotProps={{

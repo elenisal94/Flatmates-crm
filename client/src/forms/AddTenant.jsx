@@ -43,7 +43,6 @@ const AddTenant = ({ tenantStore }) => {
   const {
     register,
     handleSubmit,
-    control,
     formState: { errors },
   } = methods;
 
