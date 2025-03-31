@@ -19,8 +19,6 @@ const SelectField = ({
 
   const hasError = !!errors[name];
 
-  console.log("options", options);
-
   return (
     <FormControl error={hasError} fullWidth>
       <Controller
@@ -35,11 +33,6 @@ const SelectField = ({
               options={options}
               value={selectedOption}
               onChange={(e, newValue) => {
-                console.log("Selected Option:", newValue);
-                console.log(
-                  "Value passed to onChange:",
-                  newValue ? newValue.value : null
-                );
                 field.onChange(newValue ? newValue.value : null);
               }}
               isOptionEqualToValue={(option, value) =>

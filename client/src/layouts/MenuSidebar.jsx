@@ -18,6 +18,9 @@ import Sheet from "@mui/joy/Sheet";
 import Stack from "@mui/joy/Stack";
 import SearchRoundedIcon from "@mui/icons-material/SearchRounded";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
+import ApartmentIcon from "@mui/icons-material/Apartment";
+import ReceiptIcon from "@mui/icons-material/Receipt";
+import TaskIcon from "@mui/icons-material/Task";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import PersonIcon from "@mui/icons-material/Face3";
 import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
@@ -109,7 +112,7 @@ export default function Sidebar() {
         onClick={() => closeSidebar()}
       />
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-        <Typography level="title-lg">Flatmates CRM</Typography>
+        <Typography level="title-lg">Tenant CRM</Typography>
         <ColorSchemeToggle sx={{ ml: "auto" }} />
       </Box>
       <Input
@@ -165,7 +168,7 @@ export default function Sidebar() {
           </ListItem>
           <ListItem>
             <ListItemButton component={Link} to="/tasks">
-              <AssignmentRoundedIcon />
+              <TaskIcon />
               <ListItemContent>
                 <Typography level="title-sm">Tasks</Typography>
               </ListItemContent>
@@ -173,9 +176,17 @@ export default function Sidebar() {
           </ListItem>
           <ListItem>
             <ListItemButton component={Link} to="/bills">
-              <AssignmentRoundedIcon />
+              <ReceiptIcon />
               <ListItemContent>
                 <Typography level="title-sm">Bills</Typography>
+              </ListItemContent>
+            </ListItemButton>
+          </ListItem>
+          <ListItem>
+            <ListItemButton component={Link} to="/rent">
+              <ApartmentIcon />
+              <ListItemContent>
+                <Typography level="title-sm">Rents</Typography>
               </ListItemContent>
             </ListItemButton>
           </ListItem>

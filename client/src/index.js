@@ -8,6 +8,7 @@ import { Provider } from "mobx-react";
 import tenantStore from "./stores/TenantStore.jsx";
 import taskStore from "./stores/TaskStore.jsx";
 import billPaymentStore from "./stores/BillPaymentStore.jsx";
+import rentPaymentStore from "./stores/RentPaymentStore.jsx";
 // import { ThemeProvider } from '@mui/material/styles';
 // import theme from './theme'; // Import the theme file you created
 
@@ -22,6 +23,7 @@ root.render(
       tenantStore={tenantStore}
       taskStore={taskStore}
       billPaymentStore={billPaymentStore}
+      rentPaymentStore={rentPaymentStore}
     >
       <CRMSystem />
       {/* </ThemeProvider> */}

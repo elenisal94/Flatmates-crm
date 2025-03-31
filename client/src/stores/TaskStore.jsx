@@ -77,7 +77,6 @@ class TaskStore {
   }
 
   async saveTask(taskData) {
-    console.log("Task Data Before Sending:", taskData);
     try {
       const formattedTaskData = {
         ...taskData,

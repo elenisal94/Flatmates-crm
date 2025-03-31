@@ -24,7 +24,6 @@ app.use(cors(corsOptions));
 app.options(
   "*",
   (req, res, next) => {
-    console.log("Received CORS preflight request");
     next();
   },
   cors(corsOptions)
