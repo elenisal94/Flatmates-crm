@@ -5,7 +5,7 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import dayjs from "dayjs";
 
-const DateField = ({ name, label, required, dueDate }) => {
+const DateField = ({ name, label, required, dueDate, helperText }) => {
   const {
     control,
     setValue,
@@ -14,11 +14,8 @@ const DateField = ({ name, label, required, dueDate }) => {
   } = useFormContext();
 
   useEffect(() => {
-    if (required) {
-      const defaultDate = dueDate
-        ? dayjs(dueDate).toISOString()
-        : dayjs().toISOString();
-      setValue(name, defaultDate, { shouldValidate: true });
+    if (required && dueDate) {
+      setValue(name, dayjs(dueDate).toISOString(), { shouldValidate: true });
     }
   }, [name, required, setValue, dueDate]);
 
@@ -42,7 +39,7 @@ const DateField = ({ name, label, required, dueDate }) => {
             <DatePicker
               {...field}
               format="DD/MM/YYYY"
-              value={field.value ? dayjs(field.value) : null}
+              value={field.value ? dayjs(field.value) : null} // Start as null
               onChange={(newValue) => {
                 const value = newValue ? newValue.toISOString() : null;
                 setValue(name, value, { shouldValidate: true });
@@ -54,13 +51,13 @@ const DateField = ({ name, label, required, dueDate }) => {
                   size: "small",
                   fullWidth: true,
                   error: !!errors[name],
+                  helperText: helperText,
                 },
               }}
             />
           </LocalizationProvider>
         )}
       />
-      {errors[name] && <FormHelperText>{errors[name]?.message}</FormHelperText>}
     </FormControl>
   );
 };

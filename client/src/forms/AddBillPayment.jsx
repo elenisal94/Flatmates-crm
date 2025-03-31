@@ -21,7 +21,13 @@ const AddBillPayment = ({ billPaymentStore }) => {
       .typeError("Please enter a valid number")
       .required("Amount is required")
       .positive("Amount must be positive"),
-    dueDate: yup.date().required("Due Date is required").nullable(),
+    dueDate: yup
+      .date()
+      .nullable()
+      .transform((value, originalValue) =>
+        originalValue === "" ? null : value
+      )
+      .required("Due date is required"),
     datePaid: yup.date().nullable(),
     paymentMade: yup.boolean().required("Payment status is required"),
   });
@@ -41,6 +47,8 @@ const AddBillPayment = ({ billPaymentStore }) => {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = methods;
 
@@ -56,6 +64,16 @@ const AddBillPayment = ({ billPaymentStore }) => {
 
     fetchTenants();
   }, []);
+
+  const paymentMade = watch("paymentMade");
+
+  useEffect(() => {
+    if (paymentMade) {
+      setValue("datePaid", new Date().toISOString().split("T")[0]); // Set current date in YYYY-MM-DD format
+    } else {
+      setValue("datePaid", null);
+    }
+  }, [paymentMade, setValue]);
 
   const onSubmit = async (data) => {
     await billPaymentStore.saveBillPayment(data);
@@ -110,16 +128,10 @@ const AddBillPayment = ({ billPaymentStore }) => {
               helperText={errors.dueDate?.message}
             />
           </div>
-          <div>
-            <DateField
-              {...register("datePaid")}
-              name="datePaid"
-              label="Date Paid"
-              error={!!errors.datePaid}
-              helperText={errors.datePaid?.message}
-              clearable
-            />
-          </div>
+
+          {/* Hidden DatePaid Field */}
+          <input type="hidden" {...register("datePaid")} />
+
           <div>
             <SelectField
               {...register("paymentMade")}

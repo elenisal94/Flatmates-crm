@@ -94,7 +94,7 @@ const BillsPage = observer(() => {
               size="sm"
               onClick={() => BillPaymentStore.setupNewBillPayment()}
             >
-              Add Bill Payment
+              Add Bill
             </Button>
           </Box>
           <BillsTable

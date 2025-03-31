@@ -77,17 +77,22 @@ class TaskStore {
   }
 
   async saveTask(taskData) {
+    console.log("Task Data Before Sending:", taskData);
     try {
+      const formattedTaskData = {
+        ...taskData,
+      };
+
       if (this.selectedTask) {
         const response = await axios.put(
           `/api/tasks/${this.selectedTask._id}`,
-          taskData
+          formattedTaskData
         );
         this.tasks = this.tasks.map((task) =>
           task._id === this.selectedTask._id ? response.data : task
         );
       } else {
-        const response = await axios.post("/api/tasks", taskData);
+        const response = await axios.post("/api/tasks", formattedTaskData);
         this.tasks = [...this.tasks, response.data];
       }
 

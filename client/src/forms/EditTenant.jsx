@@ -1,6 +1,6 @@
 import React from "react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
 import { inject, observer } from "mobx-react";
+import { useForm, FormProvider } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import CustomTextField from "./formComponents/CustomTextField";
@@ -15,7 +15,7 @@ const schema = yup.object().shape({
     .string()
     .matches(/^\d{10}$/, "Phone number must be 10 digits")
     .required("Phone number is required"),
-  address: yup.object({
+  address: yup.object().shape({
     flat: yup.string().required("Flat number is required"),
     street: yup.string().required("Street name and number is required"),
     city: yup.string().required("City is required"),
@@ -23,7 +23,7 @@ const schema = yup.object().shape({
   }),
 });
 
-const EditTenant = ({ tenantStore, tenantFields }) => {
+const EditTenant = ({ tenantStore }) => {
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: tenantStore.selectedTenant || {
@@ -41,8 +41,8 @@ const EditTenant = ({ tenantStore, tenantFields }) => {
   });
 
   const {
+    register,
     handleSubmit,
-    control,
     formState: { errors },
   } = methods;
 
@@ -54,28 +54,80 @@ const EditTenant = ({ tenantStore, tenantFields }) => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormLayout title="Edit Record">
-          {tenantFields
-            .filter((field) => !field.viewOnly)
-            .map(({ name, label, required, type, disabled }) => (
-              <div key={name}>
-                <Controller
-                  name={name}
-                  control={control}
-                  render={({ field }) => (
-                    <CustomTextField
-                      {...field}
-                      label={label}
-                      required={required}
-                      type={type}
-                      disabled={disabled}
-                      error={!!errors[name]}
-                      helperText={errors[name]?.message}
-                    />
-                  )}
-                />
-              </div>
-            ))}
+        <FormLayout title="Edit Tenant">
+          <div>
+            <CustomTextField
+              {...register("firstName")}
+              label="First Name"
+              required
+              error={!!errors.firstName}
+              helperText={errors.firstName?.message}
+            />
+          </div>
+          <div>
+            <CustomTextField
+              {...register("lastName")}
+              label="Last Name"
+              required
+              error={!!errors.lastName}
+              helperText={errors.lastName?.message}
+            />
+          </div>
+          <div>
+            <CustomTextField
+              {...register("email")}
+              label="Email"
+              required
+              type="email"
+              error={!!errors.email}
+              helperText={errors.email?.message}
+            />
+          </div>
+          <div>
+            <CustomTextField
+              {...register("phone")}
+              label="Phone"
+              required
+              error={!!errors.phone}
+              helperText={errors.phone?.message}
+            />
+          </div>
+          <div>
+            <CustomTextField
+              {...register("address.flat")}
+              label="Flat Number"
+              required
+              error={!!errors.address?.flat}
+              helperText={errors.address?.flat?.message}
+            />
+          </div>
+          <div>
+            <CustomTextField
+              {...register("address.street")}
+              label="Street"
+              required
+              error={!!errors.address?.street}
+              helperText={errors.address?.street?.message}
+            />
+          </div>
+          <div>
+            <CustomTextField
+              {...register("address.city")}
+              label="City"
+              required
+              error={!!errors.address?.city}
+              helperText={errors.address?.city?.message}
+            />
+          </div>
+          <div>
+            <CustomTextField
+              {...register("address.postcode")}
+              label="Postcode"
+              required
+              error={!!errors.address?.postcode}
+              helperText={errors.address?.postcode?.message}
+            />
+          </div>
         </FormLayout>
         <FormActions
           onClose={() => tenantStore.handleClose()}

@@ -38,11 +38,11 @@ const EditBillPayment = ({ billPaymentStore }) => {
     },
   });
 
-  console.log("selectedBillPayment", billPaymentStore.selectedBillPayment);
-
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = methods;
 
@@ -58,29 +58,37 @@ const EditBillPayment = ({ billPaymentStore }) => {
     fetchTenants();
   }, []);
 
-  //   useEffect(() => {
-  //     if (billPaymentStore.selectedBillPayment?.tenant) {
-  //       methods.setValue("tenant", billPaymentStore.selectedBillPayment.tenant);
-  //     }
-  //   }, [tenantOptions, methods]);
+  const paymentMade = watch("paymentMade");
+
+  useEffect(() => {
+    if (paymentMade) {
+      setValue("datePaid", new Date().toISOString().split("T")[0]);
+    } else {
+      setValue("datePaid", null);
+    }
+  }, [paymentMade, setValue]);
 
   const onSubmit = async (data) => {
     await billPaymentStore.saveBillPayment(data);
     billPaymentStore.handleClose();
   };
 
-  console.log("Rendering SelectField with options:", tenantOptions);
-
   return (
     <FormProvider {...methods}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout title="Edit Bill Payment">
           <div>
-            <CustomTextField
-              {...register("billType")}
+            <SelectField
+              name="billType"
               label="Bill Type"
               required
-              error={!!errors.billType}
+              options={[
+                { value: "Water", label: "Water" },
+                { value: "Electricity", label: "Electricity" },
+                { value: "Gas", label: "Gas" },
+                { value: "Internet", label: "Internet" },
+                { value: "Council Tax", label: "Council Tax" },
+              ]}
               helperText={errors.billType?.message}
             />
           </div>
@@ -114,17 +122,10 @@ const EditBillPayment = ({ billPaymentStore }) => {
               helperText={errors.dueDate?.message}
             />
           </div>
+
+          <input type="hidden" {...register("datePaid")} />
+
           <div>
-            <DateField
-              {...register("datePaid")}
-              name="datePaid"
-              label="Date Paid"
-              defaultValue={billPaymentStore.selectedBillPayment?.datePaid}
-              error={!!errors.datePaid}
-              helperText={errors.datePaid?.message}
-            />
-          </div>
-          {/* <div>
             <SelectField
               {...register("paymentMade")}
               name="paymentMade"
@@ -137,7 +138,7 @@ const EditBillPayment = ({ billPaymentStore }) => {
               ]}
               isSearchable={false}
             />
-          </div> */}
+          </div>
         </FormLayout>
         <FormActions
           onClose={() => billPaymentStore.handleClose()}

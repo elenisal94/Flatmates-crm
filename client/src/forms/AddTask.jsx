@@ -17,8 +17,20 @@ const AddTask = ({ taskStore }) => {
     title: yup.string().required("Title is required"),
     description: yup.string().required("Description is required"),
     assignedTo: yup.string().required("Assigned to is required"),
-    dueDate: yup.date().required("Due Date is required").nullable(),
-    completed: yup.boolean().required("Completed status is required"),
+    dueDate: yup
+      .date()
+      .nullable()
+      .transform((value, originalValue) =>
+        originalValue === "" ? null : value
+      )
+      .required("Due date is required"),
+    completed: yup
+      .mixed()
+      .oneOf([true, false, "true", "false"])
+      .transform((value) =>
+        value === "true" ? true : value === "false" ? false : value
+      )
+      .required("Completed status is required"),
   });
 
   const methods = useForm({
@@ -104,7 +116,7 @@ const AddTask = ({ taskStore }) => {
               name="completed"
               label="Completed?"
               required
-              helperText={errors.dueDate?.completed}
+              helperText={errors.completed?.message}
               options={[
                 { value: true, label: "Yes" },
                 { value: false, label: "No" },
