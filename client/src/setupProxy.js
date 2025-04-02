@@ -4,8 +4,10 @@ module.exports = function (app) {
   app.use(
     "/api",
     createProxyMiddleware({
-      target: "http://localhost:6000",
+      target: "http://localhost:5001",
       changeOrigin: true,
+      timeout: 10000,
+      proxyTimeout: 10000,
     })
   );
 };

@@ -6,6 +6,8 @@ const tenantRoutes = require("./routes/tenantRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const rentPaymentRoutes = require("./routes/rentPaymentRoutes");
 const billPaymentRoutes = require("./routes/billPaymentRoutes");
+const resetRoutes = require("./routes/resetData.js");
+
 require("./helpers/cronJob.js");
 
 const app = express();
@@ -37,6 +39,10 @@ app.use((req, res, next) => {
   );
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
   res.header("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; connect-src 'self' http://localhost:5001"
+  );
   next();
 });
 
@@ -54,6 +60,7 @@ app.use("/api/tenants", tenantRoutes);
 app.use("/api/tasks", taskRoutes);
 app.use("/api/rent-payments", rentPaymentRoutes);
 app.use("/api/bill-payments", billPaymentRoutes);
+app.use("/api/reset", resetRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

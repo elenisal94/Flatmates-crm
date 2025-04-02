@@ -28,7 +28,7 @@ const ViewRentPayment = ({ rentPaymentStore }) => {
           <ViewField label="Tenant" value={getFullName(rentPayment.tenant)} />
           <ViewField
             label="Amount"
-            value={`$${get(rentPayment, "amount", 0)}`}
+            value={`£${get(rentPayment, "amount", 0)}`}
           />
           <ViewField
             label="Due Date"

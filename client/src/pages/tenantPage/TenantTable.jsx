@@ -128,14 +128,25 @@ export default function TenantTable({
     setCurrentPage(1);
   };
 
-  const getPaymentStatus = (paid, latePayments) => {
-    if (paid) {
-      return "Paid";
-    } else if (latePayments > 0) {
+  const getPaymentStatus = (
+    completedPayments,
+    pendingPayments,
+    latePayments,
+    totalPayments
+  ) => {
+    if (totalPayments === 0) {
+      return "No Payments";
+    }
+    if (latePayments > 0) {
       return "Late";
-    } else {
+    }
+    if (pendingPayments > 0) {
       return "Pending";
     }
+    if (completedPayments === totalPayments) {
+      return "Paid";
+    }
+    return "Unknown";
   };
 
   const getTaskStatus = (tenant) => {
@@ -176,14 +187,21 @@ export default function TenantTable({
           .includes(query));
 
     const rentStatus = getPaymentStatus(
-      tenant.rentPaid,
-      tenant.lateRentPayments
+      tenant.completedRentPayments ?? 0,
+      tenant.pendingRentPayments ?? 0,
+      tenant.lateRentPayments ?? 0,
+      tenant.totalRentPayments ?? 0
     );
+
     const billStatus = getPaymentStatus(
-      tenant.billsPaid,
-      tenant.lateBillPayments
+      tenant.completedBillPayments ?? 0,
+      tenant.pendingBillPayments ?? 0,
+      tenant.lateBillPayments ?? 0,
+      tenant.totalBillPayments ?? 0
     );
+
     const taskStatus = getTaskStatus(tenant);
+
     const matchesRentStatus =
       !rentStatusFilter.length ||
       rentStatusFilter.includes(rentStatus.toLowerCase());

@@ -32,7 +32,7 @@ const ViewBillPayment = ({ billPaymentStore }) => {
           <ViewField label="Tenant" value={getFullName(billPayment.tenant)} />
           <ViewField
             label="Amount"
-            value={`$${get(billPayment, "amount", 0)}`}
+            value={`£${get(billPayment, "amount", 0)}`}
           />
           <ViewField
             label="Due Date"

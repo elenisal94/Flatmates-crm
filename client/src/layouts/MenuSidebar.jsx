@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import Avatar from "@mui/joy/Avatar";
 import Box from "@mui/joy/Box";
@@ -33,12 +36,16 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BrightnessAutoRoundedIcon from "@mui/icons-material/BrightnessAutoRounded";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Link } from "react-router-dom";
-
-import ColorSchemeToggle from "../tablePages/tableUtils/ColorSchemeToggle";
+import ColorSchemeToggle from "../pages/tableUtils/ColorSchemeToggle";
 import { closeSidebar } from "./SidebarUtils";
+import TenantStore from "../stores/TenantStore";
+import billPaymentStore from "../stores/BillPaymentStore";
+import rentPaymentStore from "../stores/RentPaymentStore";
+import taskStore from "../stores/TaskStore";
 
 function Toggler({ defaultExpanded = false, renderToggle, children }) {
   const [open, setOpen] = useState(defaultExpanded);
+
   return (
     <>
       {renderToggle({ open, setOpen })}
@@ -59,6 +66,33 @@ function Toggler({ defaultExpanded = false, renderToggle, children }) {
 }
 
 export default function Sidebar() {
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(false);
+
+  const resetData = async () => {
+    setLoading(true);
+    setMessage("");
+
+    try {
+      const response = await axios.post("http://localhost:5001/api/reset");
+      const data = response.data;
+
+      if (data.success) {
+        TenantStore.fetchTenants();
+        taskStore.fetchTasks();
+        billPaymentStore.fetchBillPayments();
+        rentPaymentStore.fetchRentPayments();
+        toast.success("Data reset successfully! 🎉");
+      } else {
+        toast.error("Reset failed. Try again.");
+      }
+    } catch (error) {
+      toast.error("Error connecting to server.");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <Sheet
       className="Sidebar"
@@ -140,23 +174,23 @@ export default function Sidebar() {
             "--ListItem-radius": (theme) => theme.vars.radius.sm,
           }}
         >
-          <ListItem>
+          {/* <ListItem>
             <ListItemButton>
               <HomeRoundedIcon />
               <ListItemContent>
                 <Typography level="title-sm">Home</Typography>
               </ListItemContent>
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
 
-          <ListItem>
+          {/* <ListItem>
             <ListItemButton>
               <DashboardRoundedIcon />
               <ListItemContent>
                 <Typography level="title-sm">Dashboard</Typography>
               </ListItemContent>
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
 
           <ListItem>
             <ListItemButton component={Link} to="/tenants">
@@ -190,7 +224,7 @@ export default function Sidebar() {
               </ListItemContent>
             </ListItemButton>
           </ListItem>
-          <ListItem>
+          {/* <ListItem>
             <ListItemButton
               role="menuitem"
               component="a"
@@ -204,9 +238,9 @@ export default function Sidebar() {
                 4
               </Chip>
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
 
-          <ListItem nested>
+          {/* <ListItem nested>
             <Toggler
               renderToggle={({ open, setOpen }) => (
                 <ListItemButton onClick={() => setOpen(!open)}>
@@ -238,7 +272,7 @@ export default function Sidebar() {
                 </ListItem>
               </List>
             </Toggler>
-          </ListItem>
+          </ListItem> */}
         </List>
 
         <List
@@ -252,17 +286,17 @@ export default function Sidebar() {
           }}
         >
           <ListItem>
-            <ListItemButton>
+            <ListItemButton component={Link} to="/support">
               <SupportRoundedIcon />
               Support
             </ListItemButton>
           </ListItem>
-          <ListItem>
+          {/* <ListItem>
             <ListItemButton>
               <SettingsRoundedIcon />
               Settings
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
         </List>
         <Card
           invertedColors
@@ -276,27 +310,28 @@ export default function Sidebar() {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography level="title-sm">Used space</Typography>
-            <IconButton size="sm">
+            <Typography level="title-sm">Looking for a do-over?</Typography>
+            {/* <IconButton size="sm">
               <CloseRoundedIcon />
-            </IconButton>
+            </IconButton> */}
           </Stack>
           <Typography level="body-xs">
-            Your team has used 80% of your available space. Need more?
+            Click below to reset all table data to the original demo data. This
+            action will overwrite any existing data!
           </Typography>
-          <LinearProgress
+          {/* <LinearProgress
             variant="outlined"
             value={80}
             determinate
             sx={{ my: 1 }}
-          />
-          <Button size="sm" variant="solid">
-            Upgrade plan
+          /> */}
+          <Button size="sm" variant="solid" onClick={resetData}>
+            {loading ? "Resetting..." : "Reset data"}
           </Button>
         </Card>
       </Box>
       <Divider />
-      <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+      {/* <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
         <Avatar
           variant="outlined"
           size="sm"
@@ -309,7 +344,7 @@ export default function Sidebar() {
         <IconButton size="sm" variant="plain" color="neutral">
           <LogoutRoundedIcon />
         </IconButton>
-      </Box>
+      </Box> */}
     </Sheet>
   );
 }

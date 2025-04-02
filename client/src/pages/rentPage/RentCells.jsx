@@ -12,8 +12,8 @@ import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import Pending from "@mui/icons-material/Pending";
 import ErrorOutline from "@mui/icons-material/ErrorOutline";
 
-const BillsCells = ({
-  billPayments,
+const RentCells = ({
+  rentPayments,
   selected,
   setSelected,
   order,
@@ -24,11 +24,11 @@ const BillsCells = ({
   handleEditClick,
   handleDelete,
   stableSort,
-  paginatedBills,
-  getBillStatus,
+  paginatedRent,
+  getRentStatus,
   getComparator,
 }) => {
-  const getBillChipColor = (status) => {
+  const getRentChipColor = (status) => {
     switch (status) {
       case "Paid":
         return "success";
@@ -43,7 +43,7 @@ const BillsCells = ({
     }
   };
 
-  const getBillStartDecorator = (paymentMade) => {
+  const getRentStartDecorator = (paymentMade) => {
     switch (paymentMade) {
       case "Paid":
         return <CheckRoundedIcon />;
@@ -90,19 +90,19 @@ const BillsCells = ({
             <Checkbox
               size="sm"
               indeterminate={
-                selected.length > 0 && selected.length !== billPayments.length
+                selected.length > 0 && selected.length !== rentPayments.length
               }
-              checked={(selected?.length || 0) === (billPayments?.length || 0)}
+              checked={(selected?.length || 0) === (rentPayments?.length || 0)}
               onChange={(event) => {
                 setSelected(
                   event.target.checked
-                    ? billPayments.map((bill) => bill._id)
+                    ? rentPayments.map((rent) => rent._id)
                     : []
                 );
               }}
               color={
                 (selected?.length || 0) > 0 ||
-                (selected?.length || 0) === (billPayments?.length || 0)
+                (selected?.length || 0) === (rentPayments?.length || 0)
                   ? "primary"
                   : undefined
               }
@@ -125,26 +125,23 @@ const BillsCells = ({
                 },
               }}
             >
-              Bill Type
+              Tenant
             </Link>
           </ResizableTableCell>
-          {columnVisibility.tenant && (
-            <ResizableTableCell>Tenant</ResizableTableCell>
-          )}
           {columnVisibility.amount && (
             <ResizableTableCell>Amount</ResizableTableCell>
           )}
           {columnVisibility.dueDate && (
             <ResizableTableCell>Due Date</ResizableTableCell>
           )}
+          {columnVisibility.rentStatus && (
+            <ResizableTableCell>Rent status</ResizableTableCell>
+          )}
           {columnVisibility.datePaid && (
             <ResizableTableCell>Date Paid</ResizableTableCell>
           )}
           {columnVisibility.paymentMade && (
             <ResizableTableCell>Payment Made?</ResizableTableCell>
-          )}
-          {columnVisibility.billStatus && (
-            <ResizableTableCell>Bill status</ResizableTableCell>
           )}
           <th
             aria-label="last"
@@ -158,11 +155,11 @@ const BillsCells = ({
         </tr>
       </thead>
       <tbody>
-        {stableSort(paginatedBills, getComparator(order, "id")).map((bill) => {
-          const isItemSelected = selected.indexOf(bill._id) !== -1;
-          const billStatus = getBillStatus(bill);
+        {stableSort(paginatedRent, getComparator(order, "id")).map((rent) => {
+          const isItemSelected = selected.indexOf(rent._id) !== -1;
+          const rentStatus = getRentStatus(rent);
           return (
-            <tr key={bill._id}>
+            <tr key={rent._id}>
               <td className="table-cell" style={{ textAlign: "center" }}>
                 <Checkbox
                   size="sm"
@@ -171,11 +168,11 @@ const BillsCells = ({
                     if (event.target.checked) {
                       setSelected((prevSelected) => [
                         ...prevSelected,
-                        bill._id,
+                        rent._id,
                       ]);
                     } else {
                       setSelected((prevSelected) =>
-                        prevSelected.filter((id) => id !== bill._id)
+                        prevSelected.filter((id) => id !== rent._id)
                       );
                     }
                   }}
@@ -189,42 +186,47 @@ const BillsCells = ({
                   level="body3"
                   textColor="text.primary"
                 >
-                  {bill.billType}
+                  <Link
+                    href="#"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      onProfileClick(rent);
+                    }}
+                  >
+                    {getFullName(rent?.tenant?._id)}
+                  </Link>
                 </Typography>
               </td>
-              {columnVisibility.tenant && (
-                <td className="table-cell">{getFullName(bill?.tenant?._id)}</td>
-              )}
               {columnVisibility.amount && (
-                <td className="table-cell">£{bill.amount.toFixed(2)}</td>
+                <td className="table-cell">£{rent.amount.toFixed(2)}</td>
               )}
               {columnVisibility.dueDate && (
                 <td className="table-cell">
-                  {dayjs(bill.dueDate).format("DD-MM-YYYY")}
+                  {dayjs(rent.dueDate).format("DD-MM-YYYY")}
+                </td>
+              )}
+              {columnVisibility.rentStatus && (
+                <td className="table-cell">
+                  <Chip
+                    variant="soft"
+                    size="sm"
+                    color={getRentChipColor(rentStatus)}
+                    startDecorator={getRentStartDecorator(rentStatus)}
+                  >
+                    {rentStatus}
+                  </Chip>
                 </td>
               )}
               {columnVisibility.datePaid && (
                 <td className="table-cell">
-                  {bill.datePaid
-                    ? dayjs(bill.datePaid).format("DD-MM-YYYY")
+                  {rent.datePaid
+                    ? dayjs(rent.datePaid).format("DD-MM-YYYY")
                     : "N/A"}
                 </td>
               )}
               {columnVisibility.paymentMade && (
                 <td className="table-cell">
-                  {bill.paymentMade ? "Yes" : "No"}
-                </td>
-              )}
-              {columnVisibility.billStatus && (
-                <td className="table-cell">
-                  <Chip
-                    variant="soft"
-                    size="sm"
-                    color={getBillChipColor(billStatus)}
-                    startDecorator={getBillStartDecorator(billStatus)}
-                  >
-                    {billStatus}
-                  </Chip>
+                  {rent.paymentMade ? "Yes" : "No"}
                 </td>
               )}
               <td
@@ -235,9 +237,9 @@ const BillsCells = ({
                 }}
               >
                 <RowMenu
-                  onEdit={() => handleEditClick(bill)}
-                  onDelete={() => handleDelete(bill)}
-                  onProfile={() => onProfileClick(bill)}
+                  onEdit={() => handleEditClick(rent)}
+                  onDelete={() => handleDelete(rent)}
+                  onProfile={() => onProfileClick(rent)}
                 />
               </td>
             </tr>
@@ -248,4 +250,4 @@ const BillsCells = ({
   );
 };
 
-export default BillsCells;
+export default RentCells;

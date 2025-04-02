@@ -5,10 +5,11 @@ import {
   Navigate,
 } from "react-router-dom";
 import Sidebar from "../layouts/MenuSidebar";
-import TenantPage from "../tablePages/tenantPage/TenantPage";
-import TaskPage from "../tablePages/taskPage/TaskPage";
-import BillsPage from "../tablePages/billsPage/BillsPage";
-import RentPage from "../tablePages/rentPage/RentPage";
+import TenantPage from "../pages/tenantPage/TenantPage";
+import TaskPage from "../pages/taskPage/TaskPage";
+import BillsPage from "../pages/billsPage/BillsPage";
+import RentPage from "../pages/rentPage/RentPage";
+import SupportPage from "../pages/SupportPage";
 
 const AppRoutes = () => {
   return (
@@ -22,6 +23,7 @@ const AppRoutes = () => {
             <Route path="/tasks" element={<TaskPage />} />
             <Route path="/bills" element={<BillsPage />} />
             <Route path="/rent" element={<RentPage />} />
+            <Route path="/support" element={<SupportPage />} />
           </Routes>
         </div>
       </div>

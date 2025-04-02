@@ -165,12 +165,16 @@ const TenantCells = ({
         (tenant) => {
           const isItemSelected = selected.indexOf(tenant._id) !== -1;
           const rentStatus = getPaymentStatus(
-            tenant.rentPaid,
-            tenant.lateRentPayments
+            tenant.completedRentPayments ?? 0,
+            tenant.pendingRentPayments ?? 0,
+            tenant.lateRentPayments ?? 0,
+            tenant.totalRentPayments ?? 0
           );
           const billStatus = getPaymentStatus(
-            tenant.billsPaid,
-            tenant.lateBillPayments
+            tenant.completedBillPayments ?? 0,
+            tenant.pendingBillPayments ?? 0,
+            tenant.lateBillPayments ?? 0,
+            tenant.totalBillPayments ?? 0
           );
           const taskStatus = getTaskStatus(tenant);
           return (
