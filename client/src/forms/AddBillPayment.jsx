@@ -9,18 +9,28 @@ import DateField from "./formComponents/DateField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 import TenantStore from "../stores/TenantStore";
+import DOMPurify from "dompurify";
 
 const AddBillPayment = ({ billPaymentStore }) => {
   const [tenantOptions, setTenantOptions] = useState([]);
 
   const schema = yup.object().shape({
-    tenant: yup.string().required("Tenant is required"),
-    billType: yup.string().required("Bill type is required"),
+    tenant: yup
+      .string()
+      .transform((value) => DOMPurify.sanitize(value))
+      .required("Tenant is required"),
+
+    billType: yup
+      .string()
+      .transform((value) => DOMPurify.sanitize(value))
+      .required("Bill type is required"),
+
     amount: yup
       .number()
       .typeError("Please enter a valid number")
       .required("Amount is required")
       .positive("Amount must be positive"),
+
     dueDate: yup
       .date()
       .nullable()
@@ -28,7 +38,9 @@ const AddBillPayment = ({ billPaymentStore }) => {
         originalValue === "" ? null : value
       )
       .required("Due date is required"),
+
     datePaid: yup.date().nullable(),
+
     paymentMade: yup.boolean().required("Payment status is required"),
   });
 

@@ -9,17 +9,29 @@ import DateField from "./formComponents/DateField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 import TenantStore from "../stores/TenantStore";
+import DOMPurify from "dompurify";
 
 const schema = yup.object().shape({
-  billType: yup.string().required("Bill Type is required"),
-  tenant: yup.string().required("Tenant is required"),
+  billType: yup
+    .string()
+    .transform((value) => DOMPurify.sanitize(value))
+    .required("Bill Type is required"),
+
+  tenant: yup
+    .string()
+    .transform((value) => DOMPurify.sanitize(value))
+    .required("Tenant is required"),
+
   amount: yup
     .number()
     .typeError("Please enter a valid number")
     .required("Amount is required")
     .positive("Amount must be positive"),
+
   dueDate: yup.date().required("Due Date is required").nullable(),
+
   datePaid: yup.date().nullable(),
+
   paymentMade: yup.boolean().required("Payment status is required"),
 });
 

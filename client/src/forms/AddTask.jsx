@@ -9,14 +9,29 @@ import DateField from "./formComponents/DateField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 import TenantStore from "../stores/TenantStore";
+import DOMPurify from "dompurify";
 
 const AddTask = ({ taskStore }) => {
   const [tenantOptions, setTenantOptions] = useState([]);
 
   const schema = yup.object().shape({
-    title: yup.string().required("Title is required"),
-    description: yup.string().required("Description is required"),
-    assignedTo: yup.string().required("Assigned to is required"),
+    title: yup
+      .string()
+      .max(500, "Field cannot exceed 500 characters")
+      .transform((value) => DOMPurify.sanitize(value)) // Sanitize input
+      .required("Title is required"),
+
+    description: yup
+      .string()
+      .max(500, "Field cannot exceed 500 characters")
+      .transform((value) => DOMPurify.sanitize(value)) // Sanitize input
+      .required("Description is required"),
+
+    assignedTo: yup
+      .string()
+      .transform((value) => DOMPurify.sanitize(value)) // Sanitize input
+      .required("Assigned to is required"),
+
     dueDate: yup
       .date()
       .nullable()
@@ -24,6 +39,7 @@ const AddTask = ({ taskStore }) => {
         originalValue === "" ? null : value
       )
       .required("Due date is required"),
+
     completed: yup
       .mixed()
       .oneOf([true, false, "true", "false"])

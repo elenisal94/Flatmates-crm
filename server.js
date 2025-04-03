@@ -7,11 +7,24 @@ const taskRoutes = require("./routes/taskRoutes");
 const rentPaymentRoutes = require("./routes/rentPaymentRoutes");
 const billPaymentRoutes = require("./routes/billPaymentRoutes");
 const resetRoutes = require("./routes/resetData.js");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 require("./helpers/cronJob.js");
 
 const app = express();
 const PORT = process.env.PORT || 5001;
+
+app.use(helmet());
+
+app.use(mongoSanitize());
+
+const limiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 100,
+  message: "Too many requests from this IP, please try again after a minute",
+});
 
 const corsOptions = {
   origin: "http://localhost:3000",
@@ -22,6 +35,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use(limiter);
 
 app.options(
   "*",

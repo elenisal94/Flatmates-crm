@@ -9,12 +9,28 @@ import DateField from "./formComponents/DateField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 import TenantStore from "../stores/TenantStore";
+import DOMPurify from "dompurify";
 
 const schema = yup.object().shape({
-  title: yup.string().required("Title is required"),
-  description: yup.string().required("Description is required"),
-  assignedTo: yup.string().required("Assigned to is required"),
+  title: yup
+    .string()
+    .max(500, "Field cannot exceed 500 characters")
+    .transform((value) => DOMPurify.sanitize(value))
+    .required("Title is required"),
+
+  description: yup
+    .string()
+    .max(500, "Field cannot exceed 500 characters")
+    .transform((value) => DOMPurify.sanitize(value))
+    .required("Description is required"),
+
+  assignedTo: yup
+    .string()
+    .transform((value) => DOMPurify.sanitize(value))
+    .required("Assigned to is required"),
+
   dueDate: yup.date().required("Due Date is required").nullable(),
+
   completed: yup.boolean().required("Completed status is required"),
 });
 

@@ -6,21 +6,59 @@ import * as yup from "yup";
 import CustomTextField from "./formComponents/CustomTextField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
+import DOMPurify from "dompurify";
 
 const AddTenant = ({ tenantStore }) => {
   const schema = yup.object().shape({
-    firstName: yup.string().required("First name is required"),
-    lastName: yup.string().required("Last name is required"),
-    email: yup.string().email("Invalid email").required("Email is required"),
+    firstName: yup
+      .string()
+      .max(500, "Field cannot exceed 500 characters")
+      .transform((value) => DOMPurify.sanitize(value))
+      .required("First name is required"),
+
+    lastName: yup
+      .string()
+      .max(500, "Field cannot exceed 500 characters")
+      .transform((value) => DOMPurify.sanitize(value))
+      .required("Last name is required"),
+
+    email: yup
+      .string()
+      .max(500, "Field cannot exceed 500 characters")
+      .transform((value) => DOMPurify.sanitize(value))
+      .email("Invalid email")
+      .required("Email is required"),
+
     phone: yup
       .string()
+      .transform((value) => DOMPurify.sanitize(value))
       .matches(/^\d{10}$/, "Phone number must be 10 digits")
       .required("Phone number is required"),
+
     address: yup.object().shape({
-      flat: yup.string().required("Flat number is required"),
-      street: yup.string().required("Street name and number is required"),
-      city: yup.string().required("City is required"),
-      postcode: yup.string().required("Postcode is required"),
+      flat: yup
+        .string()
+        .max(500, "Field cannot exceed 500 characters")
+        .transform((value) => DOMPurify.sanitize(value))
+        .required("Flat number is required"),
+
+      street: yup
+        .string()
+        .max(500, "Field cannot exceed 500 characters")
+        .transform((value) => DOMPurify.sanitize(value))
+        .required("Street name and number is required"),
+
+      city: yup
+        .string()
+        .max(500, "Field cannot exceed 500 characters")
+        .transform((value) => DOMPurify.sanitize(value))
+        .required("City is required"),
+
+      postcode: yup
+        .string()
+        .max(500, "Field cannot exceed 500 characters")
+        .transform((value) => DOMPurify.sanitize(value))
+        .required("Postcode is required"),
     }),
   });
 
