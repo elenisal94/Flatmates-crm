@@ -10,7 +10,8 @@ class BillPaymentStore {
 
   constructor() {
     makeAutoObservable(this);
-    axios.defaults.baseURL = "http://localhost:5001";
+    axios.defaults.baseURL =
+      process.env.REACT_APP_API_URL || "http://localhost:5001";
     axios.defaults.withCredentials = true;
     this.fetchBillPayments();
   }

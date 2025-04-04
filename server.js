@@ -27,7 +27,7 @@ const limiter = rateLimit({
 });
 
 const corsOptions = {
-  origin: "http://localhost:3000",
+  origin: process.env.FRONTEND_URL || "http://localhost:3000",
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
@@ -46,7 +46,10 @@ app.options(
 );
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header(
+    "Access-Control-Allow-Origin",
+    process.env.FRONTEND_URL || "http://localhost:3000"
+  );
   res.header(
     "Access-Control-Allow-Methods",
     "GET, HEAD, POST, PUT, DELETE, OPTIONS"
@@ -55,7 +58,9 @@ app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", "true");
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self'; connect-src 'self' http://localhost:5001"
+    `default-src 'self'; connect-src 'self' ${
+      process.env.BACKEND_URL || "http://localhost:5001"
+    }`
   );
   next();
 });
@@ -63,7 +68,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 mongoose
-  .connect("mongodb://localhost/crm-db", {
+  .connect(process.env.MONGO_URI || "mongodb://localhost/crm-db", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

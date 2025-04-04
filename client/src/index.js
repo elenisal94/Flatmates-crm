@@ -12,7 +12,8 @@ import rentPaymentStore from "./stores/RentPaymentStore.jsx";
 // import { ThemeProvider } from '@mui/material/styles';
 // import theme from './theme'; // Import the theme file you created
 
-axios.defaults.baseURL = "http://localhost:5001";
+axios.defaults.baseURL =
+  process.env.REACT_APP_API_URL || "http://localhost:5001";
 axios.defaults.withCredentials = true;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

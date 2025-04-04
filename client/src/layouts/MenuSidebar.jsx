@@ -74,7 +74,8 @@ export default function Sidebar() {
     setMessage("");
 
     try {
-      const response = await axios.post("http://localhost:5001/api/reset");
+      const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:5001";
+      const response = await axios.post(`${baseUrl}/api/reset`);
       const data = response.data;
 
       if (data.success) {
