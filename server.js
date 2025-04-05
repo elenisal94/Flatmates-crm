@@ -46,25 +46,7 @@ app.options(
   cors(corsOptions)
 );
 
-app.use((req, res, next) => {
-  res.header(
-    "Access-Control-Allow-Origin",
-    process.env.FRONTEND_URL || "http://localhost:3000"
-  );
-  res.header(
-    "Access-Control-Allow-Methods",
-    "GET, HEAD, POST, PUT, DELETE, OPTIONS"
-  );
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.setHeader(
-    "Content-Security-Policy",
-    `default-src 'self'; connect-src 'self' ${
-      process.env.BACKEND_URL || "http://localhost:5001"
-    }`
-  );
-  next();
-});
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
