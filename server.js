@@ -64,6 +64,6 @@ app.use("/api/rent-payments", rentPaymentRoutes);
 app.use("/api/bill-payments", billPaymentRoutes);
 app.use("/api/reset", resetRoutes);
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server is running on port ${PORT}`);
 });
