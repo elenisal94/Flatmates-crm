@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+require("dotenv").config();
 const { Tenant, Task, RentPayment, BillPayment } = require("./schema.js");
 const tenantRoutes = require("./routes/tenantRoutes");
 const taskRoutes = require("./routes/taskRoutes");
