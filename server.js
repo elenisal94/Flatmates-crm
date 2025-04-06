@@ -51,7 +51,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 mongoose
-  .connect(process.env.MONGO_URI || "mongodb://localhost/crm-db", {
+  .connect(process.env.MONGO_URI || "mongodb://127.0.0.1:27017/crm-db", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })

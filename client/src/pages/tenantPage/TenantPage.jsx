@@ -92,14 +92,22 @@ const TenantPage = observer(() => {
             <Typography level="h2" component="h1">
               Tenants
             </Typography>
-            <Button
-              color="primary"
-              startDecorator={<AddIcon />}
-              size="sm"
-              onClick={() => TenantStore.setupNewTenant()}
+            <Box
+              sx={{
+                width: { xs: "100%", sm: "auto" },
+                display: "flex",
+                justifyContent: { xs: "flex-end", sm: "flex-start" },
+              }}
             >
-              Add tenant
-            </Button>
+              <Button
+                color="primary"
+                startDecorator={<AddIcon />}
+                size="sm"
+                onClick={() => TenantStore.setupNewTenant()}
+              >
+                Add tenant
+              </Button>
+            </Box>
           </Box>
           <TenantTable
             tenants={tenants}

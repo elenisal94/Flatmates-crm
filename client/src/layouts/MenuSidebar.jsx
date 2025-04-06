@@ -150,11 +150,11 @@ export default function Sidebar() {
         <Typography level="title-lg">Tenant CRM</Typography>
         <ColorSchemeToggle sx={{ ml: "auto" }} />
       </Box>
-      <Input
+      {/* <Input
         size="sm"
         startDecorator={<SearchRoundedIcon />}
         placeholder="Search"
-      />
+      /> */}
       <Box
         sx={{
           minHeight: 0,

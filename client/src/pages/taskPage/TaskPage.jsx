@@ -91,14 +91,22 @@ const TaskPage = observer(() => {
             <Typography level="h2" component="h1">
               Tasks
             </Typography>
-            <Button
-              color="primary"
-              startDecorator={<AddIcon />}
-              size="sm"
-              onClick={() => TaskStore.setupNewTask()}
+            <Box
+              sx={{
+                width: { xs: "100%", sm: "auto" },
+                display: "flex",
+                justifyContent: { xs: "flex-end", sm: "flex-start" },
+              }}
             >
-              Add Task
-            </Button>
+              <Button
+                color="primary"
+                startDecorator={<AddIcon />}
+                size="sm"
+                onClick={() => TaskStore.setupNewTask()}
+              >
+                Add Task
+              </Button>
+            </Box>
           </Box>
           <TaskTable
             tasks={tasks}

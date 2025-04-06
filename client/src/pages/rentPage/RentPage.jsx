@@ -88,14 +88,22 @@ const RentPage = observer(() => {
             <Typography level="h2" component="h1">
               Rents
             </Typography>
-            <Button
-              color="primary"
-              startDecorator={<AddIcon />}
-              size="sm"
-              onClick={() => RentPaymentStore.setupNewRentPayment()}
+            <Box
+              sx={{
+                width: { xs: "100%", sm: "auto" },
+                display: "flex",
+                justifyContent: { xs: "flex-end", sm: "flex-start" },
+              }}
             >
-              Add Rent
-            </Button>
+              <Button
+                color="primary"
+                startDecorator={<AddIcon />}
+                size="sm"
+                onClick={() => RentPaymentStore.setupNewRentPayment()}
+              >
+                Add Rent
+              </Button>
+            </Box>
           </Box>
           <RentTable
             rentPayments={rentPayments}

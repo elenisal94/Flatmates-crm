@@ -88,14 +88,22 @@ const BillsPage = observer(() => {
             <Typography level="h2" component="h1">
               Bills
             </Typography>
-            <Button
-              color="primary"
-              startDecorator={<AddIcon />}
-              size="sm"
-              onClick={() => BillPaymentStore.setupNewBillPayment()}
+            <Box
+              sx={{
+                width: { xs: "100%", sm: "auto" },
+                display: "flex",
+                justifyContent: { xs: "flex-end", sm: "flex-start" },
+              }}
             >
-              Add Bill
-            </Button>
+              <Button
+                color="primary"
+                startDecorator={<AddIcon />}
+                size="sm"
+                onClick={() => BillPaymentStore.setupNewBillPayment()}
+              >
+                Add Bill
+              </Button>
+            </Box>
           </Box>
           <BillsTable
             billPayments={billPayments}
