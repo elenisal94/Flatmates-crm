@@ -67,7 +67,6 @@ export default function RentTable({
   });
 
   const columns = [
-    { id: "tenant", label: "Tenant" },
     { id: "amount", label: "Amount" },
     { id: "dueDate", label: "Due Date" },
     { id: "datePaid", label: "Date Paid" },

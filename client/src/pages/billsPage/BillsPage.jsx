@@ -57,18 +57,20 @@ const BillsPage = observer(() => {
               separator={<ChevronRightRoundedIcon fontSize="sm" />}
               sx={{ pl: 0 }}
             >
-              <Link underline="none" color="neutral" href="#" aria-label="Home">
-                <HomeRoundedIcon />
-              </Link>
-              <Link
+              {/* <Link underline="none" color="neutral" href="#" aria-label="Home"> */}
+              <HomeRoundedIcon />
+              {/* </Link> */}
+              {/* <Link
                 underline="hover"
                 color="neutral"
                 href="#"
                 fontSize={12}
                 fontWeight={500}
-              >
+              > */}
+              <Typography color="secondary" fontWeight={500} fontSize={12}>
                 Dashboard
-              </Link>
+              </Typography>
+              {/* </Link> */}
               <Typography color="primary" fontWeight={500} fontSize={12}>
                 Bill Payments
               </Typography>

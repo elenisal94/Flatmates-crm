@@ -10,6 +10,7 @@ import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 import TenantStore from "../stores/TenantStore";
 import DOMPurify from "dompurify";
+import SensitiveDataWarning from "./formComponents/SensitiveDataWarning";
 
 const AddTask = ({ taskStore }) => {
   const [tenantOptions, setTenantOptions] = useState([]);
@@ -141,6 +142,7 @@ const AddTask = ({ taskStore }) => {
             />
           </div>
         </FormLayout>
+        <SensitiveDataWarning />
         <FormActions
           onClose={() => taskStore.handleClose()}
           onSubmitLabel="Add"

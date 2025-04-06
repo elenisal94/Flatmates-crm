@@ -20,7 +20,7 @@ const CRMSystem = () => {
           <div className="main-content">
             <ToastContainer
               position="top-center"
-              autoClose={6000}
+              autoClose={3000}
               hideProgressBar={false}
               newestOnTop={true}
               closeOnClick

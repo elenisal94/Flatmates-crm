@@ -55,23 +55,25 @@ const TaskPage = observer(() => {
               separator={<ChevronRightRoundedIcon fontSize="sm" />}
               sx={{ pl: 0 }}
             >
-              <Link
+              {/* <Link
                 underline="none"
                 color="neutral"
                 href="#some-link"
                 aria-label="Home"
-              >
-                <HomeRoundedIcon />
-              </Link>
-              <Link
+              > */}
+              <HomeRoundedIcon />
+              {/* </Link> */}
+              {/* <Link
                 underline="hover"
                 color="neutral"
                 href="#some-link"
                 fontSize={12}
                 fontWeight={500}
-              >
+              > */}
+              <Typography color="secondary" fontWeight={500} fontSize={12}>
                 Dashboard
-              </Link>
+              </Typography>
+              {/* </Link> */}
               <Typography color="primary" fontWeight={500} fontSize={12}>
                 Tasks
               </Typography>

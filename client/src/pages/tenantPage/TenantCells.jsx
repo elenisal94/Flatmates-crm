@@ -84,7 +84,7 @@ const TenantCells = ({
             component="button"
             onClick={() => setOrder(order === "asc" ? "desc" : "asc")}
             fontWeight="lg"
-            endDecorator={<ArrowDropDownIcon />}
+            // endDecorator={<ArrowDropDownIcon />}
             sx={{
               "& svg": {
                 transition: "0.2s",

@@ -67,7 +67,6 @@ export default function TaskTable({
   });
 
   const columns = [
-    { id: "title", label: "Title" },
     { id: "description", label: "Description" },
     { id: "assignedTo", label: "Assigned To" },
     { id: "dueDate", label: "Due Date" },

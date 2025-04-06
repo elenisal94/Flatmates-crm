@@ -10,6 +10,7 @@ import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 import TenantStore from "../stores/TenantStore";
 import DOMPurify from "dompurify";
+import SensitiveDataWarning from "./formComponents/SensitiveDataWarning";
 
 const AddBillPayment = ({ billPaymentStore }) => {
   const [tenantOptions, setTenantOptions] = useState([]);
@@ -159,6 +160,7 @@ const AddBillPayment = ({ billPaymentStore }) => {
             />
           </div>
         </FormLayout>
+        <SensitiveDataWarning />
         <FormActions
           onClose={() => billPaymentStore.handleClose()}
           onSubmitLabel="Add"

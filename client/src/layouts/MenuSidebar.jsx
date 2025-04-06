@@ -36,7 +36,7 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BrightnessAutoRoundedIcon from "@mui/icons-material/BrightnessAutoRounded";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Link } from "react-router-dom";
-import ColorSchemeToggle from "../pages/tableUtils/ColorSchemeToggle";
+// import ColorSchemeToggle from "../pages/tableUtils/ColorSchemeToggle";
 import { closeSidebar } from "./SidebarUtils";
 import TenantStore from "../stores/TenantStore";
 import billPaymentStore from "../stores/BillPaymentStore";
@@ -148,7 +148,7 @@ export default function Sidebar() {
       />
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
         <Typography level="title-lg">Tenant CRM</Typography>
-        <ColorSchemeToggle sx={{ ml: "auto" }} />
+        {/* <ColorSchemeToggle sx={{ ml: "auto" }} /> */}
       </Box>
       {/* <Input
         size="sm"

@@ -10,6 +10,7 @@ import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 import TenantStore from "../stores/TenantStore";
 import DOMPurify from "dompurify";
+import SensitiveDataWarning from "./formComponents/SensitiveDataWarning";
 
 const schema = yup.object().shape({
   title: yup
@@ -128,6 +129,7 @@ const EditTask = ({ taskStore }) => {
             />
           </div>
         </FormLayout>
+        <SensitiveDataWarning />
         <FormActions
           onClose={() => taskStore.handleClose()}
           onSubmitLabel="Save Changes"

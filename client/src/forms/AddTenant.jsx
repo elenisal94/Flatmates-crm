@@ -7,6 +7,7 @@ import CustomTextField from "./formComponents/CustomTextField";
 import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 import DOMPurify from "dompurify";
+import SensitiveDataWarning from "./formComponents/SensitiveDataWarning";
 
 const AddTenant = ({ tenantStore }) => {
   const schema = yup.object().shape({
@@ -167,6 +168,7 @@ const AddTenant = ({ tenantStore }) => {
             />
           </div>
         </FormLayout>
+        <SensitiveDataWarning />
         <FormActions
           onClose={() => tenantStore.handleClose()}
           onSubmitLabel="Add"

@@ -10,6 +10,7 @@ import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 import TenantStore from "../stores/TenantStore";
 import DOMPurify from "dompurify";
+import SensitiveDataWarning from "./formComponents/SensitiveDataWarning";
 
 const schema = yup.object().shape({
   tenant: yup
@@ -131,6 +132,7 @@ const EditRentPayment = ({ rentPaymentStore }) => {
             />
           </div>
         </FormLayout>
+        <SensitiveDataWarning />
         <FormActions
           onClose={() => rentPaymentStore.handleClose()}
           onSubmitLabel="Save Changes"

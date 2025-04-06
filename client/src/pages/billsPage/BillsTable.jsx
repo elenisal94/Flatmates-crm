@@ -69,7 +69,6 @@ export default function BillsTable({
 
   const columns = [
     { id: "tenant", label: "Tenant" },
-    { id: "billType", label: "Bill Type" },
     { id: "amount", label: "Amount" },
     { id: "dueDate", label: "Due Date" },
     { id: "datePaid", label: "Date Paid" },
