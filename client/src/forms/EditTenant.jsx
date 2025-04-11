@@ -31,7 +31,7 @@ const schema = yup.object().shape({
 
   phone: yup
     .string()
-    .matches(/^\d{10}$/, "Phone number must be 10 digits")
+    .matches(/^\d{11}$/, "Phone number must be 11 digits")
     .transform((value) => DOMPurify.sanitize(value))
     .required("Phone number is required"),
 

@@ -33,7 +33,7 @@ const AddTenant = ({ tenantStore }) => {
     phone: yup
       .string()
       .transform((value) => DOMPurify.sanitize(value))
-      .matches(/^\d{10}$/, "Phone number must be 10 digits")
+      .matches(/^\d{11}$/, "Phone number must be 11 digits")
       .required("Phone number is required"),
 
     address: yup.object().shape({
