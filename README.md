@@ -48,16 +48,6 @@ GitHub Repo: [github.com/elenisal94/Flatmates-crm](https://github.com/elenisal94
 
 ---
 
-## 🚶 Walkthrough
-
-[![Watch Walkthrough](https://cdn.loom.com/sessions/thumbnails/b6c7a2f06d5e4df6856cd4d067a7757e-with-play.gif)](https://www.loom.com/embed/b6c7a2f06d5e4df6856cd4d067a7757e?sid=6cd35a96-7db5-4414-b9ab-3eb30711d507)
-
-Click the image above to watch a demo of the Tenant CRM in action.
-
-> 📌 Note: Some visuals may differ slightly from the current version.
-
----
-
 ### Environment Setup
 
 Create a `.env` file in the root directory and fill in the necessary variables:
