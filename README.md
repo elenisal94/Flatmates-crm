@@ -73,8 +73,6 @@ Create a `.env` file in the root directory and fill in the necessary variables:
 
 ## 🏗️ Setup
 
-## 🏗️ Setup
-
 1. Clone the repository  
    `git clone https://github.com/elenisal94/Flatmates-crm.git`  
    `cd Flatmates-crm`
