@@ -48,19 +48,6 @@ GitHub Repo: [github.com/elenisal94/Flatmates-crm](https://github.com/elenisal94
 
 ---
 
-### Environment Setup
-
-Create a `.env` file in the root directory and fill in the necessary variables:
-
-- `MONGO_URI`: Your MongoDB connection string.  
-  - For local development, you can use something like `mongodb://127.0.0.1:27017/crm-db`.  
-  - To use MongoDB Atlas, create a free cluster and get your connection URI. Make sure your IP is whitelisted.  
-- `BACKEND_URL`: The backend server URL, usually `http://localhost:5001` during local development.  
-- `FRONTEND_URL`: The frontend URL, usually `http://localhost:3000`.  
-- `PORT`: The port your backend server listens on (default is `5001`).
-
----
-
 ## 🏗️ Setup
 
 1. Clone the repository  
@@ -87,7 +74,20 @@ Create a `.env` file in the root directory and fill in the necessary variables:
 
 7. Open [http://localhost:3000](http://localhost:3000) in your browser to use the app
 
+---
 
+### 🔐 Environment Variables
+
+Create a `.env` file in the root directory and fill in the necessary variables:
+
+- `MONGO_URI`: Your MongoDB connection string.  
+  - For local development, you can use something like `mongodb://127.0.0.1:27017/crm-db`.  
+  - To use MongoDB Atlas, create a free cluster and get your connection URI. Make sure your IP is whitelisted.  
+- `BACKEND_URL`: The backend server URL, usually `http://localhost:5001` during local development.  
+- `FRONTEND_URL`: The frontend URL, usually `http://localhost:3000`.  
+- `PORT`: The port your backend server listens on (default is `5001`).
+
+---
 <a href="https://elenisalamouri.co.uk/flatmates-crm/">See more project details</a>.
 
 <i>Tenants table page </i>
