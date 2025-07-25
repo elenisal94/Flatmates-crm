@@ -1,6 +1,6 @@
 # Tenant CRM 🏡
 
-Tenant CRM is a full-stack application that helps landlords manage tenants across multiple properties. It allows users to track rent and bill payments, manage tenant-specific tasks, and view aggregated statistics—all within a clean, responsive UI.
+Tenant CRM is a full-stack application that helps landlords manage tenants across multiple properties. It allows users to track rent and bill payments, manage tenant-specific tasks and view aggregated statistics—all within a clean, responsive UI.
 
 Live Site: [https://tenantcrmproject.co.uk](https://tenantcrmproject.co.uk)  
 GitHub Repo: [github.com/elenisal94/Flatmates-crm](https://github.com/elenisal94/Flatmates-crm)
@@ -73,6 +73,7 @@ Create a `.env` file in the root directory and fill in the necessary variables:
 
 3. Create a `.env` file in the root folder.  
    Add your MongoDB URI and URLs, for example:
+   ```env
    MONGO_URI=your_mongodb_connection_string
    BACKEND_URL=http://localhost:5001
    FRONTEND_URL=http://localhost:3000
