@@ -94,9 +94,9 @@ Fill the gap in user-friendly tools for multi-property management with a clean, 
 ## 🔐 Environment Variables
 Create a `.env` file in the root directory:
 
-- `MONGO_URI`: Your MongoDB connection string  
-  - Local development: `mongodb://127.0.0.1:27017/crm-db`  
-  - MongoDB Atlas: Create a free cluster and get your connection URI (ensure your IP is whitelisted)
+- `MONGO_URI`: Your MongoDB connection string (choose one option below)
+  - **Local development**: `mongodb://127.0.0.1:27017/crm-db`  
+  - **MongoDB Atlas**: Create a free cluster and get your connection URI (ensure your IP is whitelisted)
 - `BACKEND_URL`: Backend server URL for frontend API calls (`http://localhost:5001` for local development)  
 - `FRONTEND_URL`: Frontend URL for CORS configuration (`http://localhost:3000` for local development)  
 - `PORT`: Port for the backend server to listen on (`5001` by default - should match the port in BACKEND_URL)
