@@ -6,6 +6,11 @@ GitHub Repo: [github.com/elenisal94/Flatmates-crm](https://github.com/elenisal94
 
 ---
 
+## 🎥 Video Walkthrough
+[Watch a full demo of the application](https://www.loom.com/embed/b6c7a2f06d5e4df6856cd4d067a7757e?sid=6cd35a96-7db5-4414-b9ab-3eb30711d507) - See the app in action with a complete feature overview.
+
+---
+
 ## 🎯 Purpose
 Fill the gap in user-friendly tools for multi-property management with a clean, intuitive interface that requires no login and provides instant usability.
 
