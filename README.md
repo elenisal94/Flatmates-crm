@@ -15,7 +15,7 @@ Fill the gap in user-friendly tools for multi-property management with a clean, 
 
 ## 🚀 How It Works
 1. **Add tenants** - Go to the website and create new tenant records
-2. **Track activities** - Navigate to Tasks, Bills, or Rents sections to add items for each tenant and update their status
+2. **Manage activities** - Navigate to Tasks, Bills, or Rents sections to create, update, or delete items for each tenant and modify their status
 3. **View insights** - Return to the tenant page to see updated stats (bills owed, pending tasks, etc.) and customize your view using the 'visible columns' dropdown
 
 ---
@@ -40,9 +40,8 @@ Fill the gap in user-friendly tools for multi-property management with a clean, 
 
 ## ⚙️ Features
 - Create, update, and delete tenant records  
-- Track rent and bill payments per tenant  
+- Create, update, and delete tasks, bills, and rent payments for each tenant
 - Automatically update aggregate stats (e.g., total rent due)  
-- Add and manage tasks for each tenant  
 - Instantly usable—no login required  
 - Reset all data to default with one click  
 - Sortable and resizable data tables  
