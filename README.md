@@ -3,6 +3,7 @@ Tenant CRM is a full-stack application that helps landlords manage tenants acros
 
 Live Site: [https://tenantcrmproject.co.uk](https://tenantcrmproject.co.uk)  
 GitHub Repo: [github.com/elenisal94/Flatmates-crm](https://github.com/elenisal94/Flatmates-crm)
+Project Details: [View full case study](https://elenisalamouri.co.uk/flatmates-crm/)
 
 ---
 
