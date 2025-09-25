@@ -9,11 +9,13 @@ Tenant CRM is a full-stack application that helps landlords manage tenants acros
 ---
 
 ## 🎥 Video Walkthrough
+
 [Watch a full demo of the application](https://www.loom.com/embed/b6c7a2f06d5e4df6856cd4d067a7757e?sid=6cd35a96-7db5-4414-b9ab-3eb30711d507) - See the app in action with a complete feature overview.
 
 ---
 
 ## 🎯 Purpose
+
 Fill the gap in user-friendly tools for multi-property management with a clean, intuitive interface that requires no login and provides instant usability.
 
 **Learning objectives:** Practice building a full-stack CRUD application and learn React with separate frontend and backend architecture.
@@ -21,6 +23,7 @@ Fill the gap in user-friendly tools for multi-property management with a clean, 
 ---
 
 ## 🚀 How It Works
+
 1. **Add tenants** - Go to the website and create new tenant records
 2. **Manage activities** - Navigate to Tasks, Bills, or Rents sections to create, update, or delete items for each tenant and modify their status
 3. **View insights** - Return to the tenant page to see updated stats (bills owed, pending tasks, etc.) and customize your view using the 'visible columns' dropdown
@@ -28,50 +31,59 @@ Fill the gap in user-friendly tools for multi-property management with a clean, 
 ---
 
 ## 🧰 Tech Stack
-**Frontend**  
-- React  
-- JavaScript  
+
+**Frontend**
+
+- React
+- JavaScript
 - Joy UI (MUI variant)
 
-**Backend**  
-- Node.js  
+**Backend**
+
+- Node.js
 - Express
 
-**Database**  
+**Database**
+
 - MongoDB
 
-**Deployment**  
+**Deployment**
+
 - AWS EC2
 
 ---
 
 ## ⚙️ Features
-- Create, update, and delete tenant records  
+
+- Create, update, and delete tenant records
 - Create, update, and delete tasks, bills, and rent payments for each tenant
-- Automatically update aggregate stats (e.g., total rent due)  
-- Instantly usable—no login required  
-- Reset all data to default with one click  
-- Sortable and resizable data tables  
-- Form validation with clear error messages  
+- Automatically update aggregate stats (e.g., total rent due)
+- Instantly usable—no login required
+- Reset all data to default with one click
+- Sortable and resizable data tables
+- Form validation with clear error messages
 - Sleek, responsive interface using Joy UI
 
 ---
 
 ## 🏗️ Setup
 
-1. Clone the repository  
+1. Clone the repository
+
    ```bash
    git clone https://github.com/elenisal94/Flatmates-crm.git
    cd Flatmates-crm
    ```
 
-2. Install dependencies  
+2. Install dependencies
+
    ```bash
    cd client && npm install
    cd .. && npm install
    ```
 
 3. Create a `.env` file in the root folder with your MongoDB URI and URLs:
+
    ```env
    MONGO_URI=your_mongodb_connection_string
    BACKEND_URL=http://localhost:5001
@@ -79,12 +91,14 @@ Fill the gap in user-friendly tools for multi-property management with a clean, 
    PORT=5001
    ```
 
-4. Run backend server  
+4. Run backend server
+
    ```bash
    node server.js
    ```
 
-5. Run frontend client (in a separate terminal)  
+5. Run frontend client (in a separate terminal)
+
    ```bash
    cd client && npm start
    ```
@@ -94,13 +108,14 @@ Fill the gap in user-friendly tools for multi-property management with a clean, 
 ---
 
 ## 🔐 Environment Variables
+
 Create a `.env` file in the root directory:
 
 - `MONGO_URI`: Your MongoDB connection string (choose one option below)
-  - **Local development**: `mongodb://127.0.0.1:27017/crm-db`  
+  - **Local development**: `mongodb://127.0.0.1:27017/crm-db`
   - **MongoDB Atlas**: Create a free cluster and get your connection URI (ensure your IP is whitelisted)
-- `BACKEND_URL`: Backend server URL for frontend API calls (`http://localhost:5001` for local development)  
-- `FRONTEND_URL`: Frontend URL for CORS configuration (`http://localhost:3000` for local development)  
+- `BACKEND_URL`: Backend server URL for frontend API calls (`http://localhost:5001` for local development)
+- `FRONTEND_URL`: Frontend URL for CORS configuration (`http://localhost:3000` for local development)
 - `PORT`: Port for the backend server to listen on (`5001` by default - should match the port in BACKEND_URL)
 
 ---
