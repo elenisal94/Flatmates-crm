@@ -147,7 +147,7 @@ export default function Sidebar() {
         onClick={() => closeSidebar()}
       />
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-        <Typography level="title-lg">Tenant CRM</Typography>
+        <Typography level="title-lg">Tenant CRM!</Typography>
         {/* <ColorSchemeToggle sx={{ ml: "auto" }} /> */}
       </Box>
       {/* <Input
