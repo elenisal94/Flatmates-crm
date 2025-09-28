@@ -1,5 +1,10 @@
 const mongoose = require("mongoose");
-const { Task, Tenant, RentPayment, BillPayment } = require("../schema.js");
+const {
+  Task,
+  Tenant,
+  RentPayment,
+  BillPayment,
+} = require("../../server/schema.js");
 const ObjectId = mongoose.Types.ObjectId;
 
 async function updateTenantStats(tenantId) {

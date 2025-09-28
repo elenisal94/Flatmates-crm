@@ -1,0 +1,424 @@
+{
+  "tenants": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "phone": "12345678901",
+      "address": {
+        "flat": "1A",
+        "street": "Baker Street",
+        "city": "London",
+        "postcode": "NW1 6XE"
+      }
+    },
+    {
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "email": "jane.smith@example.com",
+      "phone": "98765432102",
+      "address": {
+        "flat": "2B",
+        "street": "High Street",
+        "city": "Manchester",
+        "postcode": "M1 4AB"
+      }
+    },
+    {
+      "firstName": "Alice",
+      "lastName": "Johnson",
+      "email": "alice.johnson@example.com",
+      "phone": "11122233333",
+      "address": {
+        "flat": "3C",
+        "street": "Oxford Road",
+        "city": "Birmingham",
+        "postcode": "B2 5HG"
+      }
+    },
+    {
+      "firstName": "Bob",
+      "lastName": "Williams",
+      "email": "bob.williams@example.com",
+      "phone": "44455566664",
+      "address": {
+        "flat": "4D",
+        "street": "King Street",
+        "city": "Liverpool",
+        "postcode": "L1 1AB"
+      }
+    },
+    {
+      "firstName": "Charlie",
+      "lastName": "Brown",
+      "email": "charlie.brown@example.com",
+      "phone": "77788899995",
+      "address": {
+        "flat": "5E",
+        "street": "Queen's Road",
+        "city": "Edinburgh",
+        "postcode": "EH1 3EG"
+      }
+    },
+    {
+      "firstName": "David",
+      "lastName": "Miller",
+      "email": "david.miller@example.com",
+      "phone": "55512345676",
+      "address": {
+        "flat": "6F",
+        "street": "George Street",
+        "city": "Glasgow",
+        "postcode": "G1 2AA"
+      }
+    },
+    {
+      "firstName": "Emily",
+      "lastName": "Davis",
+      "email": "emily.davis@example.com",
+      "phone": "66698765437",
+      "address": {
+        "flat": "7G",
+        "street": "Victoria Road",
+        "city": "Bristol",
+        "postcode": "BS1 5SD"
+      }
+    },
+    {
+      "firstName": "Frank",
+      "lastName": "Wilson",
+      "email": "frank.wilson@example.com",
+      "phone": "33344455558",
+      "address": {
+        "flat": "8H",
+        "street": "Albert Street",
+        "city": "Sheffield",
+        "postcode": "S1 4GH"
+      }
+    },
+    {
+      "firstName": "Grace",
+      "lastName": "Moore",
+      "email": "grace.moore@example.com",
+      "phone": "88899900009",
+      "address": {
+        "flat": "9I",
+        "street": "Chapel Street",
+        "city": "Leeds",
+        "postcode": "LS1 2QT"
+      }
+    },
+    {
+      "firstName": "Henry",
+      "lastName": "Taylor",
+      "email": "henry.taylor@example.com",
+      "phone": "22233344441",
+      "address": {
+        "flat": "10J",
+        "street": "Park Avenue",
+        "city": "Nottingham",
+        "postcode": "NG1 6AA"
+      }
+    },
+    {
+      "firstName": "Isabella",
+      "lastName": "Anderson",
+      "email": "isabella.anderson@example.com",
+      "phone": "77766655552",
+      "address": {
+        "flat": "11K",
+        "street": "Broad Street",
+        "city": "Cardiff",
+        "postcode": "CF10 1AA"
+      }
+    },
+    {
+      "firstName": "Jack",
+      "lastName": "Thomas",
+      "email": "jack.thomas@example.com",
+      "phone": "44433322223",
+      "address": {
+        "flat": "12L",
+        "street": "Church Road",
+        "city": "Leicester",
+        "postcode": "LE1 3RH"
+      }
+    },
+    {
+      "firstName": "Katherine",
+      "lastName": "Harris",
+      "email": "katherine.harris@example.com",
+      "phone": "99988877774",
+      "address": {
+        "flat": "13M",
+        "street": "Market Street",
+        "city": "Southampton",
+        "postcode": "SO14 7EG"
+      }
+    },
+    {
+      "firstName": "Liam",
+      "lastName": "Clark",
+      "email": "liam.clark@example.com",
+      "phone": "11122233335",
+      "address": {
+        "flat": "14N",
+        "street": "Bridge Street",
+        "city": "Newcastle",
+        "postcode": "NE1 1EE"
+      }
+    },
+    {
+      "firstName": "Mia",
+      "lastName": "Lewis",
+      "email": "mia.lewis@example.com",
+      "phone": "55566677776",
+      "address": {
+        "flat": "15O",
+        "street": "West Street",
+        "city": "Belfast",
+        "postcode": "BT1 2AA"
+      }
+    },
+    {
+      "firstName": "Nathan",
+      "lastName": "Walker",
+      "email": "nathan.walker@example.com",
+      "phone": "33322211117",
+      "address": {
+        "flat": "16P",
+        "street": "Highfield Road",
+        "city": "Dublin",
+        "postcode": "D2 1AB"
+      }
+    },
+    {
+      "firstName": "Olivia",
+      "lastName": "Hall",
+      "email": "olivia.hall@example.com",
+      "phone": "77755533338",
+      "address": {
+        "flat": "17Q",
+        "street": "Hill Street",
+        "city": "Aberdeen",
+        "postcode": "AB1 3XY"
+      }
+    },
+    {
+      "firstName": "Peter",
+      "lastName": "Allen",
+      "email": "peter.allen@example.com",
+      "phone": "22211100009",
+      "address": {
+        "flat": "18R",
+        "street": "Meadow Lane",
+        "city": "York",
+        "postcode": "YO1 7BP"
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "title": "Fix leaking pipe",
+      "description": "Urgent plumbing issue in the kitchen",
+      "assignedTo": "TENANT_ID_1",
+      "dueDate": "2025-04-10",
+      "completed": false
+    },
+    {
+      "title": "Replace broken heater",
+      "description": "Heater not working in the living room",
+      "assignedTo": "TENANT_ID_2",
+      "dueDate": "2025-04-15",
+      "completed": true
+    },
+    {
+      "title": "Check smoke detectors",
+      "description": "Ensure all smoke detectors are functioning",
+      "assignedTo": "TENANT_ID_3",
+      "dueDate": "2025-04-12",
+      "completed": false
+    },
+    {
+      "title": "Repair kitchen cabinet",
+      "description": "Loose hinges need fixing",
+      "assignedTo": "TENANT_ID_4",
+      "dueDate": "2025-04-18",
+      "completed": false
+    },
+    {
+      "title": "Unclog bathroom drain",
+      "description": "Water draining very slowly in the bathroom sink",
+      "assignedTo": "TENANT_ID_5",
+      "dueDate": "2025-04-14",
+      "completed": true
+    },
+    {
+      "title": "Repaint living room wall",
+      "description": "Paint chipping off in some areas",
+      "assignedTo": "TENANT_ID_6",
+      "dueDate": "2025-04-20",
+      "completed": false
+    },
+    {
+      "title": "Fix front door lock",
+      "description": "Lock is difficult to turn, needs lubrication or replacement",
+      "assignedTo": "TENANT_ID_7",
+      "dueDate": "2025-04-09",
+      "completed": false
+    },
+    {
+      "title": "Inspect water heater",
+      "description": "Tenant reported inconsistent water temperature",
+      "assignedTo": "TENANT_ID_8",
+      "dueDate": "2025-04-22",
+      "completed": true
+    },
+    {
+      "title": "Replace hallway lightbulb",
+      "description": "Hallway light is out, needs a new bulb",
+      "assignedTo": "TENANT_ID_9",
+      "dueDate": "2025-04-11",
+      "completed": false
+    }
+  ],
+  "rentPayments": [
+    {
+      "tenant": "TENANT_ID_1",
+      "amount": 1200,
+      "dueDate": "2025-04-01",
+      "datePaid": "2025-03-30",
+      "paymentMade": true
+    },
+    {
+      "tenant": "TENANT_ID_2",
+      "amount": 1100,
+      "dueDate": "2025-04-01",
+      "datePaid": null,
+      "paymentMade": false
+    },
+    {
+      "tenant": "TENANT_ID_3",
+      "amount": 950,
+      "dueDate": "2025-04-01",
+      "datePaid": "2025-03-31",
+      "paymentMade": true
+    },
+    {
+      "tenant": "TENANT_ID_4",
+      "amount": 1300,
+      "dueDate": "2025-04-01",
+      "datePaid": "2025-03-29",
+      "paymentMade": true
+    },
+    {
+      "tenant": "TENANT_ID_5",
+      "amount": 1000,
+      "dueDate": "2025-04-01",
+      "datePaid": null,
+      "paymentMade": false
+    },
+    {
+      "tenant": "TENANT_ID_6",
+      "amount": 1250,
+      "dueDate": "2025-04-01",
+      "datePaid": "2025-03-30",
+      "paymentMade": true
+    },
+    {
+      "tenant": "TENANT_ID_7",
+      "amount": 900,
+      "dueDate": "2025-04-01",
+      "datePaid": null,
+      "paymentMade": false
+    },
+    {
+      "tenant": "TENANT_ID_8",
+      "amount": 1100,
+      "dueDate": "2025-04-01",
+      "datePaid": "2025-03-31",
+      "paymentMade": true
+    },
+    {
+      "tenant": "TENANT_ID_9",
+      "amount": 1400,
+      "dueDate": "2025-04-01",
+      "datePaid": null,
+      "paymentMade": false
+    }
+  ],
+  "billPayments": [
+    {
+      "tenant": "TENANT_ID_1",
+      "billType": "Electricity",
+      "amount": 150,
+      "dueDate": "2025-04-05",
+      "datePaid": null,
+      "paymentMade": false
+    },
+    {
+      "tenant": "TENANT_ID_2",
+      "billType": "Water",
+      "amount": 60,
+      "dueDate": "2025-04-10",
+      "datePaid": "2025-04-09",
+      "paymentMade": true
+    },
+    {
+      "tenant": "TENANT_ID_3",
+      "billType": "Internet",
+      "amount": 45,
+      "dueDate": "2025-04-07",
+      "datePaid": "2025-04-06",
+      "paymentMade": true
+    },
+    {
+      "tenant": "TENANT_ID_4",
+      "billType": "Gas",
+      "amount": 80,
+      "dueDate": "2025-04-06",
+      "datePaid": null,
+      "paymentMade": false
+    },
+    {
+      "tenant": "TENANT_ID_5",
+      "billType": "Electricity",
+      "amount": 120,
+      "dueDate": "2025-04-08",
+      "datePaid": "2025-04-07",
+      "paymentMade": true
+    },
+    {
+      "tenant": "TENANT_ID_6",
+      "billType": "Water",
+      "amount": 55,
+      "dueDate": "2025-04-09",
+      "datePaid": null,
+      "paymentMade": false
+    },
+    {
+      "tenant": "TENANT_ID_7",
+      "billType": "Internet",
+      "amount": 50,
+      "dueDate": "2025-04-11",
+      "datePaid": "2025-04-10",
+      "paymentMade": true
+    },
+    {
+      "tenant": "TENANT_ID_8",
+      "billType": "Gas",
+      "amount": 90,
+      "dueDate": "2025-04-12",
+      "datePaid": null,
+      "paymentMade": false
+    },
+    {
+      "tenant": "TENANT_ID_9",
+      "billType": "Electricity",
+      "amount": 135,
+      "dueDate": "2025-04-13",
+      "datePaid": "2025-04-12",
+      "paymentMade": true
+    }
+  ]
+}

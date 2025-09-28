@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Lambda function to update tenant stats
+Globals:
+  Function:
+    Timeout: 30
+Resources:
+  UpdateTenantStatsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: UpdateTenantStatsFunction
+      Handler: index.handler
+      Runtime: nodejs18.x
+      MemorySize: 128
+      Environment:
+        Variables:
+          MONGO_URI:
+            Ref: MongoUri
+      Events:
+        UpdateTenantStatsSchedule:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 minute)
+            Name: UpdateTenantStatsCron
+            Description: Run tenant stats update every minute
+    Metadata:
+      SamResourceId: UpdateTenantStatsFunction
+Parameters:
+  MongoUri:
+    Type: String
+    Description: MongoDB connection string
