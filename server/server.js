@@ -12,8 +12,6 @@ const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
-// require("./helpers/cronJob.js");
-
 const app = express();
 const PORT = process.env.PORT || 5001;
 

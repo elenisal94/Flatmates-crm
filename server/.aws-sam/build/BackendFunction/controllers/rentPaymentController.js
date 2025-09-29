@@ -1,7 +1,7 @@
 const { RentPayment, Tenant } = require("../schema.js");
 const {
   updateTenantStats,
-} = require("../../lamdas/updateTenantStats/tenantStatsHelper.js");
+} = require("../../lambdas/updateTenantStats/tenantStatsHelper.js");
 
 exports.getAllRentPayments = async (req, res) => {
   try {

@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: lamdas/updateTenantStats
+        working-directory: lambdas/updateTenantStats
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

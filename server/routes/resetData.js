@@ -1,9 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const { Tenant, Task, RentPayment, BillPayment } = require("../schema");
-const {
-  updateTenantStats,
-} = require("../../lamdas/updateTenantStats/tenantStatsHelper");
+const { updateTenantStats } = require("../tenantStatsHelper");
 const demoData = require("../demoData.json");
 
 const router = express.Router();

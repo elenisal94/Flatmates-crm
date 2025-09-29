@@ -1,7 +1,5 @@
 const { BillPayment, Tenant } = require("../schema.js");
-const {
-  updateTenantStats,
-} = require("../../lamdas/updateTenantStats/tenantStatsHelper.js");
+const { updateTenantStats } = require("../tenantStatsHelper.js");
 
 exports.getAllBillPayments = async (req, res) => {
   try {

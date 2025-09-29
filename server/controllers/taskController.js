@@ -1,7 +1,5 @@
 const { Task, Tenant } = require("../schema.js");
-const {
-  updateTenantStats,
-} = require("../../lamdas/updateTenantStats/tenantStatsHelper.js");
+const { updateTenantStats } = require("../tenantStatsHelper.js");
 
 exports.getAllTasks = async (req, res) => {
   try {

@@ -1,7 +1,7 @@
 const cron = require("node-cron");
 const {
   updateTenantStats,
-} = require("../../lamdas/updateTenantStats/tenantStatsHelper.js");
+} = require("../../lambdas/updateTenantStats/tenantStatsHelper.js");
 const { Tenant } = require("../schema.js");
 
 cron.schedule("* * * * *", async () => {
