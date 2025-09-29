@@ -41,4 +41,5 @@ jobs:
             --parameter-overrides \
               MongoUri="${{ secrets.MONGO_URI }}" \
               FrontendUrl="${{ secrets.FRONTEND_URL }}" \
-            --region $AWS_REGION
+            --region $AWS_REGION \
+            --resolve-s3

@@ -39,4 +39,5 @@ jobs:
             --stack-name update-tenant-stats \
             --capabilities CAPABILITY_IAM \
             --parameter-overrides MongoUri="${{ secrets.MONGO_URI }}" \
-            --region $AWS_REGION
+            --region $AWS_REGION \
+            --resolve-s3
