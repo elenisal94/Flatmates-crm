@@ -27,7 +27,7 @@ jobs:
         run: npm install
 
       - name: Build with SAM
-        run: sam build --template template.yaml
+        run: sam build --template template.yml
 
       - name: Deploy with SAM
         env:
@@ -35,9 +35,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: "us-east-1"
         run: |
-          sam deploy --template-file .aws-sam/build/template.yaml \
+          sam deploy --template-file .aws-sam/build/template.yml \
             --stack-name backend-api \
             --capabilities CAPABILITY_IAM \
             --parameter-overrides \
               MongoUri="${{ secrets.MONGO_URI }}" \
-              FrontendUrl="${{ secrets.FRONTEND_URL }}"
+              FrontendUrl="${{ secrets.FRONTEND_URL }}" \
+            --region $AWS_REGION

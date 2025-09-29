@@ -38,4 +38,5 @@ jobs:
           sam deploy --template-file .aws-sam/build/template.yaml \
             --stack-name update-tenant-stats \
             --capabilities CAPABILITY_IAM \
-            --parameter-overrides MongoUri="${{ secrets.MONGO_URI }}"
+            --parameter-overrides MongoUri="${{ secrets.MONGO_URI }}" \
+            --region $AWS_REGION
