@@ -42,5 +42,5 @@ jobs:
               MongoUri="${{ secrets.MONGO_URI }}" \
               FrontendUrl="${{ secrets.FRONTEND_URL }}" \
             --region $AWS_REGION \
-            --confirm-changeset \
+            --no-confirm-changeset \
             --resolve-s3
