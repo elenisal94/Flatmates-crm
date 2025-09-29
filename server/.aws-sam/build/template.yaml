@@ -8,6 +8,7 @@ Resources:
   BackendFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: server-BackendFunction-mrdpEAffrjHV
       Handler: server.handler
       Runtime: nodejs18.x
       CodeUri: BackendFunction
