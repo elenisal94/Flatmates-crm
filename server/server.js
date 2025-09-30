@@ -18,6 +18,7 @@ const PORT = process.env.PORT || 5001;
 app.use(helmet());
 
 app.use(mongoSanitize());
+app.set("trust proxy", true);
 
 const limiter = rateLimit({
   windowMs: 60 * 1000,
