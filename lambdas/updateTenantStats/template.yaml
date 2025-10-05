@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: Lambda function to update tenant stats
+Description: Lambda function to update tenant stats (using existing queue)
 
 Globals:
   Function:
@@ -17,15 +17,23 @@ Resources:
       Environment:
         Variables:
           MONGO_URI: !Ref MongoUri
+          STATS_QUEUE_URL: !Ref StatsQueueUrl
       Events:
-        UpdateTenantStatsSchedule:
-          Type: Schedule
+        TenantStatsQueueEvent:
+          Type: SQS
           Properties:
-            Schedule: rate(1 minute) # runs every minute
-            Name: UpdateTenantStatsCron
-            Description: Run tenant stats update every minute
+            Queue: !Ref StatsQueueArn
+            BatchSize: 1
 
 Parameters:
   MongoUri:
     Type: String
     Description: MongoDB connection string
+
+  StatsQueueUrl:
+    Type: String
+    Description: The URL of the existing SQS queue
+
+  StatsQueueArn:
+    Type: String
+    Description: The ARN of the existing SQS queue
