@@ -8,35 +8,42 @@ import {
 import { CssVarsProvider as JoyCssVarsProvider } from "@mui/joy/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { ToastContainer } from "react-toastify";
+import { useAuth0 } from "@auth0/auth0-react";
 
-const CRMSystem = () => {
-  const materialTheme = materialExtendTheme();
+import { setTokenGetter } from "./helpers/apiRequest";
+
+const materialTheme = materialExtendTheme();
+
+function App() {
+  const { getAccessTokenSilently } = useAuth0();
+
+  React.useEffect(() => {
+    setTokenGetter(getAccessTokenSilently);
+  }, [getAccessTokenSilently]);
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
       <JoyCssVarsProvider>
         <CssBaseline enableColorScheme />
-        <div>
-          <div className="main-content">
-            <ToastContainer
-              position="top-center"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop={true}
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              theme="light"
-              style={{ fontSize: "16px" }}
-            />
-            <AppRoutes />
-          </div>
+        <div className="main-content">
+          <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            style={{ fontSize: "16px" }}
+          />
+          <AppRoutes />
         </div>
       </JoyCssVarsProvider>
     </MaterialCssVarsProvider>
   );
-};
+}
 
-export default CRMSystem;
+export default App;

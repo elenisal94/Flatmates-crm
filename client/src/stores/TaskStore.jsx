@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import axios from "axios";
+import { apiRequest } from "../helpers/apiRequest";
 
 class TaskStore {
   tasks = [];
@@ -10,54 +10,39 @@ class TaskStore {
 
   constructor() {
     makeAutoObservable(this);
-    axios.defaults.baseURL =
-      process.env.REACT_APP_API_URL || "http://localhost:5001";
-    axios.defaults.withCredentials = true;
     this.fetchTasks();
   }
 
   async fetchTasks() {
-    try {
-      const response = await axios.get("/api/tasks");
-      this.tasks = response.data;
-    } catch (error) {
-      console.error("Error fetching tasks:", error);
+    const response = await apiRequest("/tasks", "GET");
+    if (response) {
+      this.tasks = response;
     }
   }
 
   async viewTask(task) {
-    try {
-      const response = await axios.get(`/api/tasks/${task._id}`);
-      this.selectedTask = response.data;
+    const response = await apiRequest(`/tasks/${task._id}`, "GET");
+    if (response) {
+      this.selectedTask = response;
       this.open = true;
       this.mode = "view";
-    } catch (error) {
-      console.error("Failed to fetch task details:", error);
     }
   }
 
   async editTask(task) {
-    try {
-      const response = await axios.get(`/api/tasks/${task._id}`);
-      this.selectedTask = response.data;
+    const response = await apiRequest(`/tasks/${task._id}`, "GET");
+    if (response) {
+      this.selectedTask = response;
       this.open = true;
       this.mode = "edit";
-    } catch (error) {
-      console.error("Failed to fetch task details for editing:", error);
     }
   }
 
   async deleteTask(task) {
-    try {
-      const response = await axios.delete(`/api/tasks/${task._id}`);
-      if (response.status === 200) {
-        this.tasks = this.tasks.filter((prevTask) => prevTask._id !== task._id);
-        this.refreshInfo = true;
-      } else {
-        console.warn(`Unexpected response status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("Failed to delete task:", error.message || error);
+    const response = await apiRequest(`/tasks/${task._id}`, "DELETE");
+    if (response !== null) {
+      this.tasks = this.tasks.filter((prevTask) => prevTask._id !== task._id);
+      this.refreshInfo = true;
     }
   }
 
@@ -78,32 +63,30 @@ class TaskStore {
   }
 
   async saveTask(taskData) {
-    try {
-      const formattedTaskData = {
-        ...taskData,
-      };
+    const formattedTaskData = { ...taskData };
 
-      if (this.selectedTask) {
-        const response = await axios.put(
-          `/api/tasks/${this.selectedTask._id}`,
-          formattedTaskData
-        );
+    if (this.selectedTask) {
+      const response = await apiRequest(
+        `/tasks/${this.selectedTask._id}`,
+        "PUT",
+        formattedTaskData
+      );
+      if (response) {
         this.tasks = this.tasks.map((task) =>
-          task._id === this.selectedTask._id ? response.data : task
+          task._id === this.selectedTask._id ? response : task
         );
-      } else {
-        const response = await axios.post("/api/tasks", formattedTaskData);
-        this.tasks = [...this.tasks, response.data];
       }
-
-      this.refreshInfo = true;
-      this.handleClose();
-      await this.fetchTasks();
-    } catch (error) {
-      console.error("Failed to save task:", error);
+    } else {
+      const response = await apiRequest("/tasks", "POST", formattedTaskData);
+      if (response) {
+        this.tasks = [...this.tasks, response];
+      }
     }
+
+    this.refreshInfo = true;
+    this.handleClose();
+    await this.fetchTasks();
   }
 }
 
-const taskStore = new TaskStore();
-export default taskStore;
+export default new TaskStore();

@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const { Tenant } = require("./schema.js");
 const { updateTenantStats } = require("./tenantStatsHelper");
 
 let isConnected = false;
@@ -23,20 +22,25 @@ async function connectToDatabase() {
 }
 
 exports.handler = async (event) => {
-  console.log("Lambda event:", event);
+  console.log("SQS event received:", JSON.stringify(event, null, 2));
 
   try {
     await connectToDatabase();
 
-    const tenants = await Tenant.find();
-    console.log(`Found ${tenants.length} tenants`);
-
-    for (const tenant of tenants) {
+    for (const record of event.Records) {
       try {
-        await updateTenantStats(tenant._id);
-        console.log(`Updated stats for tenant ${tenant._id}`);
+        const body = JSON.parse(record.body);
+
+        if (!body.tenantId) {
+          console.warn("No tenantId found in message:", record.body);
+          continue;
+        }
+
+        console.log(`Updating stats for tenant ${body.tenantId}`);
+        await updateTenantStats(body.tenantId);
+        console.log(`Stats updated for tenant ${body.tenantId}`);
       } catch (err) {
-        console.error(`Failed to update stats for tenant ${tenant._id}`, err);
+        console.error("Error processing record:", record, err);
       }
     }
 
@@ -45,7 +49,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({ message: "Tenant stats updated successfully" }),
     };
   } catch (err) {
-    console.error("Error in Lambda:", err);
+    console.error("Error in stats Lambda:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({ message: "Error handling tenant stats" }),

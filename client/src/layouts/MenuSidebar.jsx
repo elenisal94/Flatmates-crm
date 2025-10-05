@@ -42,6 +42,7 @@ import TenantStore from "../stores/TenantStore";
 import billPaymentStore from "../stores/BillPaymentStore";
 import rentPaymentStore from "../stores/RentPaymentStore";
 import taskStore from "../stores/TaskStore";
+import { useAuth0 } from "@auth0/auth0-react";
 
 function Toggler({ defaultExpanded = false, renderToggle, children }) {
   const [open, setOpen] = useState(defaultExpanded);
@@ -68,6 +69,7 @@ function Toggler({ defaultExpanded = false, renderToggle, children }) {
 export default function Sidebar() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(false);
+  const { user, logout } = useAuth0();
 
   const resetData = async () => {
     setLoading(true);
@@ -332,20 +334,35 @@ export default function Sidebar() {
         </Card>
       </Box>
       <Divider />
-      {/* <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-        <Avatar
-          variant="outlined"
-          size="sm"
-          src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=286"
-        />
+      <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+        <Avatar variant="outlined" size="sm" src="/avatar-1577909_1280.png" />
         <Box sx={{ minWidth: 0, flex: 1 }}>
-          <Typography level="title-sm">Siriwat K.</Typography>
-          <Typography level="body-xs">siriwatk@test.com</Typography>
+          <Typography level="title-sm">{user?.name || "Guest"}</Typography>
+          <Typography
+            level="body-xs"
+            sx={{
+              maxWidth: 150,
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {user?.email || ""}
+          </Typography>
         </Box>
-        <IconButton size="sm" variant="plain" color="neutral">
+        <IconButton
+          size="sm"
+          variant="plain"
+          color="neutral"
+          onClick={() =>
+            logout({
+              returnTo: window.location.origin,
+            })
+          }
+        >
           <LogoutRoundedIcon />
         </IconButton>
-      </Box> */}
+      </Box>
     </Sheet>
   );
 }

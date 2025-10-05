@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import axios from "axios";
+import { apiRequest } from "../helpers/apiRequest";
 
 class RentPaymentStore {
   rentPayments = [];
@@ -10,58 +10,50 @@ class RentPaymentStore {
 
   constructor() {
     makeAutoObservable(this);
-    axios.defaults.baseURL =
-      process.env.REACT_APP_API_URL || "http://localhost:5001";
-    axios.defaults.withCredentials = true;
     this.fetchRentPayments();
   }
 
   async fetchRentPayments() {
-    try {
-      const response = await axios.get("/api/rent-payments");
-      this.rentPayments = response.data;
-    } catch (error) {
-      console.error("Error fetching rent payments:", error);
+    const response = await apiRequest("/rent-payments", "GET");
+    if (response) {
+      this.rentPayments = response;
     }
   }
 
   async viewRentPayment(rentPayment) {
-    try {
-      const response = await axios.get(`/api/rent-payments/${rentPayment._id}`);
-      this.selectedRentPayment = response.data;
+    const response = await apiRequest(
+      `/rent-payments/${rentPayment._id}`,
+      "GET"
+    );
+    if (response) {
+      this.selectedRentPayment = response;
       this.mode = "view";
       this.open = true;
-    } catch (error) {
-      console.error("Failed to fetch rent payment details:", error);
     }
   }
 
   async editRentPayment(rentPayment) {
-    try {
-      const response = await axios.get(`/api/rent-payments/${rentPayment._id}`);
-      this.selectedRentPayment = response.data;
+    const response = await apiRequest(
+      `/rent-payments/${rentPayment._id}`,
+      "GET"
+    );
+    if (response) {
+      this.selectedRentPayment = response;
       this.mode = "edit";
       this.open = true;
-    } catch (error) {
-      console.error("Failed to fetch rent payment details for editing:", error);
     }
   }
 
   async deleteRentPayment(rentPayment) {
-    try {
-      const response = await axios.delete(
-        `/api/rent-payments/${rentPayment._id}`
+    const response = await apiRequest(
+      `/rent-payments/${rentPayment._id}`,
+      "DELETE"
+    );
+    if (response !== null) {
+      this.rentPayments = this.rentPayments.filter(
+        (prevRentPayment) => prevRentPayment._id !== rentPayment._id
       );
-      if (response.status === 200) {
-        this.rentPayments = this.rentPayments.filter(
-          (prevRentPayment) => prevRentPayment._id !== rentPayment._id
-        );
-        this.refreshInfo = true;
-      } else {
-        console.warn(`Unexpected response status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("Failed to delete rent payment:", error.message || error);
+      this.refreshInfo = true;
     }
   }
 
@@ -82,33 +74,34 @@ class RentPaymentStore {
   }
 
   async saveRentPayment(rentPaymentData) {
-    try {
-      if (this.selectedRentPayment) {
-        const response = await axios.put(
-          `/api/rent-payments/${this.selectedRentPayment._id}`,
-          rentPaymentData
-        );
+    if (this.selectedRentPayment) {
+      const response = await apiRequest(
+        `/rent-payments/${this.selectedRentPayment._id}`,
+        "PUT",
+        rentPaymentData
+      );
+      if (response) {
         this.rentPayments = this.rentPayments.map((rentPayment) =>
           rentPayment._id === this.selectedRentPayment._id
-            ? response.data
+            ? response
             : rentPayment
         );
-      } else {
-        const response = await axios.post(
-          "/api/rent-payments",
-          rentPaymentData
-        );
-        this.rentPayments = [...this.rentPayments, response.data];
       }
-
-      this.refreshInfo = true;
-      this.handleClose();
-      await this.fetchRentPayments();
-    } catch (error) {
-      console.error("Failed to save rent payment:", error);
+    } else {
+      const response = await apiRequest(
+        "/rent-payments",
+        "POST",
+        rentPaymentData
+      );
+      if (response) {
+        this.rentPayments = [...this.rentPayments, response];
+      }
     }
+
+    this.refreshInfo = true;
+    this.handleClose();
+    await this.fetchRentPayments();
   }
 }
 
-const rentPaymentStore = new RentPaymentStore();
-export default rentPaymentStore;
+export default new RentPaymentStore();

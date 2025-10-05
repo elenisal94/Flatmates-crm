@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import axios from "axios";
+import { apiRequest } from "../helpers/apiRequest";
 
 class BillPaymentStore {
   billPayments = [];
@@ -10,58 +10,50 @@ class BillPaymentStore {
 
   constructor() {
     makeAutoObservable(this);
-    axios.defaults.baseURL =
-      process.env.REACT_APP_API_URL || "http://localhost:5001";
-    axios.defaults.withCredentials = true;
     this.fetchBillPayments();
   }
 
   async fetchBillPayments() {
-    try {
-      const response = await axios.get("/api/bill-payments");
-      this.billPayments = response.data;
-    } catch (error) {
-      console.error("Error fetching bill payments:", error);
+    const response = await apiRequest("/bill-payments", "GET");
+    if (response) {
+      this.billPayments = response;
     }
   }
 
   async viewBillPayment(billPayment) {
-    try {
-      const response = await axios.get(`/api/bill-payments/${billPayment._id}`);
-      this.selectedBillPayment = response.data;
+    const response = await apiRequest(
+      `/bill-payments/${billPayment._id}`,
+      "GET"
+    );
+    if (response) {
+      this.selectedBillPayment = response;
       this.mode = "view";
       this.open = true;
-    } catch (error) {
-      console.error("Failed to fetch bill payment details:", error);
     }
   }
 
   async editBillPayment(billPayment) {
-    try {
-      const response = await axios.get(`/api/bill-payments/${billPayment._id}`);
-      this.selectedBillPayment = response.data;
+    const response = await apiRequest(
+      `/bill-payments/${billPayment._id}`,
+      "GET"
+    );
+    if (response) {
+      this.selectedBillPayment = response;
       this.mode = "edit";
       this.open = true;
-    } catch (error) {
-      console.error("Failed to fetch bill payment details for editing:", error);
     }
   }
 
   async deleteBillPayment(billPayment) {
-    try {
-      const response = await axios.delete(
-        `/api/bill-payments/${billPayment._id}`
+    const response = await apiRequest(
+      `/bill-payments/${billPayment._id}`,
+      "DELETE"
+    );
+    if (response !== null) {
+      this.billPayments = this.billPayments.filter(
+        (prevBillPayment) => prevBillPayment._id !== billPayment._id
       );
-      if (response.status === 200) {
-        this.billPayments = this.billPayments.filter(
-          (prevBillPayment) => prevBillPayment._id !== billPayment._id
-        );
-        this.refreshInfo = true;
-      } else {
-        console.warn(`Unexpected response status: ${response.status}`);
-      }
-    } catch (error) {
-      console.error("Failed to delete bill payment:", error.message || error);
+      this.refreshInfo = true;
     }
   }
 
@@ -82,33 +74,34 @@ class BillPaymentStore {
   }
 
   async saveBillPayment(billPaymentData) {
-    try {
-      if (this.selectedBillPayment) {
-        const response = await axios.put(
-          `/api/bill-payments/${this.selectedBillPayment._id}`,
-          billPaymentData
-        );
+    if (this.selectedBillPayment) {
+      const response = await apiRequest(
+        `/bill-payments/${this.selectedBillPayment._id}`,
+        "PUT",
+        billPaymentData
+      );
+      if (response) {
         this.billPayments = this.billPayments.map((billPayment) =>
           billPayment._id === this.selectedBillPayment._id
-            ? response.data
+            ? response
             : billPayment
         );
-      } else {
-        const response = await axios.post(
-          "/api/bill-payments",
-          billPaymentData
-        );
-        this.billPayments = [...this.billPayments, response.data];
       }
-
-      this.refreshInfo = true;
-      this.handleClose();
-      await this.fetchBillPayments();
-    } catch (error) {
-      console.error("Failed to save bill payment:", error);
+    } else {
+      const response = await apiRequest(
+        "/bill-payments",
+        "POST",
+        billPaymentData
+      );
+      if (response) {
+        this.billPayments = [...this.billPayments, response];
+      }
     }
+
+    this.refreshInfo = true;
+    this.handleClose();
+    await this.fetchBillPayments();
   }
 }
 
-const billPaymentStore = new BillPaymentStore();
-export default billPaymentStore;
+export default new BillPaymentStore();

@@ -1,11 +1,28 @@
 const express = require("express");
 const router = express.Router();
-const rentPaymentController = require("../controllers/rentPaymentController");
 
-router.get("/", rentPaymentController.getAllRentPayments);
-router.post("/", rentPaymentController.createRentPayment);
-router.get("/:id", rentPaymentController.getSpecificRentPayment);
-router.put("/:id", rentPaymentController.updateRentPayment);
-router.delete("/:id", rentPaymentController.deleteRentPayment);
+const {
+  createRentPayment,
+  updateRentPayment,
+  getAllRentPayments,
+  getSpecificRentPayment,
+  deleteRentPayment,
+} = require("../controllers/rentPaymentController");
+
+const checkJwt = require("../middleware/auth");
+const {
+  createRentValidation,
+  updateRentValidation,
+} = require("../middleware/rentValidator");
+
+router.get("/", checkJwt, getAllRentPayments);
+
+router.post("/", checkJwt, createRentValidation, createRentPayment);
+
+router.get("/:id", checkJwt, getSpecificRentPayment);
+
+router.put("/:id", checkJwt, updateRentValidation, updateRentPayment);
+
+router.delete("/:id", checkJwt, deleteRentPayment);
 
 module.exports = router;

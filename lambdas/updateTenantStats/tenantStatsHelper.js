@@ -1,16 +1,31 @@
 const mongoose = require("mongoose");
-const {
-  Task,
-  Tenant,
-  RentPayment,
-  BillPayment,
-} = require("../../server/schema.js");
+require("dotenv").config();
+const { Task, Tenant, RentPayment, BillPayment } = require("./schema.js");
 const ObjectId = mongoose.Types.ObjectId;
 
-async function updateTenantStats(tenantId) {
+let isConnected = false;
+
+async function connectToDatabase() {
+  if (isConnected) return;
+
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      maxPoolSize: 10,
+    });
+    console.log("MongoDB connected");
+    isConnected = true;
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    throw err;
+  }
+}
+
+async function updateTenantStats(userId) {
   try {
     const taskStats = await Task.aggregate([
-      { $match: { assignedTo: new ObjectId(tenantId) } },
+      { $match: { assignedTo: new ObjectId(userId) } },
       {
         $group: {
           _id: "$assignedTo",
@@ -51,7 +66,7 @@ async function updateTenantStats(tenantId) {
     ]);
 
     const rentStats = await RentPayment.aggregate([
-      { $match: { tenant: new ObjectId(tenantId) } },
+      { $match: { tenant: new ObjectId(userId) } },
       {
         $group: {
           _id: "$tenant",
@@ -92,7 +107,7 @@ async function updateTenantStats(tenantId) {
     ]);
 
     const billStats = await BillPayment.aggregate([
-      { $match: { tenant: new ObjectId(tenantId) } },
+      { $match: { tenant: new ObjectId(userId) } },
       {
         $group: {
           _id: "$tenant",
@@ -154,10 +169,12 @@ async function updateTenantStats(tenantId) {
     };
 
     const updatedTenant = await Tenant.findByIdAndUpdate(
-      tenantId,
+      userId,
       { $set: stats },
       { new: true }
     );
+
+    console.log(`Updated stats for user ${userId}:`, stats);
 
     return stats;
   } catch (error) {
@@ -166,6 +183,31 @@ async function updateTenantStats(tenantId) {
   }
 }
 
-module.exports = {
-  updateTenantStats,
+exports.handler = async (event) => {
+  console.log("Stats Lambda triggered with event:", event);
+
+  const userId = event.userId || (event.body && JSON.parse(event.body).userId);
+
+  if (!userId) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ message: "Missing userId" }),
+    };
+  }
+
+  try {
+    await connectToDatabase();
+    const stats = await updateTenantStats(userId);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({ message: "Tenant stats updated", stats }),
+    };
+  } catch (error) {
+    console.error("Error in stats Lambda:", error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ message: "Error updating tenant stats" }),
+    };
+  }
 };

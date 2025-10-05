@@ -1,5 +1,5 @@
 import { makeAutoObservable } from "mobx";
-import axios from "axios";
+import { apiRequest } from "../helpers/apiRequest";
 
 class TenantStore {
   tenants = [];
@@ -10,19 +10,14 @@ class TenantStore {
 
   constructor() {
     makeAutoObservable(this);
-    axios.defaults.baseURL =
-      process.env.REACT_APP_API_URL || "http://localhost:5001";
-    axios.defaults.withCredentials = true;
     this.fetchTenants();
   }
 
   async fetchTenants() {
     try {
-      const response = await axios.get("/api/tenants");
-      this.tenants = response.data;
-      return Array.isArray(response.data)
-        ? response.data
-        : Object.values(response.data);
+      const data = await apiRequest("get", "/api/tenants");
+      this.tenants = Array.isArray(data) ? data : Object.values(data);
+      return this.tenants;
     } catch (error) {
       console.error("Error fetching tenants:", error);
       return [];
@@ -31,8 +26,8 @@ class TenantStore {
 
   async viewTenant(tenant) {
     try {
-      const response = await axios.get(`/api/tenants/${tenant._id}`);
-      this.selectedTenant = response.data;
+      const data = await apiRequest("get", `/api/tenants/${tenant._id}`);
+      this.selectedTenant = data;
       this.open = true;
     } catch (error) {
       console.error("Failed to fetch tenant details:", error);
@@ -41,8 +36,8 @@ class TenantStore {
 
   async editTenant(tenant) {
     try {
-      const response = await axios.get(`/api/tenants/${tenant._id}`);
-      this.selectedTenant = response.data;
+      const data = await apiRequest("get", `/api/tenants/${tenant._id}`);
+      this.selectedTenant = data;
       this.open = true;
     } catch (error) {
       console.error("Failed to fetch tenant details for editing:", error);
@@ -51,17 +46,13 @@ class TenantStore {
 
   async deleteTenant(tenant) {
     try {
-      const response = await axios.delete(`/api/tenants/${tenant._id}`);
-      if (response.status === 200) {
-        this.tenants = this.tenants.filter(
-          (prevTenant) => prevTenant._id !== tenant._id
-        );
-        this.refreshInfo = true;
-      } else {
-        console.warn(`Unexpected response status: ${response.status}`);
-      }
+      const data = await apiRequest("delete", `/api/tenants/${tenant._id}`);
+      this.tenants = this.tenants.filter(
+        (prevTenant) => prevTenant._id !== tenant._id
+      );
+      this.refreshInfo = true;
     } catch (error) {
-      console.error("Failed to delete tenant:", error.message || error);
+      console.error("Failed to delete tenant:", error);
     }
   }
 
@@ -71,13 +62,13 @@ class TenantStore {
     this.open = true;
   }
 
-  editTenant(tenant) {
+  editTenantMode(tenant) {
     this.selectedTenant = tenant;
     this.mode = "edit";
     this.open = true;
   }
 
-  viewTenant(tenant) {
+  viewTenantMode(tenant) {
     this.selectedTenant = tenant;
     this.mode = "view";
     this.open = true;
@@ -96,16 +87,17 @@ class TenantStore {
   async saveTenant(tenantData) {
     try {
       if (this.selectedTenant) {
-        const response = await axios.put(
+        const updatedTenant = await apiRequest(
+          "put",
           `/api/tenants/${this.selectedTenant._id}`,
           tenantData
         );
         this.tenants = this.tenants.map((tenant) =>
-          tenant._id === this.selectedTenant._id ? response.data : tenant
+          tenant._id === this.selectedTenant._id ? updatedTenant : tenant
         );
       } else {
-        const response = await axios.post("/api/tenants", tenantData);
-        this.tenants = [...this.tenants, response.data];
+        const newTenant = await apiRequest("post", "/api/tenants", tenantData);
+        this.tenants = [...this.tenants, newTenant];
       }
 
       this.refreshInfo = true;
