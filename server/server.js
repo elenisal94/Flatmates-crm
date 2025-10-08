@@ -60,7 +60,24 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // Handle preflight OPTIONS requests
+app.options("*", cors(corsOptions));
+
+// === Extra headers for CORS ===
+app.use((req, res, next) => {
+  res.header(
+    "Access-Control-Allow-Origin",
+    process.env.FRONTEND_URL || "http://localhost:3000"
+  );
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200); // send quick response for preflight
+  }
+  next();
+});
 
 // === Body parsing and sanitization ===
 app.use(express.json());

@@ -15,11 +15,26 @@ import { setTokenGetter } from "./helpers/apiRequest";
 const materialTheme = materialExtendTheme();
 
 function App() {
-  const { getAccessTokenSilently } = useAuth0();
+  const { getAccessTokenSilently, isAuthenticated, isLoading } = useAuth0();
 
   React.useEffect(() => {
     setTokenGetter(getAccessTokenSilently);
   }, [getAccessTokenSilently]);
+
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
 
   return (
     <MaterialCssVarsProvider theme={{ [MATERIAL_THEME_ID]: materialTheme }}>

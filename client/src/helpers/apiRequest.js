@@ -6,8 +6,9 @@ export const setTokenGetter = (getter) => {
 
 export const apiRequest = async (endpoint, method = "GET", data = null) => {
   try {
+    console.log("getAccessToken available?", !!getAccessToken);
     const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:5001";
-    const url = `${baseUrl}/api${endpoint}`;
+    const url = `${baseUrl}${endpoint}`;
 
     const token = getAccessToken ? await getAccessToken() : null;
 
@@ -20,28 +21,30 @@ export const apiRequest = async (endpoint, method = "GET", data = null) => {
     }
 
     const options = {
-      method,
+      method: method.toUpperCase(),
       headers,
     };
 
-    if (data) {
+    if (data && method.toUpperCase() !== "GET") {
       options.body = JSON.stringify(data);
     }
 
     const response = await fetch(url, options);
 
     if (!response.ok) {
-      console.error(
-        "API request failed:",
-        response.status,
-        await response.text()
-      );
-      return null;
+      const errorText = await response.text();
+      console.error("API request failed:", response.status, errorText);
+      throw new Error(`API request failed: ${response.status} ${errorText}`);
     }
 
-    return await response.json();
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.includes("application/json")) {
+      return await response.json();
+    }
+
+    return null;
   } catch (error) {
     console.error("API request error:", error);
-    return null;
+    throw error;
   }
 };

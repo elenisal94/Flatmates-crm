@@ -10,7 +10,6 @@ class BillPaymentStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.fetchBillPayments();
   }
 
   async fetchBillPayments() {

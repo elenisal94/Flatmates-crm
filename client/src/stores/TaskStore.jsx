@@ -10,18 +10,17 @@ class TaskStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.fetchTasks();
   }
 
   async fetchTasks() {
-    const response = await apiRequest("/tasks", "GET");
+    const response = await apiRequest("/api/tasks", "GET");
     if (response) {
       this.tasks = response;
     }
   }
 
   async viewTask(task) {
-    const response = await apiRequest(`/tasks/${task._id}`, "GET");
+    const response = await apiRequest(`/api/tasks/${task._id}`, "GET");
     if (response) {
       this.selectedTask = response;
       this.open = true;
@@ -30,7 +29,7 @@ class TaskStore {
   }
 
   async editTask(task) {
-    const response = await apiRequest(`/tasks/${task._id}`, "GET");
+    const response = await apiRequest(`/api/tasks/${task._id}`, "GET");
     if (response) {
       this.selectedTask = response;
       this.open = true;
@@ -39,7 +38,7 @@ class TaskStore {
   }
 
   async deleteTask(task) {
-    const response = await apiRequest(`/tasks/${task._id}`, "DELETE");
+    const response = await apiRequest(`/api/tasks/${task._id}`, "DELETE");
     if (response !== null) {
       this.tasks = this.tasks.filter((prevTask) => prevTask._id !== task._id);
       this.refreshInfo = true;
@@ -67,7 +66,7 @@ class TaskStore {
 
     if (this.selectedTask) {
       const response = await apiRequest(
-        `/tasks/${this.selectedTask._id}`,
+        `/api/tasks/${this.selectedTask._id}`,
         "PUT",
         formattedTaskData
       );
@@ -77,7 +76,11 @@ class TaskStore {
         );
       }
     } else {
-      const response = await apiRequest("/tasks", "POST", formattedTaskData);
+      const response = await apiRequest(
+        "/api/tasks",
+        "POST",
+        formattedTaskData
+      );
       if (response) {
         this.tasks = [...this.tasks, response];
       }

@@ -10,12 +10,11 @@ class TenantStore {
 
   constructor() {
     makeAutoObservable(this);
-    this.fetchTenants();
   }
 
   async fetchTenants() {
     try {
-      const data = await apiRequest("get", "/api/tenants");
+      const data = await apiRequest("/api/tenants", "GET");
       this.tenants = Array.isArray(data) ? data : Object.values(data);
       return this.tenants;
     } catch (error) {
@@ -26,7 +25,7 @@ class TenantStore {
 
   async viewTenant(tenant) {
     try {
-      const data = await apiRequest("get", `/api/tenants/${tenant._id}`);
+      const data = await apiRequest(`/api/tenants/${tenant._id}`, "GET");
       this.selectedTenant = data;
       this.open = true;
     } catch (error) {
@@ -36,7 +35,7 @@ class TenantStore {
 
   async editTenant(tenant) {
     try {
-      const data = await apiRequest("get", `/api/tenants/${tenant._id}`);
+      const data = await apiRequest(`/api/tenants/${tenant._id}`, "GET");
       this.selectedTenant = data;
       this.open = true;
     } catch (error) {
@@ -46,7 +45,7 @@ class TenantStore {
 
   async deleteTenant(tenant) {
     try {
-      const data = await apiRequest("delete", `/api/tenants/${tenant._id}`);
+      const data = await apiRequest(`/api/tenants/${tenant._id}`, "DELETE");
       this.tenants = this.tenants.filter(
         (prevTenant) => prevTenant._id !== tenant._id
       );
@@ -88,18 +87,17 @@ class TenantStore {
     try {
       if (this.selectedTenant) {
         const updatedTenant = await apiRequest(
-          "put",
           `/api/tenants/${this.selectedTenant._id}`,
+          "PUT",
           tenantData
         );
         this.tenants = this.tenants.map((tenant) =>
           tenant._id === this.selectedTenant._id ? updatedTenant : tenant
         );
       } else {
-        const newTenant = await apiRequest("post", "/api/tenants", tenantData);
+        const newTenant = await apiRequest("/api/tenants", "POST", tenantData);
         this.tenants = [...this.tenants, newTenant];
       }
-
       this.refreshInfo = true;
       this.handleClose();
       await this.fetchTenants();
