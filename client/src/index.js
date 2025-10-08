@@ -25,11 +25,11 @@ root.render(
       clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
       authorizationParams={{
         redirect_uri: window.location.origin,
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+        scope: "openid profile email offline_access",
       }}
       cacheLocation="localstorage"
       useRefreshTokens={true}
-      audience={process.env.REACT_APP_AUTH0_AUDIENCE}
-      scope="openid profile email"
     >
       <Provider
         tenantStore={tenantStore}

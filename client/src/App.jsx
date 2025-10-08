@@ -20,7 +20,10 @@ function App() {
   React.useEffect(() => {
     setTokenGetter(async () => {
       return await getAccessTokenSilently({
-        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+        authorizationParams: {
+          audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+          scope: "openid profile email",
+        },
       });
     });
   }, [getAccessTokenSilently]);

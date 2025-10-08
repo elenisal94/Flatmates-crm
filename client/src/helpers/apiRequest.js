@@ -12,8 +12,6 @@ export const apiRequest = async (endpoint, method = "GET", data = null) => {
 
     const token = getAccessToken ? await getAccessToken() : null;
 
-    // console.log("Token being sent:", token);
-
     const headers = {
       "Content-Type": "application/json",
     };
