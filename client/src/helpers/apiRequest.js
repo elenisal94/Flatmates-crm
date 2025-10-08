@@ -6,11 +6,13 @@ export const setTokenGetter = (getter) => {
 
 export const apiRequest = async (endpoint, method = "GET", data = null) => {
   try {
-    console.log("getAccessToken available?", !!getAccessToken);
+    // console.log("getAccessToken available?", !!getAccessToken);
     const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:5001";
     const url = `${baseUrl}${endpoint}`;
 
     const token = getAccessToken ? await getAccessToken() : null;
+
+    // console.log("Token being sent:", token);
 
     const headers = {
       "Content-Type": "application/json",

@@ -18,7 +18,11 @@ function App() {
   const { getAccessTokenSilently, isAuthenticated, isLoading } = useAuth0();
 
   React.useEffect(() => {
-    setTokenGetter(getAccessTokenSilently);
+    setTokenGetter(async () => {
+      return await getAccessTokenSilently({
+        audience: process.env.REACT_APP_AUTH0_AUDIENCE,
+      });
+    });
   }, [getAccessTokenSilently]);
 
   if (isLoading) {
