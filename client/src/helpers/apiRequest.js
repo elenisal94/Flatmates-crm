@@ -6,7 +6,6 @@ export const setTokenGetter = (getter) => {
 
 export const apiRequest = async (endpoint, method = "GET", data = null) => {
   try {
-    // console.log("getAccessToken available?", !!getAccessToken);
     const baseUrl = process.env.REACT_APP_API_URL || "http://localhost:5001";
     const url = `${baseUrl}${endpoint}`;
 

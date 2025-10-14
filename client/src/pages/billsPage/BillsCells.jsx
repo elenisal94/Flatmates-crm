@@ -79,7 +79,7 @@ const BillsCells = ({
     >
       <thead>
         <tr>
-          <th
+          {/* <th
             style={{
               width: 48,
               textAlign: "center",
@@ -108,9 +108,12 @@ const BillsCells = ({
               }
               sx={{ verticalAlign: "text-bottom" }}
             />
-          </th>
+          </th> */}
+          {columnVisibility.tenant && (
+            <ResizableTableCell>Tenant</ResizableTableCell>
+          )}
           <ResizableTableCell>
-            <Link
+            {/* <Link
               underline="none"
               color="primary"
               component="button"
@@ -124,13 +127,10 @@ const BillsCells = ({
                     order === "desc" ? "rotate(0deg)" : "rotate(180deg)",
                 },
               }}
-            >
-              Bill Type
-            </Link>
+          > */}
+            Bill Type
+            {/* </Link> */}
           </ResizableTableCell>
-          {columnVisibility.tenant && (
-            <ResizableTableCell>Tenant</ResizableTableCell>
-          )}
           {columnVisibility.amount && (
             <ResizableTableCell>Amount</ResizableTableCell>
           )}
@@ -163,7 +163,7 @@ const BillsCells = ({
           const billStatus = getBillStatus(bill);
           return (
             <tr key={bill._id}>
-              <td className="table-cell" style={{ textAlign: "center" }}>
+              {/* <td className="table-cell" style={{ textAlign: "center" }}>
                 <Checkbox
                   size="sm"
                   checked={isItemSelected}
@@ -182,7 +182,10 @@ const BillsCells = ({
                   color={isItemSelected ? "primary" : undefined}
                   sx={{ verticalAlign: "text-bottom" }}
                 />
-              </td>
+              </td> */}
+              {columnVisibility.tenant && (
+                <td className="table-cell">{getFullName(bill?.tenant?._id)}</td>
+              )}
               <td className="table-cell">
                 <Typography
                   fontWeight="lg"
@@ -200,9 +203,6 @@ const BillsCells = ({
                   </Link>
                 </Typography>
               </td>
-              {columnVisibility.tenant && (
-                <td className="table-cell">{getFullName(bill?.tenant?._id)}</td>
-              )}
               {columnVisibility.amount && (
                 <td className="table-cell">£{bill.amount.toFixed(2)}</td>
               )}

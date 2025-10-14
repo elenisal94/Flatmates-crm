@@ -41,7 +41,9 @@ app.use(
 
 // === Input sanitization ===
 app.use(mongoSanitize());
-app.set("trust proxy", true);
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
 
 // === Rate limiting ===
 const limiter = rateLimit({
@@ -98,6 +100,12 @@ app.use("/api/tasks", taskRoutes);
 app.use("/api/rent-payments", rentPaymentRoutes);
 app.use("/api/bill-payments", billPaymentRoutes);
 app.use("/api/reset", resetRoutes);
+
+if (process.env.NODE_ENV !== "production" && !process.env.LAMBDA_TASK_ROOT) {
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running locally on http://localhost:${PORT}`);
+  });
+}
 
 // === Serverless handler ===
 module.exports.handler = require("serverless-http")(app);

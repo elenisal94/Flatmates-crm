@@ -13,7 +13,7 @@ async function connectToDatabase() {
       useUnifiedTopology: true,
       maxPoolSize: 10,
     });
-    console.log("MongoDB connected");
+    // console.log("MongoDB connected");
     isConnected = true;
   } catch (err) {
     console.error("MongoDB connection error:", err);
@@ -22,7 +22,7 @@ async function connectToDatabase() {
 }
 
 exports.handler = async (event) => {
-  console.log("SQS event received:", JSON.stringify(event, null, 2));
+  // console.log("SQS event received:", JSON.stringify(event, null, 2));
 
   try {
     await connectToDatabase();
@@ -36,9 +36,9 @@ exports.handler = async (event) => {
           continue;
         }
 
-        console.log(`Updating stats for tenant ${body.tenantId}`);
+        // console.log(`Updating stats for tenant ${body.tenantId}`);
         await updateTenantStats(body.tenantId);
-        console.log(`Stats updated for tenant ${body.tenantId}`);
+        // console.log(`Stats updated for tenant ${body.tenantId}`);
       } catch (err) {
         console.error("Error processing record:", record, err);
       }

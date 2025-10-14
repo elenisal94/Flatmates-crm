@@ -49,7 +49,7 @@ const TenantCells = ({
   >
     <thead>
       <tr>
-        <th
+        {/* <th
           style={{
             width: 48,
             textAlign: "center",
@@ -76,9 +76,9 @@ const TenantCells = ({
             }
             sx={{ verticalAlign: "text-bottom" }}
           />
-        </th>
+        </th> */}
         <ResizableTableCell>
-          <Link
+          {/* <Link
             underline="none"
             color="primary"
             component="button"
@@ -91,9 +91,9 @@ const TenantCells = ({
                 transform: order === "desc" ? "rotate(0deg)" : "rotate(180deg)",
               },
             }}
-          >
-            Tenant
-          </Link>
+          > */}
+          Tenant
+          {/* </Link> */}
         </ResizableTableCell>
         {columnVisibility.phone && (
           <ResizableTableCell>Phone</ResizableTableCell>
@@ -179,7 +179,7 @@ const TenantCells = ({
           const taskStatus = getTaskStatus(tenant);
           return (
             <tr key={tenant._id}>
-              <td className="table-cell" style={{ textAlign: "center" }}>
+              {/* <td className="table-cell" style={{ textAlign: "center" }}>
                 <Checkbox
                   size="sm"
                   checked={isItemSelected}
@@ -198,7 +198,7 @@ const TenantCells = ({
                   color={isItemSelected ? "primary" : undefined}
                   sx={{ verticalAlign: "text-bottom" }}
                 />
-              </td>
+              </td> */}
               <td className="table-cell">
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <div>

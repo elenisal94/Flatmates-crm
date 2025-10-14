@@ -15,10 +15,18 @@ import Header from "../tableUtils/Header";
 import BillPaymentForm from "../../forms/BillPaymentForm";
 import BillPaymentStore from "../../stores/BillPaymentStore";
 import DrawerComponent from "../../layouts/GenericDrawer";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const BillsPage = observer(() => {
+  const { isAuthenticated, isLoading } = useAuth0();
   const { billPayments, selectedBillPayment, open, refreshInfo } =
     BillPaymentStore;
+
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      BillPaymentStore.fetchBillPayments();
+    }
+  }, [isAuthenticated, isLoading]);
 
   useEffect(() => {
     if (refreshInfo) {
@@ -88,7 +96,7 @@ const BillsPage = observer(() => {
             }}
           >
             <Typography level="h2" component="h1">
-              Bills
+              Bills 💡
             </Typography>
             <Box
               sx={{

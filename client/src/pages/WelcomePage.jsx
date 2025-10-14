@@ -85,7 +85,7 @@ const WelcomePage = () => {
               fontSize: "1rem",
             }}
           >
-            Log In
+            Log In / Sign Up
           </Button>
 
           <Typography level="body3" sx={{ fontSize: "0.9rem", color: "#777" }}>

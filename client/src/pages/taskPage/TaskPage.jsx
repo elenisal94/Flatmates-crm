@@ -15,9 +15,18 @@ import Header from "../tableUtils/Header";
 import TaskForm from "../../forms/TaskForm";
 import TaskStore from "../../stores/TaskStore";
 import DrawerComponent from "../../layouts/GenericDrawer";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const TaskPage = observer(() => {
+  const { isAuthenticated, isLoading } = useAuth0();
   const { tasks, selectedTask, open, refreshInfo } = TaskStore;
+
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      TaskStore.fetchTasks();
+    }
+  }, [isAuthenticated, isLoading]);
+
   useEffect(() => {
     if (refreshInfo) {
       TaskStore.fetchTasks();
@@ -91,7 +100,7 @@ const TaskPage = observer(() => {
             }}
           >
             <Typography level="h2" component="h1">
-              Tasks
+              Tasks ✏️
             </Typography>
             <Box
               sx={{

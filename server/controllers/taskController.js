@@ -21,9 +21,9 @@ async function enqueueTenantStatsUpdate(tenantId, userId) {
       })
     );
 
-    console.log(
-      `📬 Sent stats update for tenant ${tenantId} from taskController`
-    );
+    // console.log(
+    //   `📬 Sent stats update for tenant ${tenantId} from taskController`
+    // );
   } catch (err) {
     console.error("Failed to enqueue tenant stats update:", err);
   }
@@ -32,7 +32,7 @@ async function enqueueTenantStatsUpdate(tenantId, userId) {
 // Get all tasks for the current user
 exports.getAllTasks = async (req, res) => {
   try {
-    const tasks = await Task.find({ userId: req.user.sub });
+    const tasks = await Task.find({ userId: req.auth.sub });
     res.json(tasks);
   } catch (error) {
     console.error("Error fetching tasks:", error);
@@ -44,7 +44,7 @@ exports.getAllTasks = async (req, res) => {
 exports.getSpecificTask = async (req, res) => {
   const taskId = req.params.id;
   try {
-    const task = await Task.findOne({ _id: taskId, userId: req.user.sub });
+    const task = await Task.findOne({ _id: taskId, userId: req.auth.sub });
     if (!task) {
       return res.status(404).json({ message: "Task not found" });
     }
@@ -58,11 +58,11 @@ exports.getSpecificTask = async (req, res) => {
 // Create a new task
 exports.createTask = async (req, res) => {
   try {
-    const newTask = new Task({ ...req.body, userId: req.user.sub });
+    const newTask = new Task({ ...req.body, userId: req.auth.sub });
     await newTask.save();
 
     if (newTask.assignedTo) {
-      await enqueueTenantStatsUpdate(newTask.assignedTo, req.user.sub);
+      await enqueueTenantStatsUpdate(newTask.assignedTo, req.auth.sub);
     }
 
     res.status(201).json(newTask);
@@ -77,7 +77,7 @@ exports.updateTask = async (req, res) => {
   const taskId = req.params.id;
   try {
     const updatedTask = await Task.findOneAndUpdate(
-      { _id: taskId, userId: req.user.sub },
+      { _id: taskId, userId: req.auth.sub },
       req.body,
       { new: true }
     );
@@ -87,7 +87,7 @@ exports.updateTask = async (req, res) => {
     }
 
     if (updatedTask.assignedTo) {
-      await enqueueTenantStatsUpdate(updatedTask.assignedTo, req.user.sub);
+      await enqueueTenantStatsUpdate(updatedTask.assignedTo, req.auth.sub);
     }
 
     res.json(updatedTask);
@@ -103,7 +103,7 @@ exports.deleteTask = async (req, res) => {
   try {
     const deletedTask = await Task.findOneAndDelete({
       _id: taskId,
-      userId: req.user.sub,
+      userId: req.auth.sub,
     });
 
     if (!deletedTask) {
@@ -111,7 +111,7 @@ exports.deleteTask = async (req, res) => {
     }
 
     if (deletedTask.assignedTo) {
-      await enqueueTenantStatsUpdate(deletedTask.assignedTo, req.user.sub);
+      await enqueueTenantStatsUpdate(deletedTask.assignedTo, req.auth.sub);
     }
 
     res.json({ message: "Task deleted successfully" });

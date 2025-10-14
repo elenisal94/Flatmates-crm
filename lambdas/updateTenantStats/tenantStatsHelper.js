@@ -174,7 +174,7 @@ async function updateTenantStats(userId) {
       { new: true }
     );
 
-    console.log(`Updated stats for user ${userId}:`, stats);
+    // console.log(`Updated stats for user ${userId}:`, stats);
 
     return stats;
   } catch (error) {
@@ -184,7 +184,7 @@ async function updateTenantStats(userId) {
 }
 
 exports.handler = async (event) => {
-  console.log("Stats Lambda triggered with event:", event);
+  // console.log("Stats Lambda triggered with event:", event);
 
   const userId = event.userId || (event.body && JSON.parse(event.body).userId);
 

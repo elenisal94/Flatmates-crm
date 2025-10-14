@@ -13,7 +13,7 @@ class RentPaymentStore {
   }
 
   async fetchRentPayments() {
-    const response = await apiRequest("/rent-payments", "GET");
+    const response = await apiRequest("/api/rent-payments", "GET");
     if (response) {
       this.rentPayments = response;
     }
@@ -21,7 +21,7 @@ class RentPaymentStore {
 
   async viewRentPayment(rentPayment) {
     const response = await apiRequest(
-      `/rent-payments/${rentPayment._id}`,
+      `/api/rent-payments/${rentPayment._id}`,
       "GET"
     );
     if (response) {
@@ -33,7 +33,7 @@ class RentPaymentStore {
 
   async editRentPayment(rentPayment) {
     const response = await apiRequest(
-      `/rent-payments/${rentPayment._id}`,
+      `/api/rent-payments/${rentPayment._id}`,
       "GET"
     );
     if (response) {
@@ -45,7 +45,7 @@ class RentPaymentStore {
 
   async deleteRentPayment(rentPayment) {
     const response = await apiRequest(
-      `/rent-payments/${rentPayment._id}`,
+      `/api/rent-payments/${rentPayment._id}`,
       "DELETE"
     );
     if (response !== null) {
@@ -75,7 +75,7 @@ class RentPaymentStore {
   async saveRentPayment(rentPaymentData) {
     if (this.selectedRentPayment) {
       const response = await apiRequest(
-        `/rent-payments/${this.selectedRentPayment._id}`,
+        `/api/rent-payments/${this.selectedRentPayment._id}`,
         "PUT",
         rentPaymentData
       );
@@ -88,7 +88,7 @@ class RentPaymentStore {
       }
     } else {
       const response = await apiRequest(
-        "/rent-payments",
+        "/api/rent-payments",
         "POST",
         rentPaymentData
       );

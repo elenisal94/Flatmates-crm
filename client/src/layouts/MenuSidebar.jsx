@@ -301,7 +301,7 @@ export default function Sidebar() {
             </ListItemButton>
           </ListItem> */}
         </List>
-        <Card
+        {/* <Card
           invertedColors
           variant="soft"
           color="warning"
@@ -317,27 +317,37 @@ export default function Sidebar() {
             {/* <IconButton size="sm">
               <CloseRoundedIcon />
             </IconButton> */}
-          </Stack>
+        {/* </Stack>
           <Typography level="body-xs">
             Click below to reset all table data to the original demo data. This
             action will overwrite any existing data!
-          </Typography>
-          {/* <LinearProgress
+          </Typography> */}
+        {/* <LinearProgress
             variant="outlined"
             value={80}
             determinate
             sx={{ my: 1 }}
           /> */}
-          <Button size="sm" variant="solid" onClick={resetData}>
+        {/* <Button size="sm" variant="solid" onClick={resetData}>
             {loading ? "Resetting..." : "Reset data"}
           </Button>
-        </Card>
+        </Card> */}
       </Box>
       <Divider />
       <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
         <Avatar variant="outlined" size="sm" src="/avatar-1577909_1280.png" />
         <Box sx={{ minWidth: 0, flex: 1 }}>
-          <Typography level="title-sm">{user?.name || "Guest"}</Typography>
+          <Typography
+            level="title-sm"
+            sx={{
+              maxWidth: 150,
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {user?.name || "Guest"}
+          </Typography>
           <Typography
             level="body-xs"
             sx={{

@@ -21,9 +21,9 @@ async function enqueueTenantStatsUpdate(tenantId, userId) {
       })
     );
 
-    console.log(
-      `📬 Enqueued stats update for tenant ${tenantId} (tenantController)`
-    );
+    // console.log(
+    //   `📬 Enqueued stats update for tenant ${tenantId} (tenantController)`
+    // );
   } catch (err) {
     console.error("Failed to enqueue tenant stats update:", err);
   }
@@ -32,7 +32,7 @@ async function enqueueTenantStatsUpdate(tenantId, userId) {
 // Get all tenants for this user
 exports.getAllTenants = async (req, res) => {
   try {
-    const tenants = await Tenant.find({ userId: req.user.sub });
+    const tenants = await Tenant.find({ userId: req.auth.sub });
     res.json(tenants);
   } catch (error) {
     console.error("Error fetching tenants:", error);
@@ -46,7 +46,7 @@ exports.getSpecificTenant = async (req, res) => {
   try {
     const tenant = await Tenant.findOne({
       _id: tenantId,
-      userId: req.user.sub,
+      userId: req.auth.sub,
     });
     if (!tenant) {
       return res.status(404).json({ message: "Tenant not found" });
@@ -63,11 +63,11 @@ exports.createTenant = async (req, res) => {
   try {
     const newTenant = new Tenant({
       ...req.body,
-      userId: req.user.sub,
+      userId: req.auth.sub,
     });
     await newTenant.save();
 
-    await enqueueTenantStatsUpdate(newTenant._id, req.user.sub);
+    await enqueueTenantStatsUpdate(newTenant._id, req.auth.sub);
 
     res.status(201).json(newTenant);
   } catch (error) {
@@ -81,7 +81,7 @@ exports.updateTenant = async (req, res) => {
   const tenantId = req.params.id;
   try {
     const updatedTenant = await Tenant.findOneAndUpdate(
-      { _id: tenantId, userId: req.user.sub },
+      { _id: tenantId, userId: req.auth.sub },
       req.body,
       { new: true }
     );
@@ -90,7 +90,7 @@ exports.updateTenant = async (req, res) => {
       return res.status(404).json({ message: "Tenant not found" });
     }
 
-    await enqueueTenantStatsUpdate(updatedTenant._id, req.user.sub);
+    await enqueueTenantStatsUpdate(updatedTenant._id, req.auth.sub);
 
     res.json(updatedTenant);
   } catch (error) {
@@ -105,14 +105,14 @@ exports.deleteTenant = async (req, res) => {
   try {
     const deletedTenant = await Tenant.findOneAndDelete({
       _id: tenantId,
-      userId: req.user.sub,
+      userId: req.auth.sub,
     });
 
     if (!deletedTenant) {
       return res.status(404).json({ message: "Tenant not found" });
     }
 
-    await enqueueTenantStatsUpdate(deletedTenant._id, req.user.sub);
+    await enqueueTenantStatsUpdate(deletedTenant._id, req.auth.sub);
 
     res.json({ message: "Tenant deleted successfully" });
   } catch (error) {

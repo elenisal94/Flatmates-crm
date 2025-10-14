@@ -9,7 +9,7 @@ const router = express.Router();
 // POST /reset — Reset the current user's data only
 router.post("/", async (req, res) => {
   try {
-    const userId = req.user?.sub;
+    const userId = req.auth?.sub;
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized: missing user" });
     }

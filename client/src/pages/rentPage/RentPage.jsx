@@ -15,10 +15,18 @@ import Header from "../tableUtils/Header";
 import RentPaymentForm from "../../forms/RentPaymentForm";
 import RentPaymentStore from "../../stores/RentPaymentStore";
 import DrawerComponent from "../../layouts/GenericDrawer";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const RentPage = observer(() => {
+  const { isAuthenticated, isLoading } = useAuth0();
   const { rentPayments, selectedRentPayment, open, refreshInfo } =
     RentPaymentStore;
+
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      RentPaymentStore.fetchRentPayments();
+    }
+  }, [isAuthenticated, isLoading]);
 
   useEffect(() => {
     if (refreshInfo) {
@@ -88,7 +96,7 @@ const RentPage = observer(() => {
             }}
           >
             <Typography level="h2" component="h1">
-              Rents
+              Rents 🏡
             </Typography>
             <Box
               sx={{

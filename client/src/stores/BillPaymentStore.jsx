@@ -13,7 +13,7 @@ class BillPaymentStore {
   }
 
   async fetchBillPayments() {
-    const response = await apiRequest("/bill-payments", "GET");
+    const response = await apiRequest("/api/bill-payments", "GET");
     if (response) {
       this.billPayments = response;
     }
@@ -21,7 +21,7 @@ class BillPaymentStore {
 
   async viewBillPayment(billPayment) {
     const response = await apiRequest(
-      `/bill-payments/${billPayment._id}`,
+      `/api/bill-payments/${billPayment._id}`,
       "GET"
     );
     if (response) {
@@ -33,7 +33,7 @@ class BillPaymentStore {
 
   async editBillPayment(billPayment) {
     const response = await apiRequest(
-      `/bill-payments/${billPayment._id}`,
+      `/api/bill-payments/${billPayment._id}`,
       "GET"
     );
     if (response) {
@@ -45,7 +45,7 @@ class BillPaymentStore {
 
   async deleteBillPayment(billPayment) {
     const response = await apiRequest(
-      `/bill-payments/${billPayment._id}`,
+      `/api/bill-payments/${billPayment._id}`,
       "DELETE"
     );
     if (response !== null) {
@@ -75,7 +75,7 @@ class BillPaymentStore {
   async saveBillPayment(billPaymentData) {
     if (this.selectedBillPayment) {
       const response = await apiRequest(
-        `/bill-payments/${this.selectedBillPayment._id}`,
+        `/api/bill-payments/${this.selectedBillPayment._id}`,
         "PUT",
         billPaymentData
       );
@@ -88,7 +88,7 @@ class BillPaymentStore {
       }
     } else {
       const response = await apiRequest(
-        "/bill-payments",
+        "/api/bill-payments",
         "POST",
         billPaymentData
       );

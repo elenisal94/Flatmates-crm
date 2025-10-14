@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { apiRequest } from "../helpers/apiRequest";
+import { runInAction } from "mobx";
 
 class TenantStore {
   tenants = [];
@@ -61,13 +62,13 @@ class TenantStore {
     this.open = true;
   }
 
-  editTenantMode(tenant) {
+  editTenant(tenant) {
     this.selectedTenant = tenant;
     this.mode = "edit";
     this.open = true;
   }
 
-  viewTenantMode(tenant) {
+  viewTenant(tenant) {
     this.selectedTenant = tenant;
     this.mode = "view";
     this.open = true;

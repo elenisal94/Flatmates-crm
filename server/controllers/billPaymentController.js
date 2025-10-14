@@ -19,7 +19,7 @@ async function enqueueTenantStatsUpdate(tenantId, userId) {
       })
     );
 
-    console.log(`📬 Sent stats update for tenant ${tenantId}`);
+    // console.log(`📬 Sent stats update for tenant ${tenantId}`);
   } catch (err) {
     console.error("Failed to enqueue tenant stats update:", err);
   }
@@ -28,7 +28,7 @@ async function enqueueTenantStatsUpdate(tenantId, userId) {
 exports.getAllBillPayments = async (req, res) => {
   try {
     const billPayments = await BillPayment.find({
-      userId: req.user.sub,
+      userId: req.auth.sub,
     }).populate("tenant");
     res.json(billPayments);
   } catch (error) {
@@ -42,7 +42,7 @@ exports.getSpecificBillPayment = async (req, res) => {
   try {
     const billPayment = await BillPayment.findOne({
       _id: billPaymentId,
-      userId: req.user.sub,
+      userId: req.auth.sub,
     });
     if (!billPayment) {
       return res.status(404).json({ message: "Bill payment not found" });
@@ -58,11 +58,11 @@ exports.createBillPayment = async (req, res) => {
   try {
     const newBillPayment = new BillPayment({
       ...req.body,
-      userId: req.user.sub,
+      userId: req.auth.sub,
     });
     await newBillPayment.save();
 
-    await enqueueTenantStatsUpdate(newBillPayment.tenant, req.user.sub);
+    await enqueueTenantStatsUpdate(newBillPayment.tenant, req.auth.sub);
 
     res.status(201).json(newBillPayment);
   } catch (error) {
@@ -75,7 +75,7 @@ exports.updateBillPayment = async (req, res) => {
   const billPaymentId = req.params.id;
   try {
     const updatedBillPayment = await BillPayment.findOneAndUpdate(
-      { _id: billPaymentId, userId: req.user.sub },
+      { _id: billPaymentId, userId: req.auth.sub },
       req.body,
       { new: true }
     ).populate("tenant");
@@ -84,7 +84,7 @@ exports.updateBillPayment = async (req, res) => {
       return res.status(404).json({ message: "Bill payment not found" });
     }
 
-    await enqueueTenantStatsUpdate(updatedBillPayment.tenant, req.user.sub);
+    await enqueueTenantStatsUpdate(updatedBillPayment.tenant, req.auth.sub);
 
     res.json(updatedBillPayment);
   } catch (error) {
@@ -98,13 +98,13 @@ exports.deleteBillPayment = async (req, res) => {
   try {
     const deletedBillPayment = await BillPayment.findOneAndDelete({
       _id: billPaymentId,
-      userId: req.user.sub,
+      userId: req.auth.sub,
     });
     if (!deletedBillPayment) {
       return res.status(404).json({ message: "Bill payment not found" });
     }
 
-    await enqueueTenantStatsUpdate(deletedBillPayment.tenant, req.user.sub);
+    await enqueueTenantStatsUpdate(deletedBillPayment.tenant, req.auth.sub);
 
     res.json({ message: "Bill payment deleted successfully" });
   } catch (error) {

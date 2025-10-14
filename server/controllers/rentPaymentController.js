@@ -20,7 +20,7 @@ async function enqueueTenantStatsUpdate(tenantId, userId) {
       })
     );
 
-    console.log(`📬 Sent stats update for tenant ${tenantId}`);
+    // console.log(`📬 Sent stats update for tenant ${tenantId}`);
   } catch (err) {
     console.error("Failed to enqueue tenant stats update:", err);
   }
@@ -30,7 +30,7 @@ async function enqueueTenantStatsUpdate(tenantId, userId) {
 exports.getAllRentPayments = async (req, res) => {
   try {
     const rentPayments = await RentPayment.find({
-      userId: req.user.sub,
+      userId: req.auth.sub,
     }).populate("tenant");
     res.json(rentPayments);
   } catch (error) {
@@ -45,7 +45,7 @@ exports.getSpecificRentPayment = async (req, res) => {
   try {
     const rentPayment = await RentPayment.findOne({
       _id: rentPaymentId,
-      userId: req.user.sub,
+      userId: req.auth.sub,
     });
     if (!rentPayment) {
       return res.status(404).json({ message: "Rent payment not found" });
@@ -62,11 +62,11 @@ exports.createRentPayment = async (req, res) => {
   try {
     const newRentPayment = new RentPayment({
       ...req.body,
-      userId: req.user.sub,
+      userId: req.auth.sub,
     });
     await newRentPayment.save();
 
-    await enqueueTenantStatsUpdate(newRentPayment.tenant, req.user.sub);
+    await enqueueTenantStatsUpdate(newRentPayment.tenant, req.auth.sub);
 
     res.status(201).json(newRentPayment);
   } catch (error) {
@@ -80,7 +80,7 @@ exports.updateRentPayment = async (req, res) => {
   const rentPaymentId = req.params.id;
   try {
     const updatedRentPayment = await RentPayment.findOneAndUpdate(
-      { _id: rentPaymentId, userId: req.user.sub },
+      { _id: rentPaymentId, userId: req.auth.sub },
       req.body,
       { new: true }
     ).populate("tenant");
@@ -89,7 +89,7 @@ exports.updateRentPayment = async (req, res) => {
       return res.status(404).json({ message: "Rent payment not found" });
     }
 
-    await enqueueTenantStatsUpdate(updatedRentPayment.tenant, req.user.sub);
+    await enqueueTenantStatsUpdate(updatedRentPayment.tenant, req.auth.sub);
 
     res.json(updatedRentPayment);
   } catch (error) {
@@ -104,13 +104,13 @@ exports.deleteRentPayment = async (req, res) => {
   try {
     const deletedRentPayment = await RentPayment.findOneAndDelete({
       _id: rentPaymentId,
-      userId: req.user.sub,
+      userId: req.auth.sub,
     });
     if (!deletedRentPayment) {
       return res.status(404).json({ message: "Rent payment not found" });
     }
 
-    await enqueueTenantStatsUpdate(deletedRentPayment.tenant, req.user.sub);
+    await enqueueTenantStatsUpdate(deletedRentPayment.tenant, req.auth.sub);
 
     res.json({ message: "Rent payment deleted successfully" });
   } catch (error) {

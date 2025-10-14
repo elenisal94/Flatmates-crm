@@ -12,8 +12,6 @@ const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
-// require("./helpers/cronJob.js");
-
 const app = express();
 const PORT = process.env.PORT || 5001;
 
@@ -64,7 +62,7 @@ app.use("/api/rent-payments", rentPaymentRoutes);
 app.use("/api/bill-payments", billPaymentRoutes);
 app.use("/api/reset", resetRoutes);
 
-console.log("DEPLOY TEST " + new Date().toISOString());
+// console.log("DEPLOY TEST " + new Date().toISOString());
 
 // app.listen(PORT, "0.0.0.0", () => {
 //   console.log(`Server is running on port ${PORT}`);

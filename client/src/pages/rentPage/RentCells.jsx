@@ -79,7 +79,7 @@ const RentCells = ({
     >
       <thead>
         <tr>
-          <th
+          {/* <th
             style={{
               width: 48,
               textAlign: "center",
@@ -108,9 +108,9 @@ const RentCells = ({
               }
               sx={{ verticalAlign: "text-bottom" }}
             />
-          </th>
+          </th> */}
           <ResizableTableCell>
-            <Link
+            {/* <Link
               underline="none"
               color="primary"
               component="button"
@@ -124,9 +124,9 @@ const RentCells = ({
                     order === "desc" ? "rotate(0deg)" : "rotate(180deg)",
                 },
               }}
-            >
-              Tenant
-            </Link>
+            > */}
+            Tenant
+            {/* </Link> */}
           </ResizableTableCell>
           {columnVisibility.amount && (
             <ResizableTableCell>Amount</ResizableTableCell>
@@ -160,7 +160,7 @@ const RentCells = ({
           const rentStatus = getRentStatus(rent);
           return (
             <tr key={rent._id}>
-              <td className="table-cell" style={{ textAlign: "center" }}>
+              {/* <td className="table-cell" style={{ textAlign: "center" }}>
                 <Checkbox
                   size="sm"
                   checked={isItemSelected}
@@ -179,7 +179,7 @@ const RentCells = ({
                   color={isItemSelected ? "primary" : undefined}
                   sx={{ verticalAlign: "text-bottom" }}
                 />
-              </td>
+              </td> */}
               <td className="table-cell">
                 <Typography
                   fontWeight="lg"

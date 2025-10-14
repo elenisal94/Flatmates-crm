@@ -40,7 +40,7 @@ async function seedDatabase() {
   }));
   await BillPayment.insertMany(billPayments);
 
-  console.log("Database seeded successfully!");
+  // console.log("Database seeded successfully!");
   mongoose.disconnect();
 }
 

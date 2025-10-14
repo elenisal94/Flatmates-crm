@@ -14,7 +14,7 @@ async function connectToDatabase() {
       useUnifiedTopology: true,
       maxPoolSize: 10,
     });
-    console.log("MongoDB connected");
+    // console.log("MongoDB connected");
     isConnected = true;
   } catch (err) {
     console.error("MongoDB connection error:", err);
@@ -23,18 +23,18 @@ async function connectToDatabase() {
 }
 
 exports.handler = async (event) => {
-  console.log("Lambda event:", event);
+  // console.log("Lambda event:", event);
 
   try {
     await connectToDatabase();
 
     const tenants = await Tenant.find();
-    console.log(`Found ${tenants.length} tenants`);
+    // console.log(`Found ${tenants.length} tenants`);
 
     for (const tenant of tenants) {
       try {
         await updateTenantStats(tenant._id);
-        console.log(`Updated stats for tenant ${tenant._id}`);
+        // console.log(`Updated stats for tenant ${tenant._id}`);
       } catch (err) {
         console.error(`Failed to update stats for tenant ${tenant._id}`, err);
       }

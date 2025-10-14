@@ -15,9 +15,17 @@ import Header from "../tableUtils/Header";
 import TenantForm from "../../forms/TenantForm";
 import TenantStore from "../../stores/TenantStore";
 import DrawerComponent from "../../layouts/GenericDrawer";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const TenantPage = observer(() => {
+  const { isAuthenticated, isLoading } = useAuth0();
   const { tenants, selectedTenant, open, refreshInfo } = TenantStore;
+
+  useEffect(() => {
+    if (isAuthenticated && !isLoading) {
+      TenantStore.fetchTenants();
+    }
+  }, [isAuthenticated, isLoading]);
 
   useEffect(() => {
     if (refreshInfo) {
@@ -92,7 +100,7 @@ const TenantPage = observer(() => {
             }}
           >
             <Typography level="h2" component="h1">
-              Tenants
+              Tenants 🙋🏽
             </Typography>
             <Box
               sx={{
