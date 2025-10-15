@@ -40,6 +40,7 @@ const AppRoutes = () => {
       ) : (
         <Routes>
           <Route path="/" element={<WelcomePage />} />
+          <Route path="/callback" element={<div>Logging in...</div>} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       )}
