@@ -21,9 +21,9 @@ async function enqueueTenantStatsUpdate(tenantId, userId) {
       })
     );
 
-    // console.log(
-    //   `📬 Enqueued stats update for tenant ${tenantId} (tenantController)`
-    // );
+    console.log(
+      `📬 Enqueued stats update for tenant ${tenantId} (tenantController)`
+    );
   } catch (err) {
     console.error("Failed to enqueue tenant stats update:", err);
   }
