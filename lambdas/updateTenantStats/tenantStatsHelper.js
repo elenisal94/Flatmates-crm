@@ -1,26 +1,6 @@
 const mongoose = require("mongoose");
-require("dotenv").config();
 const { Task, Tenant, RentPayment, BillPayment } = require("./schema.js");
 const ObjectId = mongoose.Types.ObjectId;
-
-let isConnected = false;
-
-async function connectToDatabase() {
-  if (isConnected) return;
-
-  try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      maxPoolSize: 10,
-    });
-    console.log("MongoDB connected");
-    isConnected = true;
-  } catch (err) {
-    console.error("MongoDB connection error:", err);
-    throw err;
-  }
-}
 
 async function updateTenantStats(userId) {
   try {
@@ -183,7 +163,7 @@ async function updateTenantStats(userId) {
   }
 }
 
-exports.handler = async (event) => {
+async function handler(event) {
   // console.log("Stats Lambda triggered with event:", event);
 
   const userId = event.userId || (event.body && JSON.parse(event.body).userId);
@@ -210,4 +190,9 @@ exports.handler = async (event) => {
       body: JSON.stringify({ message: "Error updating tenant stats" }),
     };
   }
+}
+
+module.exports = {
+  updateTenantStats,
+  handler,
 };
