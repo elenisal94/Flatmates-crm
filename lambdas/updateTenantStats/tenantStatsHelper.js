@@ -2,6 +2,25 @@ const mongoose = require("mongoose");
 const { Task, Tenant, RentPayment, BillPayment } = require("./schema.js");
 const ObjectId = mongoose.Types.ObjectId;
 
+let isConnected = false;
+
+async function connectToDatabase() {
+  if (isConnected) return;
+
+  try {
+    await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      maxPoolSize: 10,
+    });
+    console.log("MongoDB connected");
+    isConnected = true;
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    throw err;
+  }
+}
+
 async function updateTenantStats(userId) {
   try {
     const taskStats = await Task.aggregate([
@@ -154,7 +173,7 @@ async function updateTenantStats(userId) {
       { new: true }
     );
 
-    // console.log(`Updated stats for user ${userId}:`, stats);
+    console.log(`Updated stats for user ${userId}:`, stats);
 
     return stats;
   } catch (error) {
@@ -163,36 +182,7 @@ async function updateTenantStats(userId) {
   }
 }
 
-async function handler(event) {
-  // console.log("Stats Lambda triggered with event:", event);
-
-  const userId = event.userId || (event.body && JSON.parse(event.body).userId);
-
-  if (!userId) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ message: "Missing userId" }),
-    };
-  }
-
-  try {
-    await connectToDatabase();
-    const stats = await updateTenantStats(userId);
-
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ message: "Tenant stats updated", stats }),
-    };
-  } catch (error) {
-    console.error("Error in stats Lambda:", error);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ message: "Error updating tenant stats" }),
-    };
-  }
-}
-
 module.exports = {
   updateTenantStats,
-  handler,
+  connectToDatabase,
 };
