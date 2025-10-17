@@ -67,7 +67,7 @@ Fill the gap in user-friendly tools for multi-property management with a clean, 
 
 ## 🧩 Application Architecture
 
-<img width="1423" alt="app architecture" src="https://tenantcrm-image-files.s3.eu-north-1.amazonaws.com/Flowchart.png">
+<img width="1423" alt="app architecture" src="https://tenantcrm-image-files.s3.eu-north-1.amazonaws.com/Flowchart+(1).png">
 
 ---
 
