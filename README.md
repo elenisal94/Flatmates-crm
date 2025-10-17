@@ -128,7 +128,7 @@ Create a `.env` file in the root directory:
 ## 📸 Screenshots
 
 **Tenants table page**
-<img width="1423" alt="Screenshot 2024-07-04 at 00 10 16" src="https://tenantcrm-image-files.s3.eu-north-1.amazonaws.com/Flowchart+(1).png">
+<img width="1423" alt="Screenshot 2024-07-04 at 00 10 16" src="https://github.com/elenisal94/flatmates-crm/assets/57360206/4249c3ea-418d-4e67-a480-6a6b842686ef">
 
 **Tenant profile preview**
 <img width="1423" alt="Screenshot 2024-07-04 at 00 10 48" src="https://github.com/elenisal94/flatmates-crm/assets/57360206/7181a1ae-0b7a-49a0-9f8e-5dcc72682702">
