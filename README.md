@@ -12,9 +12,9 @@ Tenant CRM is a full-stack application that helps landlords manage tenants acros
 
 <p float="left">
   <img src="https://tenantcrm-image-files.s3.eu-north-1.amazonaws.com/Screenshot+2025-10-17+at+16.22.59.png" width="900" />
-  <img src="https://github.com/elenisal94/flatmates-crm/assets/57360206/4249c3ea-418d-4e67-a480-6a6b842686ef" height="250" />
-  <img src="https://tenantcrm-image-files.s3.eu-north-1.amazonaws.com/Screenshot+2025-10-17+at+16.29.57.png" height="250" />
-   <img src="https://tenantcrm-image-files.s3.eu-north-1.amazonaws.com/Screenshot+2025-10-17+at+16.30.39.png" height="250" />
+  <img src="https://github.com/elenisal94/flatmates-crm/assets/57360206/4249c3ea-418d-4e67-a480-6a6b842686ef" width="900" />
+  <img src="https://tenantcrm-image-files.s3.eu-north-1.amazonaws.com/Screenshot+2025-10-17+at+16.29.57.png" height="350" />
+   <img src="https://tenantcrm-image-files.s3.eu-north-1.amazonaws.com/Screenshot+2025-10-17+at+16.30.39.png" height="350" />
 </p>
 
 ---
