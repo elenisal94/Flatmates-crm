@@ -10,7 +10,6 @@ import FormLayout from "./formComponents/FormLayout";
 import FormActions from "./formComponents/FormActions";
 import TenantStore from "../stores/TenantStore";
 import DOMPurify from "dompurify";
-import SensitiveDataWarning from "./formComponents/SensitiveDataWarning";
 
 const schema = yup.object().shape({
   billType: yup
@@ -153,7 +152,6 @@ const EditBillPayment = ({ billPaymentStore }) => {
             />
           </div>
         </FormLayout>
-        <SensitiveDataWarning />
         <FormActions
           onClose={() => billPaymentStore.handleClose()}
           onSubmitLabel="Save Changes"
