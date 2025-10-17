@@ -44,23 +44,29 @@ Fill the gap in user-friendly tools for multi-property management with a clean, 
 ## 🧰 Tech Stack
 
 **Frontend**
-
 - React
 - JavaScript
 - Joy UI (MUI variant)
+- Hosted via AWS Amplify (S3 + CloudFront)
 
 **Backend**
-
 - Node.js
 - Express
+- Serverless AWS Lambda functions
+- Exposed via API Gateway
+- Auth handled by Auth0
+- Queues via SQS
 
 **Database**
-
-- MongoDB
+- MongoDB Atlas
 
 **Deployment**
+- Frontend: AWS Amplify (automatic CI/CD on push to main)
+- Backend: Serverless via AWS Lambda (deployed via GitHub Actions)
 
-- AWS EC2
+**CI/CD**
+- GitHub Actions for automated testing, build, and deployment
+- Automated Lambda deploys on push to main
 
 ---
 
