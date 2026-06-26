@@ -5,9 +5,9 @@ frontend:
       commands:
         - cd client
         - npm ci
+
     build:
       commands:
-        - cd client
         - npm run build
 
   artifacts:
