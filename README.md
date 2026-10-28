@@ -2,10 +2,6 @@
 
 Tenant CRM is a full-stack application that helps landlords manage tenants across multiple properties. It allows users to track rent and bill payments, manage tenant-specific tasks and view aggregated statistics—all within a clean, responsive UI.
 
-**Live Site:** [https://tenantcrmproject.co.uk](https://tenantcrmproject.co.uk)  
-**GitHub Repo:** [github.com/elenisal94/Flatmates-crm](https://github.com/elenisal94/Flatmates-crm)  
-**Project Details:** [View full case study](https://elenisalamouri.co.uk/flatmates-crm/)
-
 ---
 
 ## 🖼️ Preview
@@ -151,5 +147,3 @@ Create a `.env` file in the root directory:
 <img width="1423" alt="Screenshot 2024-07-04 at 00 10 48" src="https://github.com/elenisal94/flatmates-crm/assets/57360206/7181a1ae-0b7a-49a0-9f8e-5dcc72682702">
 
 ---
-
-[See more project details](https://elenisalamouri.co.uk/flatmates-crm/)
